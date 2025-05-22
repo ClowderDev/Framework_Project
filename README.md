@@ -3,7 +3,7 @@
 ### 1. Clone repository
 
 ```bash
-git clone https://github.com/your-username/Framework_Project.git
+git clone https://github.com/ClowderDev/Framework_Project.git
 cd Framework_Project/Framework_Project
 ```
 
