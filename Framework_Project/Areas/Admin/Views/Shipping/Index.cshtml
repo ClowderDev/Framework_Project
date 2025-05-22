@@ -1,0 +1,102 @@
+@{
+    ViewData["Title"] = "Shipping Management";
+}
+
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Danh sách địa chỉ</h6>
+            <a class="btn btn-primary" asp-action="Create" asp-controller="Shipping">Thêm địa chỉ</a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Thành phố</th>
+                            <th>Quận</th>
+                            <th>Huyện</th>
+                            <th>Giá</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.Shippings != null)
+                        {
+                            @foreach (var shipping in ViewBag.Shippings)
+                            {
+                                <tr>
+                                    <td>@shipping.Id</td>
+                                    <td>@shipping.City</td>
+                                    <td>@shipping.District</td>
+                                    <td>@shipping.Ward</td>
+                                    <td>@shipping.Price.ToString("N0") VND</td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm delete-shipping" data-id="@shipping.Id">Delete</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+    $(document).ready(function() {
+        $('.delete-shipping').click(function() {
+            var shippingId = $(this).data('id');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to delete this shipping?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '@Url.Action("Delete", "Shipping")?id=' + shippingId,
+                        type: 'POST',
+                        headers: {
+                            "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                        },
+                        success: function(result) {
+                            if (result.success) {
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Shipping has been deleted.',
+                                    'success'
+                                ).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    result.message || 'Error deleting shipping.',
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Delete shipping error:', error);
+                            Swal.fire(
+                                'Error!',
+                                'Error deleting shipping. Please try again.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        });
+    });
+    </script>
+}
+@Html.AntiForgeryToken()
+

@@ -1,0 +1,80 @@
+@model Framework_Project.Models.ContactModel
+
+@{
+    ViewData["Title"] = "Tạo liên hệ";
+    Layout = "_Layout";
+}
+
+<h1>Tạo liên hệ</h1>
+
+<h4>Thông tin liên hệ</h4>
+<hr />
+<div class="row">
+    <div class="col-md-9">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Tên</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label">Email</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Mô tả</label>
+                <textarea asp-for="Description" class="form-control"> </textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label">SDT</label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <label asp-for="Map" class="control-label">Bản đồ</label>
+                <input asp-for="Map" class="form-control" />
+                <span asp-validation-for="Map" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageUpload" class="control-label">Hình ảnh</label>
+                <input asp-for="ImageUpload" class="form-control" type="file" />
+                <span asp-validation-for="ImageUpload" class="text-danger"></span>
+                <img id="imgpreview" class="pt-2" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Trở về danh sách</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    $("#imgpreview").attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#ImageUpload").change(function () {
+            readURL(this);
+        });
+    </script>
+
+    <script>
+        CKEDITOR.replace('Description');
+    </script>
+}

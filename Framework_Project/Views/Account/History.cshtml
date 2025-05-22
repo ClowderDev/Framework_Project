@@ -1,0 +1,81 @@
+@model IEnumerable<OrderModel>
+
+@{
+    ViewData["Title"] = "Lịch sử đơn hàng của: " + @ViewBag.UserEmail;
+
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+</head>
+<body>
+    <h3>Lịch sử đơn hàng của: @ViewBag.UserEmail</h3>
+
+    <table class="table" id="myTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Mã sản phẩm</th>
+                <th>Phí vận chuyển</th>
+                <th>Mã giảm giá</th>
+                <th>Tên người dùng</th>
+                <th>Tình trạng</th>
+                <th>Hình thức thanh toán</th>
+                <th>Ngày đặt</th>
+                <th>Thao tác</th>   
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.OrderCode</td>
+                    <td>@item.ShippingCost.ToString("#,##0 đ")</td>
+                    <td>@item.CouponCode</td>
+                    <td>@item.UserName</td>
+                    <td>
+                        @if (item.Status == 1)
+                        {
+                            <span class="text text-success">Đơn hàng mới</span>
+                        }
+                        else if (item.Status == 2)
+                        {
+                            <span class="text text-success">Đã giao hàng</span>
+                        }
+                        else
+                        {
+
+                            <span class="text text-danger">Đã hủy</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.PaymentMethod == "COD" || item.PaymentMethod == null)
+                        {
+                            <span class="text text-success">Thanh toán khi nhận hàng</span>
+                        }
+                        else if(item.PaymentMethod == "Momo")
+                        {
+                            <span class="text text-success">Thanh toán qua MoMo</span>
+                        }
+                        else if(item.PaymentMethod == "VNPay")
+                        {
+                            <span class="text text-success">Thanh toán qua Vnpay</span>
+                        }
+                    </td>
+                    <td>@item.CreatedDate.ToString("dd-MM-yyyy")</td>
+                    <td>
+
+                        <a onclick="return confirm('Bạn xác nhận muốn hủy?')" class="btn btn-warning btn-sm" asp-action="CancelOrder" asp-controller="Account" asp-route-ordercode="@item.OrderCode">Hủy đơn hàng</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</body>
+</html>

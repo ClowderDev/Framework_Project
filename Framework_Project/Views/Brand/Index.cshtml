@@ -1,0 +1,77 @@
+@model IEnumerable<ProductModel>
+<div class="col-sm-3">
+	@Html.Partial("_SidebarPartial")
+</div>
+<style>	
+	.product-image-wrapper {
+		height: 450px;
+	}
+</style>
+
+<div class="col-sm-9 padding-right">
+	<div class="features_items">
+		<!--features_items-->
+		<h2 class="title text-center">Sản phẩm nổi bật</h2>
+		@foreach (var item in Model)
+		{
+			<div class="col-sm-4">
+				<div class="product-image-wrapper">
+					<div class="single-products">
+						<div class="productinfo text-center">
+							<a asp-action="Details" asp-controller="Product" asp-route-Id="@item.Id">
+								<img src="~/media/products/@item.Image" alt="@item.Name" width="100px" height="200px" />
+								<h2>@item.Price.ToString("#,##0 VNĐ")</h2>
+								<p>@item.Name</p>
+								<p>Danh mục: @item.Category.Name</p>
+								<p>Thương hiệu: @item.Brand.Name</p>
+							</a>
+							<button class="btn btn-default add-to-cart" data-product_id="@item.Id"><i class="fa fa-shopping-cart"></i>Thêm giỏ hàng</button>
+						</div>
+
+					</div>
+					<div class="choose">
+						@if (User.Identity?.IsAuthenticated ?? false)
+						{
+							<ul class="nav nav-pills nav-justified">
+								<li><a href="#"><i class="fa fa-plus-square"></i>Thêm vào danh sách yêu thích</a></li>
+								<li><a href="#" class="add-to-compare" data-product_id="@item.Id"><i class="fa fa-plus-square"></i>Thêm vào so sánh</a></li>
+							</ul>
+						}
+					</div>
+				</div>
+			</div>
+		}
+
+
+	</div><!--features_items-->
+
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.add-to-compare').click(function (e) {
+                e.preventDefault();
+                var productId = $(this).data('product_id');
+
+                $.ajax({
+                    url: '/Home/AddCompare',
+                    type: 'POST',
+                    data: { Id: productId },
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                            // Optionally update the compare count display
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        var errorMessage = xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred.';
+                        alert(errorMessage);
+                    }
+                });
+            });
+        });
+    </script>
+}
