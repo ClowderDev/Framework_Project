@@ -156,13 +156,24 @@ namespace Framework_Project.Areas.Admin.Controllers
 			return View(product);
 		}
 
-        [HttpDelete]
         [Route("Delete/{id:long}")]
         public async Task<IActionResult> Delete(long Id)
 		{
 			ProductModel product = await _dataContext.Products.FindAsync(Id);
+
+            if (product == null)
+            {
+                // For AJAX requests, return a JSON response
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    return NotFound(new { success = false, message = "Product not found." });
+                }
+                // For non-AJAX requests, return a standard NotFound result
+                return NotFound();
+            }
+
             // Kiểm tra nếu hình ảnh sản phẩm không phải là "noname.jpg"
-			if (!string.Equals(product.Image, "noname.jpg"))
+			if (!string.IsNullOrEmpty(product.Image) && !string.Equals(product.Image, "noname.jpg"))
 			{
                 // Xác định thư mục lưu trữ hình ảnh sản phẩm
 				string uploadsDir = Path.Combine(_webHostEnviroment.WebRootPath, "media/products");
@@ -177,6 +188,13 @@ namespace Framework_Project.Areas.Admin.Controllers
 			}
 			_dataContext.Products.Remove(product);
 			await _dataContext.SaveChangesAsync();
+
+            // For AJAX requests, return a JSON response
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Ok(new { success = true, message = "Product deleted successfully." });
+            }
+
 			TempData["success"] = "sản phẩm đã được xóa thành công";
 			return RedirectToAction("Index");
 		}

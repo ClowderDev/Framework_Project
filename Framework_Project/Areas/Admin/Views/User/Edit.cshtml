@@ -3,55 +3,167 @@
     ViewData["title"] = "Chỉnh sửa User";
 }
 
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header" style="border-bottom: 2px solid #FE980F; margin-bottom: 30px; padding-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <h1 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; display: flex; align-items: center;">
+                            <i class="fa fa-edit" style="color: #FE980F; margin-right: 10px;"></i>
+                            Chỉnh sửa User
+                        </h1>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a asp-action="Index" asp-controller="User" style="background: #6c757d; border: none; padding: 12px 25px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.3s ease;">
+                            <i class="fa fa-arrow-left" style="margin-right: 8px;"></i>
+                            Trở về danh sách
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<h3>Chỉnh sửa User</h3>
+    <!-- Form Content -->
+    <div class="row">
+        <div class="col-md-8">
+            <div style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="background: #F0F0E9; padding: 20px; border-bottom: 1px solid #F7F7F0;">
+                    <h3 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 18px; font-weight: 500;">
+                        <i class="fa fa-user" style="color: #FE980F; margin-right: 8px;"></i>
+                        Thông tin User
+                    </h3>
+                </div>
+                
+                <div style="padding: 30px;">
+                    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                        <input type="hidden" asp-for="Id" />
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center;">
+                                <i class="fa fa-user" style="color: #FE980F; margin-right: 8px;"></i>
+                                Tên
+                            </label>
+                            <input asp-for="UserName" required class="form-control" placeholder="Nhập tên người dùng..." 
+                                   style="padding: 12px 16px; border: 2px solid #F0F0E9; border-radius: 6px; font-family: 'Roboto', sans-serif; transition: all 0.3s ease;"
+                                   onfocus="this.style.borderColor='#FE980F'; this.style.boxShadow='0 0 0 3px rgba(254, 152, 15, 0.1)'"
+                                   onblur="this.style.borderColor='#F0F0E9'; this.style.boxShadow='none'" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
 
-<div class="col-md-9">
-    <form asp-action="Edit" enctype="multipart/form-data">
-        <input type="hidden" asp-for="Id" />
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center;">
+                                <i class="fa fa-envelope" style="color: #FE980F; margin-right: 8px;"></i>
+                                Email
+                            </label>
+                            <input asp-for="Email" required class="form-control" placeholder="Nhập địa chỉ email..."
+                                   style="padding: 12px 16px; border: 2px solid #F0F0E9; border-radius: 6px; font-family: 'Roboto', sans-serif; transition: all 0.3s ease;"
+                                   onfocus="this.style.borderColor='#FE980F'; this.style.boxShadow='0 0 0 3px rgba(254, 152, 15, 0.1)'"
+                                   onblur="this.style.borderColor='#F0F0E9'; this.style.boxShadow='none'" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
 
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label>Tên</label>
-            <input asp-for="UserName" required class="form-control" />
-            <span asp-validation-for="UserName" class="text-danger"></span>
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center;">
+                                <i class="fa fa-phone" style="color: #FE980F; margin-right: 8px;"></i>
+                                SDT
+                            </label>
+                            <input asp-for="PhoneNumber" required class="form-control" placeholder="Nhập số điện thoại..."
+                                   style="padding: 12px 16px; border: 2px solid #F0F0E9; border-radius: 6px; font-family: 'Roboto', sans-serif; transition: all 0.3s ease;"
+                                   onfocus="this.style.borderColor='#FE980F'; this.style.boxShadow='0 0 0 3px rgba(254, 152, 15, 0.1)'"
+                                   onblur="this.style.borderColor='#F0F0E9'; this.style.boxShadow='none'" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center;">
+                                <i class="fa fa-lock" style="color: #FE980F; margin-right: 8px;"></i>
+                                Hash password
+                            </label>
+                            <input asp-for="PasswordHash" readonly required class="form-control"
+                                   style="padding: 12px 16px; border: 2px solid #F0F0E9; border-radius: 6px; font-family: 'Roboto', sans-serif; background: #f8f9fa; color: #6c757d;" />
+                            <span asp-validation-for="PasswordHash" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center;">
+                                <i class="fa fa-users" style="color: #FE980F; margin-right: 8px;"></i>
+                                Roles
+                            </label>
+                            <select asp-for="RoleId" class="form-control" asp-items="ViewBag.Roles"
+                                    style="padding: 12px 16px; border: 2px solid #F0F0E9; border-radius: 6px; font-family: 'Roboto', sans-serif; transition: all 0.3s ease;"
+                                    onfocus="this.style.borderColor='#FE980F'; this.style.boxShadow='0 0 0 3px rgba(254, 152, 15, 0.1)'"
+                                    onblur="this.style.borderColor='#F0F0E9'; this.style.boxShadow='none'">
+                            </select>
+                            <span asp-validation-for="RoleId" class="text-danger"></span>
+                        </div>
+
+                        <div style="border-top: 1px solid #F0F0E9; padding-top: 25px; margin-top: 30px;">
+                            <button type="submit" class="btn btn-primary" 
+                                    style="background: #FE980F; border: none; padding: 12px 30px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; font-weight: 500; display: inline-flex; align-items: center; transition: all 0.3s ease;"
+                                    onmouseover="this.style.background='#e8890e'; this.style.transform='translateY(-1px)'"
+                                    onmouseout="this.style.background='#FE980F'; this.style.transform='translateY(0)'">
+                                <i class="fa fa-save" style="margin-right: 8px;"></i>
+                                Cập nhật
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>Email</label>
-            <input asp-for="Email" required class="form-control" />
-            <span asp-validation-for="Email" class="text-danger"></span>
+        <div class="col-md-4">
+            <div style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px;">
+                <div style="background: #d1ecf1; padding: 20px; border-bottom: 1px solid #F7F7F0;">
+                    <h4 style="color: #0c5460; font-family: 'Roboto', sans-serif; margin: 0; font-size: 16px; font-weight: 500;">
+                        <i class="fa fa-info-circle" style="margin-right: 8px;"></i>
+                        Thông tin hiện tại
+                    </h4>
+                </div>
+                <div style="padding: 20px;">
+                    <p style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 10px;"><strong>🆔 ID:</strong> @Model.Id</p>
+                    <p style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 10px;"><strong>👤 Tên:</strong> @Model.UserName</p>
+                    <p style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 10px;"><strong>📧 Email:</strong> @Model.Email</p>
+                    <p style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0;"><strong>📱 SĐT:</strong> 
+                        @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                        {
+                            <span>@Model.PhoneNumber</span>
+                        }
+                        else
+                        {
+                            <span style="color: #6c757d; font-style: italic;">Chưa có</span>
+                        }
+                    </p>
+                </div>
+            </div>
+
+            <div style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px;">
+                <div style="background: #e7f3ff; padding: 20px; border-bottom: 1px solid #F7F7F0;">
+                    <h4 style="color: #004085; font-family: 'Roboto', sans-serif; margin: 0; font-size: 16px; font-weight: 500;">
+                        <i class="fa fa-lightbulb-o" style="margin-right: 8px;"></i>
+                        Hướng dẫn chỉnh sửa
+                    </h4>
+                </div>
+                <div style="padding: 20px;">
+                    <p style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 15px; font-weight: 500;">✏️ Chỉnh sửa user:</p>
+                    <ul style="color: #696763; font-family: 'Roboto', sans-serif; padding-left: 20px; margin: 0;">
+                        <li style="margin-bottom: 5px;">Cập nhật tên người dùng</li>
+                        <li style="margin-bottom: 5px;">Thay đổi email nếu cần</li>
+                        <li style="margin-bottom: 5px;">Cập nhật số điện thoại</li>
+                        <li style="margin-bottom: 5px;">Thay đổi quyền hạn</li>
+                        <li style="margin-bottom: 5px;">Kiểm tra trước khi lưu</li>
+                    </ul>
+                </div>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label>SDT</label>
-            <input asp-for="PhoneNumber" required class="form-control" />
-            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label>Hash password</label>
-            <input asp-for="PasswordHash" readonly required class="form-control" />
-            <span asp-validation-for="PasswordHash" class="text-danger"></span>
-        </div>
-
-
-        <div class="form-group">
-            <label>Roles</label>
-            <select asp-for="RoleId" class="form-control" asp-items="ViewBag.Roles">
-            </select>
-            <span asp-validation-for="RoleId" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <button class="btn btn-primary">Cập nhật</button>
-        </div>
-
-
-    </form>
-    <a asp-action="Index">Trở về trang danh sách User</a>
+    </div>
 </div>
+
 @section Scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

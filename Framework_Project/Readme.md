@@ -1,17 +1,4 @@
-# Framework_Project
 
-## Giới thiệu
-
-Đây là project website bán hàng sử dụng ASP.NET Core MVC, hỗ trợ quản lý đơn hàng, sản phẩm, người dùng, thanh toán qua MoMo, VNPay, COD, v.v.
-
-## Yêu cầu hệ thống
-
-- .NET 8.0 SDK trở lên
-- SQL Server (hoặc SQL Express)
-- Visual Studio 2022 (khuyến nghị) hoặc VS Code
-- Git
-
-## Cài đặt
 
 ### 1. Clone repository
 

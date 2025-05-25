@@ -133,5 +133,40 @@ namespace Framework_Project.Areas.Admin.Controllers
             }
             return View(contact);
         }
+
+        [HttpPost]
+        [Route("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var contact = await _dataContext.Contact.FindAsync(id);
+            if (contact == null)
+            {
+                return Json(new { success = false, message = "Không tìm thấy thông tin liên hệ." });
+            }
+
+            try
+            {
+                // Optional: Delete associated image file if it exists
+                if (!string.IsNullOrEmpty(contact.LogoImg))
+                {
+                    string imagePath = Path.Combine(_webHostEnviroment.WebRootPath, "media/logo", contact.LogoImg);
+                    if (System.IO.File.Exists(imagePath))
+                    {
+                        System.IO.File.Delete(imagePath);
+                    }
+                }
+
+                _dataContext.Contact.Remove(contact);
+                await _dataContext.SaveChangesAsync();
+                return Json(new { success = true, message = "Thông tin liên hệ đã được xóa thành công." });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception for debugging
+                // _logger.LogError(ex, "Error deleting contact with ID {ContactId}", id);
+                return Json(new { success = false, message = "Đã xảy ra lỗi khi xóa thông tin liên hệ." });
+            }
+        }
     }
 }

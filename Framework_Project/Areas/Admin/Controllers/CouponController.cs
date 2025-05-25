@@ -23,6 +23,14 @@ namespace Framework_Project.Areas.Admin.Controllers
             ViewBag.Coupons = coupon_list;
             return View();
         }
+
+        [Route("Create")]
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
         [Route("Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]

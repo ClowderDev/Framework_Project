@@ -20,7 +20,6 @@ namespace Framework_Project.Repository
         {
             base.OnModelCreating(modelBuilder);
 
-            // Seed default contact information
             modelBuilder.Entity<ContactModel>().HasData(
                 new ContactModel
                 {

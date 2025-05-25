@@ -2,54 +2,157 @@
     ViewData["title"] = "Danh sách User";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-    <h3>Danh sách User</h3>
-
-    <a class="btn btn-primary" asp-action="Create" asp-controller="User">Thêm User</a>
-    <div class="table table-responsive">
-        <table class="table table-responsive" id="myTable">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Tên</th>
-                    <th>Email</th>
-                    <th>Mật khẩu</th>
-                    <th>SDT</th>
-                    <th>Role</th>
-                    <th>Thao tác</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var usersWithRoles in Model)
-                {
-                    <tr>
-                        <td>@usersWithRoles.User.Id</td>
-                        <td>@usersWithRoles.User.UserName</td>
-                        <td>@usersWithRoles.User.Email</td>
-                        <td>@usersWithRoles.User.PasswordHash</td>
-                        <td>@usersWithRoles.User.PhoneNumber</td>
-                        <td> @usersWithRoles.RoleName</td>
-                        <td>
-                            @if (usersWithRoles.User.Id != ViewBag.loggedInUserId)
-                            {
-                                @if (usersWithRoles.RoleName != "Admin")
-                                {
-                                    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-controller="User" asp-route-Id="@usersWithRoles.User.Id">Chỉnh sửa</a>
-                                    <a class="btn btn-danger btn-sm confirmDeletion" asp-action="Delete" asp-controller="User" asp-route-Id="@usersWithRoles.User.Id">Xóa</a>
-                                }
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header" style="border-bottom: 2px solid #FE980F; margin-bottom: 30px; padding-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <h1 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; display: flex; align-items: center;">
+                            <i class="fa fa-users" style="color: #FE980F; margin-right: 10px;"></i>
+                            Danh sách User
+                        </h1>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a class="btn btn-primary" asp-action="Create" asp-controller="User" style="background: #FE980F; border: none; padding: 12px 25px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.3s ease;">
+                            <i class="fa fa-plus" style="margin-right: 8px;"></i>
+                            Thêm User
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</body>
-</html>
+
+    <!-- User Table -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-container" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div class="table-header" style="background: #F0F0E9; padding: 20px; border-bottom: 1px solid #F7F7F0;">
+                    <h3 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 18px; font-weight: 500;">
+                        <i class="fa fa-list" style="color: #FE980F; margin-right: 8px;"></i>
+                        Danh sách User
+                    </h3>
+                </div>
+                
+                <div class="table-responsive" style="padding: 0;">
+                    <table class="table" id="myTable" style="margin: 0; border: none;">
+                        <thead style="background: #FE980F; color: white;">
+                            <tr>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; text-align: center; width: 60px;">Id</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; min-width: 150px;">Tên</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; min-width: 200px;">Email</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; min-width: 200px;">Mật khẩu</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; width: 120px;">SDT</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; text-align: center; width: 100px;">Role</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; text-align: center; width: 200px;">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var usersWithRoles in Model)
+                            {
+                                <tr style="border-bottom: 1px solid #F7F7F0; transition: background-color 0.3s ease;" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='white'">
+                                    <td style="padding: 20px 15px; vertical-align: middle; text-align: center;">
+                                        <span style="background: #F0F0E9; color: #363432; padding: 5px 10px; border-radius: 4px; font-weight: 500; font-size: 12px;">@usersWithRoles.User.Id</span>
+                                    </td>
+                                    <td style="padding: 20px 15px; vertical-align: middle;">
+                                        <div style="font-family: 'Roboto', sans-serif; color: #363432; font-weight: 500; font-size: 14px;">@usersWithRoles.User.UserName</div>
+                                    </td>
+                                    <td style="padding: 20px 15px; vertical-align: middle;">
+                                        <div style="font-family: 'Roboto', sans-serif; color: #363432; font-size: 13px;">@usersWithRoles.User.Email</div>
+                                    </td>
+                                    <td style="padding: 20px 15px; vertical-align: middle;">
+                                        <div style="font-family: 'Roboto', sans-serif; color: #696763; font-size: 11px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">@usersWithRoles.User.PasswordHash</div>
+                                    </td>
+                                    <td style="padding: 20px 15px; vertical-align: middle;">
+                                        <div style="font-family: 'Roboto', sans-serif; color: #363432; font-size: 13px;">@usersWithRoles.User.PhoneNumber</div>
+                                    </td>
+                                    <td style="padding: 20px 15px; vertical-align: middle; text-align: center;">
+                                        @if (usersWithRoles.RoleName == "Admin")
+                                        {
+                                            <span style="background: #f8d7da; color: #721c24; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center;">
+                                                <i class="fa fa-user-secret" style="margin-right: 5px; font-size: 10px;"></i>
+                                                Admin
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span style="background: #d4edda; color: #155724; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center;">
+                                                <i class="fa fa-user" style="margin-right: 5px; font-size: 10px;"></i>
+                                                @usersWithRoles.RoleName
+                                            </span>
+                                        }
+                                    </td>
+                                    <td style="padding: 20px 15px; vertical-align: middle; text-align: center;">
+                                        @if (usersWithRoles.User.Id != ViewBag.loggedInUserId)
+                                        {
+                                            @if (usersWithRoles.RoleName != "Admin")
+                                            {
+                                                <div style="display: flex; gap: 5px; justify-content: center; flex-wrap: wrap;">
+                                                    <a class="btn btn-sm" asp-action="Edit" asp-controller="User" asp-route-Id="@usersWithRoles.User.Id" 
+                                                       style="background: #ffc107; border: none; color: #212529; padding: 6px 10px; border-radius: 4px; text-decoration: none; font-size: 11px; display: inline-flex; align-items: center; transition: all 0.3s ease; margin-bottom: 3px;"
+                                                       onmouseover="this.style.background='#e0a800'; this.style.transform='translateY(-1px)'"
+                                                       onmouseout="this.style.background='#ffc107'; this.style.transform='translateY(0)'">
+                                                        <i class="fa fa-edit" style="margin-right: 3px; font-size: 9px;"></i>
+                                                        Chỉnh sửa
+                                                    </a>
+                                                    <a class="btn btn-sm confirmDeletion" asp-action="Delete" asp-controller="User" asp-route-Id="@usersWithRoles.User.Id"
+                                                       style="background: #dc3545; border: none; color: white; padding: 6px 10px; border-radius: 4px; text-decoration: none; font-size: 11px; display: inline-flex; align-items: center; transition: all 0.3s ease; margin-bottom: 3px;"
+                                                       onmouseover="this.style.background='#c82333'; this.style.transform='translateY(-1px)'"
+                                                       onmouseout="this.style.background='#dc3545'; this.style.transform='translateY(0)'">
+                                                        <i class="fa fa-trash" style="margin-right: 3px; font-size: 9px;"></i>
+                                                        Xóa
+                                                    </a>
+                                                </div>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn:hover {
+        transform: translateY(-1px);
+    }
+    
+    .table-container {
+        transition: all 0.3s ease;
+    }
+    
+    @@media (max-width: 768px) {
+        .table-responsive {
+            font-size: 12px;
+        }
+        
+        .page-header div {
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+    }
+</style>
+
+<script>
+    // Confirmation for delete
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteButtons = document.querySelectorAll('.confirmDeletion');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (!confirm('Bạn có chắc chắn muốn xóa user này không?')) {
+                    e.preventDefault();
+                }
+            });
+        });
+    });
+</script>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+}

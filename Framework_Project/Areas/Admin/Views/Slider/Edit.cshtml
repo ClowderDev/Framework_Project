@@ -1,79 +1,327 @@
 ﻿@model SliderModel
 @{
-    ViewData["title"] = "Chỉnh sửa Slider";
+    ViewData["Title"] = "Chỉnh sửa Slider";
 }
 
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header" style="border-bottom: 2px solid #FE980F; margin-bottom: 30px; padding-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <h1 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; display: flex; align-items: center;">
+                            <i class="fa fa-edit" style="color: #FE980F; margin-right: 10px;"></i>
+                            Chỉnh sửa Slider
+                        </h1>
+                        <p style="color: #696763; margin: 5px 0 0 0; font-size: 14px;">Cập nhật thông tin slider #@Model.Id</p>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a asp-action="Index" asp-controller="Slider" style="background: #6c757d; border: none; padding: 10px 20px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.3s ease;">
+                            <i class="fa fa-arrow-left" style="margin-right: 8px;"></i>
+                            Quay lại danh sách
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<h3>Chỉnh sửa Slider</h3>
+    <!-- Form Container -->
+    <div class="row">
+        <div class="col-md-8 col-lg-6">
+            <div class="form-container" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div class="form-header" style="margin-bottom: 25px;">
+                    <h3 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 20px; font-weight: 500;">
+                        <i class="fa fa-pencil" style="color: #FE980F; margin-right: 8px;"></i>
+                        Thông tin Slider
+                    </h3>
+                    <p style="color: #696763; margin: 5px 0 0 0; font-size: 14px;">Chỉnh sửa thông tin chi tiết cho slider</p>
+                </div>
 
-<div class="col-md-9">
-    <form asp-action="Edit" asp-controller="Slider" enctype="multipart/form-data">
+                <form asp-action="Edit" asp-controller="Slider" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="@Model.Id">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="border-radius: 6px; border: none; background: #f8d7da; color: #721c24; padding: 15px; margin-bottom: 20px; display: none;"></div>
+                    
+                    <!-- Name Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-tag" style="color: #FE980F; margin-right: 5px;"></i>
+                            Tên Slider
+                        </label>
+                        <input asp-for="Name" class="form-control" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%;" placeholder="Nhập tên slider..." />
+                        <span asp-validation-for="Name" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                    </div>
 
-        <input type="hidden" asp-for="@Model.Id">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label>Tên</label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
+                    <!-- Description Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-align-left" style="color: #FE980F; margin-right: 5px;"></i>
+                            Mô tả
+                        </label>
+                        <textarea asp-for="Description" class="form-control" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%; min-height: 120px; resize: vertical;" placeholder="Nhập mô tả cho slider..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                    </div>
+
+                    <!-- Status Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-toggle-on" style="color: #FE980F; margin-right: 5px;"></i>
+                            Trạng thái
+                        </label>
+                        <select asp-for="Status" class="form-control" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%;">
+                            <option value="1" selected="@(Model.Status == 1 ? "selected" : null)">🟢 Hiển thị</option>
+                            <option value="0" selected="@(Model.Status == 0 ? "selected" : null)">🔴 Ẩn</option>
+                        </select>
+                    </div>
+
+                    <!-- Current Image Display -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-image" style="color: #FE980F; margin-right: 5px;"></i>
+                            Hình ảnh hiện tại
+                        </label>
+                        <div class="current-image-container" style="background: #fff; border: 2px solid #F0F0E9; border-radius: 8px; padding: 15px; text-align: center;">
+                            <img src="/media/sliders/@Model.Image" id="currentImage" style="max-width: 100%; max-height: 200px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); object-fit: cover;" />
+                            <div style="margin-top: 10px;">
+                                <span style="color: #696763; font-size: 12px; background: #F0F0E9; padding: 4px 8px; border-radius: 4px;">
+                                    <i class="fa fa-info-circle" style="margin-right: 3px;"></i>
+                                    Hình ảnh hiện tại
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Image Upload Field -->
+                    <div class="form-group" style="margin-bottom: 30px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-upload" style="color: #FE980F; margin-right: 5px;"></i>
+                            Thay đổi hình ảnh (tùy chọn)
+                        </label>
+                        
+                        <!-- Custom File Upload -->
+                        <div class="file-upload-wrapper" id="fileUploadWrapper" style="position: relative; border: 2px dashed #F0F0E9; border-radius: 8px; padding: 30px; text-align: center; background: #fafafa; transition: all 0.3s ease; cursor: pointer;" onclick="triggerFileInput()">
+                            <div class="upload-icon" style="color: #FE980F; font-size: 48px; margin-bottom: 15px;">
+                                <i class="fa fa-cloud-upload"></i>
+                            </div>
+                            <p style="color: #696763; margin: 0 0 10px 0; font-size: 16px; font-weight: 500;">Nhấp để chọn hình ảnh mới</p>
+                            <p style="color: #999; margin: 0; font-size: 12px;">Để trống nếu không muốn thay đổi hình ảnh</p>
+                        </div>
+                        
+                        <input asp-for="ImageUpload" type="file" id="ImageUpload" style="display: none;" accept="image/*" />
+                        <span asp-validation-for="ImageUpload" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                        
+                        <!-- New Image Preview -->
+                        <div id="newImagePreviewContainer" style="margin-top: 20px; display: none;">
+                            <div style="background: #fff; border: 2px solid #28a745; border-radius: 8px; padding: 15px; text-align: center;">
+                                <p style="color: #28a745; margin: 0 0 10px 0; font-weight: 500;">
+                                    <i class="fa fa-check-circle" style="margin-right: 5px;"></i>
+                                    Hình ảnh mới được chọn:
+                                </p>
+                                <img id="newImgPreview" style="max-width: 100%; max-height: 200px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" />
+                                <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center;">
+                                    <button type="button" onclick="changeImage()" style="background: #ffc107; border: none; color: #212529; padding: 8px 15px; border-radius: 4px; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center;">
+                                        <i class="fa fa-edit" style="margin-right: 5px;"></i>
+                                        Thay đổi
+                                    </button>
+                                    <button type="button" onclick="removeNewImage()" style="background: #dc3545; border: none; color: white; padding: 8px 15px; border-radius: 4px; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center;">
+                                        <i class="fa fa-times" style="margin-right: 5px;"></i>
+                                        Hủy thay đổi
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-group" style="margin-bottom: 0; text-align: center;">
+                        <button type="submit" class="btn btn-primary" style="background: #FE980F; border: none; padding: 15px 40px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 500; transition: all 0.3s ease; min-width: 150px;">
+                            <i class="fa fa-save" style="margin-right: 8px;"></i>
+                            Cập nhật Slider
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
 
+        <!-- Info Panel -->
+        <div class="col-md-4 col-lg-6">
+            <div class="info-panel" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px;">
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0 0 15px 0; font-size: 18px; font-weight: 500;">
+                    <i class="fa fa-info-circle" style="color: #FE980F; margin-right: 8px;"></i>
+                    Thông tin Slider
+                </h4>
+                <div class="info-content">
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #FE980F;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">🆔 ID Slider</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px; font-weight: 600;">#@Model.Id</p>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #28a745;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">📝 Trạng thái hiện tại</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px;">
+                            @if (Model.Status == 1)
+                            {
+                                <span style="color: #28a745; font-weight: 600;">🟢 Đang hiển thị</span>
+                            }
+                            else
+                            {
+                                <span style="color: #dc3545; font-weight: 600;">🔴 Đang ẩn</span>
+                            }
+                        </p>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #17a2b8;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">🖼️ Hình ảnh</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px;">@Model.Image</p>
+                    </div>
+                </div>
+            </div>
 
-
-        <div class="form-group">
-            <label>Mô tả</label>
-            <textarea asp-for="Description" class="form-control"> </textarea>
-            <span asp-validation-for="Description" class="text-danger"></span>
+            <!-- Preview Panel -->
+            <div class="preview-panel" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0 0 15px 0; font-size: 18px; font-weight: 500;">
+                    <i class="fa fa-eye" style="color: #FE980F; margin-right: 8px;"></i>
+                    Xem trước thay đổi
+                </h4>
+                <div id="livePreview" style="border: 2px dashed #F0F0E9; border-radius: 8px; padding: 20px; text-align: center; background: #fafafa; min-height: 150px; display: flex; align-items: center; justify-content: center;">
+                    <img src="/media/sliders/@Model.Image" style="max-width: 100%; max-height: 200px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); object-fit: cover;" />
+                </div>
+            </div>
         </div>
-
-
-
-        <div class="form-group">
-            <label>Trạng thái</label>
-            <select asp-for="Status" class="form-control">
-                @if (@Model.Status == 1)
-                {
-                    <option selected value="1">Hiển thị</option>
-                    <option value="0">Ẩn</option>
-                }
-                else
-                {
-                    <option value="1">Hiển thị</option>
-                    <option selected value="0">Ẩn</option>
-                }
-
-
-            </select>
-
-        </div>
-
-        <div class="form-group">
-            <label>Hình ảnh</label>
-            <input asp-for="ImageUpload" class="form-control" />
-            <span asp-validation-for="ImageUpload" class="text-danger"></span>
-            <img src="~/media/sliders/@Model.Image" width="400px" height="200px" />
-            <img id="imgpreview" class="pt-2" />
-        </div>
-
-        <div class="form-group">
-            <button class="btn btn-primary">Cập nhật</button>
-        </div>
-
-
-    </form>
-    <a asp-action="Index">Trở về trang danh sách sliders</a>
+    </div>
 </div>
+
+<style>
+    .form-control:focus {
+        border-color: #FE980F !important;
+        box-shadow: 0 0 0 0.2rem rgba(254, 152, 15, 0.25) !important;
+        outline: none;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .file-upload-wrapper:hover {
+        border-color: #FE980F;
+        background: #fff5e6;
+    }
+    
+    .info-panel, .preview-panel, .form-container {
+        transition: all 0.3s ease;
+    }
+    
+    .info-panel:hover, .preview-panel:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    @@media (max-width: 768px) {
+        .page-header div {
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+        
+        .col-md-4 {
+            margin-top: 20px;
+        }
+    }
+</style>
+
 @section Scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+    
     <script>
-        $("ImageUpload").change(function () {
-            readURL(this);
+        // Global function to trigger file input
+        function triggerFileInput() {
+            document.getElementById('ImageUpload').click();
+        }
+        
+        // Function to change image (same as triggering file input)
+        function changeImage() {
+            document.getElementById('ImageUpload').click();
+        }
+        
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    // Update new image preview
+                    var newImgPreview = document.getElementById('newImgPreview');
+                    newImgPreview.src = e.target.result;
+                    document.getElementById('newImagePreviewContainer').style.display = 'block';
+                    
+                    // Update live preview panel
+                    var livePreview = document.getElementById('livePreview');
+                    livePreview.innerHTML = '<img src="' + e.target.result + '" style="max-width: 100%; max-height: 200px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); object-fit: cover;" />';
+                    
+                    // Update file upload wrapper to show success state
+                    var wrapper = document.getElementById('fileUploadWrapper');
+                    wrapper.style.borderColor = '#28a745';
+                    wrapper.style.background = '#f8fff8';
+                    wrapper.innerHTML = '<div style="color: #28a745; font-size: 24px; margin-bottom: 10px;"><i class="fa fa-check-circle"></i></div><p style="color: #28a745; margin: 0; font-weight: 500;">Hình ảnh mới đã được chọn</p><p style="color: #666; margin: 5px 0 0 0; font-size: 12px;">Nhấp để chọn hình ảnh khác</p>';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
+        function removeNewImage() {
+            // Clear file input
+            var fileInput = document.getElementById('ImageUpload');
+            fileInput.value = '';
+            
+            // Hide new image preview container
+            document.getElementById('newImagePreviewContainer').style.display = 'none';
+            
+            // Reset live preview to original image
+            var livePreview = document.getElementById('livePreview');
+            livePreview.innerHTML = '<img src="/media/sliders/@Model.Image" style="max-width: 100%; max-height: 200px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); object-fit: cover;" />';
+            
+            // Reset file upload wrapper to original state
+            resetFileUploadWrapper();
+        }
+        
+        function resetFileUploadWrapper() {
+            var wrapper = document.getElementById('fileUploadWrapper');
+            wrapper.style.borderColor = '#F0F0E9';
+            wrapper.style.background = '#fafafa';
+            wrapper.innerHTML = '<div class="upload-icon" style="color: #FE980F; font-size: 48px; margin-bottom: 15px;"><i class="fa fa-cloud-upload"></i></div><p style="color: #696763; margin: 0 0 10px 0; font-size: 16px; font-weight: 500;">Nhấp để chọn hình ảnh mới</p><p style="color: #999; margin: 0; font-size: 12px;">Để trống nếu không muốn thay đổi hình ảnh</p>';
+        }
+        
+        // Initialize when document is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // File input change event
+            var fileInput = document.getElementById('ImageUpload');
+            if (fileInput) {
+                fileInput.addEventListener('change', function() {
+                    console.log('File selected:', this.files[0]); // Debug log
+                    readURL(this);
+                });
+            }
+            
+            // Form validation styling
+            var form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    var submitBtn = form.querySelector('button[type="submit"]');
+                    submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin" style="margin-right: 8px;"></i>Đang cập nhật...';
+                    submitBtn.disabled = true;
+                });
+            }
         });
-    </script>
-
-    <script>
-        CKEDITOR.replace('Description');
+        
+        // CKEditor initialization
+        CKEDITOR.replace('Description', {
+            height: 120,
+            toolbar: [
+                { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline'] },
+                { name: 'paragraph', items: ['NumberedList', 'BulletedList'] },
+                { name: 'links', items: ['Link', 'Unlink'] }
+            ]
+        });
     </script>
 }

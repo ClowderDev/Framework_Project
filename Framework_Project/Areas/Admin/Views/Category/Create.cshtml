@@ -1,47 +1,238 @@
 ﻿@model CategoryModel
 @{
-    ViewData["title"] = "Tạo Danh mục";
+    ViewData["Title"] = "Tạo Danh mục";
 }
 
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header" style="border-bottom: 2px solid #FE980F; margin-bottom: 30px; padding-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <h1 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; display: flex; align-items: center;">
+                            <i class="fa fa-plus-circle" style="color: #FE980F; margin-right: 10px;"></i>
+                            Tạo Danh mục Mới
+                        </h1>
+                        <p style="color: #696763; margin: 5px 0 0 0; font-size: 14px;">Thêm danh mục mới vào hệ thống</p>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a asp-action="Index" asp-controller="Category" style="background: #6c757d; border: none; padding: 10px 20px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.3s ease;">
+                            <i class="fa fa-arrow-left" style="margin-right: 8px;"></i>
+                            Quay lại danh sách
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<h3>Tạo Danh mục</h3>
+    <!-- Form Container -->
+    <div class="row">
+        <div class="col-md-8 col-lg-8">
+            <div class="form-container" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div class="form-header" style="margin-bottom: 25px;">
+                    <h3 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 20px; font-weight: 500;">
+                        <i class="fa fa-edit" style="color: #FE980F; margin-right: 8px;"></i>
+                        Thông tin Danh mục
+                    </h3>
+                    <p style="color: #696763; margin: 5px 0 0 0; font-size: 14px;">Điền thông tin chi tiết cho danh mục mới</p>
+                </div>
 
-<div class="col-md-9">
-    <form asp-action="Create" asp-controller="Category" enctype="multipart/form-data">
+                <form autocomplete="off" asp-action="Create" asp-controller="Category" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="border-radius: 6px; border: none; background: #f8d7da; color: #721c24; padding: 15px; margin-bottom: 20px; display: none;"></div>
+                    
+                    <!-- Name Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-tag" style="color: #FE980F; margin-right: 5px;"></i>
+                            Tên Danh mục
+                        </label>
+                        <input asp-for="Name" class="form-control" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%;" placeholder="Nhập tên danh mục..." />
+                        <span asp-validation-for="Name" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                    </div>
 
+                    <!-- Description Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-align-left" style="color: #FE980F; margin-right: 5px;"></i>
+                            Mô tả Danh mục
+                        </label>
+                        <textarea asp-for="Description" class="form-control" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%; min-height: 120px; resize: vertical;" placeholder="Nhập mô tả chi tiết cho danh mục..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                    </div>
 
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label>Tên</label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
+                    <!-- Status Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-toggle-on" style="color: #FE980F; margin-right: 5px;"></i>
+                            Trạng thái
+                        </label>
+                        <select asp-for="Status" class="form-control" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%;">
+                            <option value="">-- Chọn trạng thái --</option>
+                            <option value="1">Hiển thị</option>
+                            <option value="0">Ẩn</option>
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-group" style="margin-bottom: 0; text-align: center;">
+                        <button type="submit" class="btn btn-primary" style="background: #FE980F; border: none; padding: 15px 40px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 500; transition: all 0.3s ease; min-width: 150px;">
+                            <i class="fa fa-save" style="margin-right: 8px;"></i>
+                            Tạo Danh mục
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>Mô tả</label>
-            <textarea asp-for="Description" class="form-control"> </textarea>
-            <span asp-validation-for="Description" class="text-danger"></span>
+        <!-- Help Panel -->
+        <div class="col-md-4 col-lg-4">
+            <div class="help-panel" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px;">
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0 0 15px 0; font-size: 18px; font-weight: 500;">
+                    <i class="fa fa-info-circle" style="color: #FE980F; margin-right: 8px;"></i>
+                    Hướng dẫn
+                </h4>
+                <div class="help-content">
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #FE980F;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">📝 Tên Danh mục</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px;">Nhập tên rõ ràng, dễ hiểu cho danh mục</p>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #28a745;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">📄 Mô tả</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px;">Mô tả chi tiết giúp khách hàng hiểu rõ hơn</p>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #17a2b8;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">👁️ Trạng thái</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px;">Chọn "Hiển thị" để danh mục xuất hiện trên website</p>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #6f42c1;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">💡 Lưu ý</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px;">Sau khi tạo có thể chỉnh sửa bất cứ lúc nào</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="preview-panel" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0 0 15px 0; font-size: 18px; font-weight: 500;">
+                    <i class="fa fa-eye" style="color: #FE980F; margin-right: 8px;"></i>
+                    Xem trước
+                </h4>
+                <div id="livePreview" style="border: 2px dashed #F0F0E9; border-radius: 8px; padding: 20px; text-align: center; background: #fafafa; min-height: 200px;">
+                    <div id="previewContent" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+                        <div style="color: #999; font-size: 48px; margin-bottom: 10px;">
+                            <i class="fa fa-folder"></i>
+                        </div>
+                        <p style="color: #999; margin: 0; font-style: italic;">Điền thông tin để xem trước</p>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label>Trạng thái</label>
-            <select asp-for="Status" class="form-control">
-                <option value="1">Hiển thị</option>
-                <option value="0">Ẩn</option>
-            </select>
-            <span asp-validation-for="Status" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <button class="btn btn-primary">Tạo</button>
-        </div>
-
-
-    </form>
-    <a asp-action="Index">Trở về danh sách Danh mục</a>
+    </div>
 </div>
+
+<style>
+    .form-control:focus {
+        border-color: #FE980F !important;
+        box-shadow: 0 0 0 0.2rem rgba(254, 152, 15, 0.25) !important;
+        outline: none;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .help-panel, .preview-panel, .form-container {
+        transition: all 0.3s ease;
+    }
+    
+    .help-panel:hover, .preview-panel:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    @@media (max-width: 768px) {
+        .page-header div {
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+        
+        .col-md-4 {
+            margin-top: 20px;
+        }
+    }
+</style>
+
 @section Scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+    
+    <script>
+        function updateLivePreview() {
+            var name = document.querySelector('input[name="Name"]').value;
+            var description = document.querySelector('textarea[name="Description"]').value;
+            var status = document.querySelector('select[name="Status"] option:checked').text;
+            
+            var previewContent = document.getElementById('previewContent');
+            
+            if (name || description || (status && status !== '-- Chọn trạng thái --')) {
+                var html = '<div style="text-align: center;">';
+                
+                html += '<div style="color: #FE980F; font-size: 48px; margin-bottom: 10px;"><i class="fa fa-folder"></i></div>';
+                
+                if (name) {
+                    html += '<h6 style="color: #363432; margin: 0 0 5px 0; font-weight: 500;">' + name + '</h6>';
+                }
+                
+                if (description) {
+                    var shortDesc = description.length > 50 ? description.substring(0, 50) + '...' : description;
+                    html += '<p style="color: #696763; margin: 0 0 10px 0; font-size: 12px;">' + shortDesc + '</p>';
+                }
+                
+                if (status && status !== '-- Chọn trạng thái --') {
+                    var statusColor = status === 'Hiển thị' ? '#28a745' : '#dc3545';
+                    html += '<span style="background: ' + statusColor + '; color: white; padding: 2px 8px; border-radius: 3px; font-size: 10px;">' + status + '</span>';
+                }
+                
+                html += '</div>';
+                previewContent.innerHTML = html;
+            } else {
+                previewContent.innerHTML = '<div style="color: #999; font-size: 48px; margin-bottom: 10px;"><i class="fa fa-folder"></i></div><p style="color: #999; margin: 0; font-style: italic;">Điền thông tin để xem trước</p>';
+            }
+        }
+        
+        // Initialize when document is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Form validation styling
+            var form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    var submitBtn = form.querySelector('button[type="submit"]');
+                    submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin" style="margin-right: 8px;"></i>Đang tạo...';
+                    submitBtn.disabled = true;
+                });
+            }
+            
+            // Live preview updates
+            document.querySelector('input[name="Name"]').addEventListener('input', updateLivePreview);
+            document.querySelector('textarea[name="Description"]').addEventListener('input', updateLivePreview);
+            document.querySelector('select[name="Status"]').addEventListener('change', updateLivePreview);
+        });
+        
+        // CKEditor initialization
+        CKEDITOR.replace('Description', {
+            height: 120,
+            toolbar: [
+                { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline'] },
+                { name: 'paragraph', items: ['NumberedList', 'BulletedList'] },
+                { name: 'links', items: ['Link', 'Unlink'] }
+            ]
+        });
+    </script>
 }

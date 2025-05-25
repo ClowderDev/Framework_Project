@@ -88,5 +88,59 @@ namespace Framework_Project.Areas.Admin.Controllers
             }
         }
 
+        [Route("Edit/{id}")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var shipping = await _dataContext.Shippings.FindAsync(id);
+            if (shipping == null)
+            {
+                return NotFound();
+            }
+            return View(shipping);
+        }
+
+        [HttpPost]
+        [Route("Edit/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,City,District,Ward,Price")] ShippingModel shippingModel)
+        {
+            if (id != shippingModel.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _dataContext.Update(shippingModel);
+                    await _dataContext.SaveChangesAsync();
+                    TempData["success"] = "Cập nhật địa chỉ thành công";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ShippingModelExists(shippingModel.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("", "Đã xảy ra lỗi khi cập nhật địa chỉ.");
+                    return View(shippingModel);
+                }
+            }
+            return View(shippingModel);
+        }
+
+        private bool ShippingModelExists(int id)
+        {
+            return _dataContext.Shippings.Any(e => e.Id == id);
+        }
     }
 }

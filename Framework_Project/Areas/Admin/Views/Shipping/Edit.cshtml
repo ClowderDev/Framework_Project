@@ -1,0 +1,292 @@
+@model Framework_Project.Models.ShippingModel
+
+@{
+    ViewData["Title"] = "Chỉnh sửa Địa chỉ Vận chuyển";
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header" style="border-bottom: 2px solid #FE980F; margin-bottom: 30px; padding-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <h1 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; display: flex; align-items: center;">
+                            <i class="fa fa-edit" style="color: #FE980F; margin-right: 10px;"></i>
+                            Chỉnh sửa Địa chỉ Vận chuyển
+                        </h1>
+                        <p style="color: #696763; margin: 5px 0 0 0; font-size: 14px;">Cập nhật thông tin địa chỉ vận chuyển #@Model.Id</p>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a asp-action="Index" asp-controller="Shipping" style="background: #6c757d; border: none; padding: 10px 20px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.3s ease;">
+                            <i class="fa fa-arrow-left" style="margin-right: 8px;"></i>
+                            Quay lại danh sách
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="row">
+        <div class="col-md-8 col-lg-6">
+            <div class="form-container" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div class="form-header" style="margin-bottom: 25px;">
+                    <h3 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 20px; font-weight: 500;">
+                        <i class="fa fa-pencil" style="color: #FE980F; margin-right: 8px;"></i>
+                        Thông tin Địa chỉ
+                    </h3>
+                    <p style="color: #696763; margin: 5px 0 0 0; font-size: 14px;">Chỉnh sửa thông tin địa chỉ và phí vận chuyển</p>
+                </div>
+
+                <form asp-action="Edit" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Id" />
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="border-radius: 6px; border: none; background: #f8d7da; color: #721c24; padding: 15px; margin-bottom: 20px; display: none;"></div>
+                    
+                    <!-- City Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label asp-for="City" style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-building" style="color: #FE980F; margin-right: 5px;"></i>
+                            Tỉnh/Thành phố
+                        </label>
+                        <input asp-for="City" class="form-control" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%;" placeholder="Nhập tên tỉnh/thành phố..." />
+                        <span asp-validation-for="City" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                    </div>
+
+                    <!-- District Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label asp-for="District" style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-map" style="color: #FE980F; margin-right: 5px;"></i>
+                            Quận/Huyện
+                        </label>
+                        <input asp-for="District" class="form-control" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%;" placeholder="Nhập tên quận/huyện..." />
+                        <span asp-validation-for="District" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                    </div>
+
+                    <!-- Ward Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label asp-for="Ward" style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-map-marker" style="color: #FE980F; margin-right: 5px;"></i>
+                            Phường/Xã
+                        </label>
+                        <input asp-for="Ward" class="form-control" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%;" placeholder="Nhập tên phường/xã..." />
+                        <span asp-validation-for="Ward" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                    </div>
+
+                    <!-- Price Field -->
+                    <div class="form-group" style="margin-bottom: 30px;">
+                        <label asp-for="Price" style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-money" style="color: #FE980F; margin-right: 5px;"></i>
+                            Phí vận chuyển (VNĐ)
+                        </label>
+                        <input asp-for="Price" class="form-control price-input" type="number" min="0" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%;" placeholder="Nhập phí vận chuyển..." />
+                        <div id="price-preview" style="margin-top: 8px; padding: 8px 12px; background: #e7f3ff; border-radius: 4px; color: #004085; font-weight: 500; font-size: 14px; display: none;">
+                            <i class="fa fa-calculator" style="margin-right: 5px;"></i>
+                            <span id="price-display"></span>
+                        </div>
+                        <span asp-validation-for="Price" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-group" style="margin-bottom: 0; text-align: center;">
+                        <button type="submit" class="btn btn-primary" style="background: #FE980F; border: none; padding: 15px 40px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 500; transition: all 0.3s ease; min-width: 150px;">
+                            <i class="fa fa-save" style="margin-right: 8px;"></i>
+                            Cập nhật Địa chỉ
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Info Panel -->
+        <div class="col-md-4 col-lg-6">
+            <div class="info-panel" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px;">
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0 0 15px 0; font-size: 18px; font-weight: 500;">
+                    <i class="fa fa-info-circle" style="color: #FE980F; margin-right: 8px;"></i>
+                    Thông tin Hiện tại
+                </h4>
+                <div class="info-content">
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #FE980F;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">🆔 ID Địa chỉ</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px; font-weight: 600;">#@Model.Id</p>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #28a745;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">🏢 Thành phố</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px;">@Model.City</p>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #17a2b8;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">🗺️ Quận/Huyện</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px;">@Model.District</p>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #6f42c1;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">📍 Phường/Xã</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px;">@Model.Ward</p>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #dc3545;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">💰 Phí hiện tại</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px; font-weight: 600;">@Model.Price.ToString("#,##0 VNĐ")</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="preview-panel" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0 0 15px 0; font-size: 18px; font-weight: 500;">
+                    <i class="fa fa-eye" style="color: #FE980F; margin-right: 8px;"></i>
+                    Xem trước thay đổi
+                </h4>
+                <div id="address-preview" style="border: 2px dashed #F0F0E9; border-radius: 8px; padding: 20px; text-align: center; background: #fafafa; min-height: 200px;">
+                    <div id="preview-content">
+                        <div style="text-align: left;">
+                            <div style="margin-bottom: 15px;">
+                                <h6 style="color: #363432; margin: 0 0 10px 0; font-weight: 500;">📍 Địa chỉ đầy đủ:</h6>
+                                <div style="background: #f8f9fa; padding: 10px; border-radius: 4px; border-left: 4px solid #FE980F;">
+                                    <p style="margin: 0; color: #363432; font-size: 14px;"><strong id="preview-ward">@Model.Ward</strong></p>
+                                    <p style="margin: 0; color: #696763; font-size: 13px;" id="preview-district">@Model.District</p>
+                                    <p style="margin: 0; color: #696763; font-size: 13px;" id="preview-city">@Model.City</p>
+                                </div>
+                            </div>
+                            <div>
+                                <h6 style="color: #363432; margin: 0 0 5px 0; font-weight: 500;">💰 Phí vận chuyển:</h6>
+                                <p style="color: #FE980F; margin: 0; font-weight: 700; font-size: 16px;" id="preview-price">@Model.Price.ToString("#,##0 VNĐ")</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control:focus {
+        border-color: #FE980F !important;
+        box-shadow: 0 0 0 0.2rem rgba(254, 152, 15, 0.25) !important;
+        outline: none;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .info-panel, .preview-panel, .form-container {
+        transition: all 0.3s ease;
+    }
+    
+    .info-panel:hover, .preview-panel:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    @@media (max-width: 768px) {
+        .page-header div {
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+        
+        .col-md-4 {
+            margin-top: 20px;
+        }
+    }
+</style>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function() {
+            // Initialize price display on page load
+            var initialPrice = $('.price-input').val();
+            if (initialPrice && initialPrice > 0) {
+                updatePriceDisplay(initialPrice);
+            }
+            
+            // Price input event
+            $('.price-input').on('input', function() {
+                var price = $(this).val();
+                updatePriceDisplay(price);
+                updatePreview();
+            });
+            
+            // City input event
+            $('input[name="City"]').on('input', function() {
+                updatePreview();
+            });
+            
+            // District input event
+            $('input[name="District"]').on('input', function() {
+                updatePreview();
+            });
+            
+            // Ward input event
+            $('input[name="Ward"]').on('input', function() {
+                updatePreview();
+            });
+            
+            // Update price display function
+            function updatePriceDisplay(price) {
+                var priceDisplay = document.getElementById('price-display');
+                var pricePreview = document.getElementById('price-preview');
+                
+                if (price && price.trim() !== '' && price > 0) {
+                    var formattedPrice = new Intl.NumberFormat('vi-VN', { 
+                        style: 'currency', 
+                        currency: 'VND' 
+                    }).format(price);
+                    
+                    priceDisplay.textContent = formattedPrice;
+                    pricePreview.style.display = 'block';
+                } else {
+                    pricePreview.style.display = 'none';
+                }
+            }
+            
+            // Update preview function
+            function updatePreview() {
+                var city = $('input[name="City"]').val() || '@Model.City';
+                var district = $('input[name="District"]').val() || '@Model.District';
+                var ward = $('input[name="Ward"]').val() || '@Model.Ward';
+                var price = $('.price-input').val() || '@Model.Price';
+                
+                // Update preview elements
+                document.getElementById('preview-city').textContent = city;
+                document.getElementById('preview-district').textContent = district;
+                document.getElementById('preview-ward').textContent = ward;
+                
+                if (price && price > 0) {
+                    var formattedPrice = new Intl.NumberFormat('vi-VN', { 
+                        style: 'currency', 
+                        currency: 'VND' 
+                    }).format(price);
+                    document.getElementById('preview-price').textContent = formattedPrice;
+                }
+            }
+            
+            // Form submission handling
+            $('form').on('submit', function(e) {
+                var submitBtn = $('button[type="submit"]');
+                submitBtn.prop('disabled', true);
+                submitBtn.html('<i class="fa fa-spinner fa-spin" style="margin-right: 8px;"></i>Đang cập nhật...');
+            });
+            
+            // Add visual feedback for form changes
+            $('input').on('input', function() {
+                $(this).addClass('changed');
+                setTimeout(() => {
+                    $(this).removeClass('changed');
+                }, 300);
+            });
+        });
+    </script>
+    
+    <style>
+        .form-control.changed {
+            background-color: #fff5e6 !important;
+            transition: background-color 0.3s ease;
+        }
+    </style>
+}

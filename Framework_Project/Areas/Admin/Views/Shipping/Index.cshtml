@@ -1,102 +1,322 @@
 @{
-    ViewData["Title"] = "Shipping Management";
+    ViewData["Title"] = "Quản lý Vận chuyển";
 }
 
 <div class="container-fluid">
-    <div class="card shadow mb-4">
-        <div class="card-header py-3 d-flex justify-content-between align-items-center">
-            <h6 class="m-0 font-weight-bold text-primary">Danh sách địa chỉ</h6>
-            <a class="btn btn-primary" asp-action="Create" asp-controller="Shipping">Thêm địa chỉ</a>
+    <!-- Page Header -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header" style="border-bottom: 2px solid #FE980F; margin-bottom: 30px; padding-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <h1 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; display: flex; align-items: center;">
+                            <i class="fa fa-truck" style="color: #FE980F; margin-right: 10px;"></i>
+                            Quản lý Vận chuyển
+                        </h1>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a class="btn btn-primary" asp-action="Create" asp-controller="Shipping" style="background: #FE980F; border: none; padding: 12px 25px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.3s ease;">
+                            <i class="fa fa-plus" style="margin-right: 8px;"></i>
+                            Thêm Địa chỉ Mới
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Thành phố</th>
-                            <th>Quận</th>
-                            <th>Huyện</th>
-                            <th>Giá</th>
-                            <th>Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (ViewBag.Shippings != null)
-                        {
-                            @foreach (var shipping in ViewBag.Shippings)
+    </div>
+
+    <!-- Statistics Summary -->
+    <div class="row" style="margin-bottom: 30px;">
+        <div class="col-md-3 col-sm-6">
+            <div class="stats-mini-card" style="background: #fff; border: 1px solid #F7F7F0; padding: 20px; text-align: center; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="color: #FE980F; font-size: 24px; margin-bottom: 5px;">
+                    <i class="fa fa-map-marker"></i>
+                </div>
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 14px;">Tổng địa chỉ</h4>
+                <p style="color: #FE980F; font-size: 20px; font-weight: 700; margin: 5px 0 0 0;">
+                    @if (ViewBag.Shippings != null)
+                    {
+                        @ViewBag.Shippings.Count
+                    }
+                    else
+                    {
+                        @:0
+                    }
+                </p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stats-mini-card" style="background: #fff; border: 1px solid #F7F7F0; padding: 20px; text-align: center; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="color: #28a745; font-size: 24px; margin-bottom: 5px;">
+                    <i class="fa fa-building"></i>
+                </div>
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 14px;">Thành phố</h4>
+                <p style="color: #28a745; font-size: 20px; font-weight: 700; margin: 5px 0 0 0;">
+                    @if (ViewBag.Shippings != null)
+                    {
+                        @((((IEnumerable<ShippingModel>)ViewBag.Shippings).Select(s => s.City).Distinct().Count()))
+                    }
+                    else
+                    {
+                        @:0
+                    }
+                </p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stats-mini-card" style="background: #fff; border: 1px solid #F7F7F0; padding: 20px; text-align: center; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="color: #17a2b8; font-size: 24px; margin-bottom: 5px;">
+                    <i class="fa fa-money"></i>
+                </div>
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 14px;">Phí TB</h4>
+                <p style="color: #17a2b8; font-size: 20px; font-weight: 700; margin: 5px 0 0 0;">
+                    @if (((IEnumerable<ShippingModel>)ViewBag.Shippings).Any())
+                    {
+                        @(((IEnumerable<ShippingModel>)ViewBag.Shippings).Average(s => s.Price).ToString("N0"))
+                    }
+                    else
+                    {
+                        @:0
+                    }
+                    <span style="font-size: 10px;">VNĐ</span>
+                </p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stats-mini-card" style="background: #fff; border: 1px solid #F7F7F0; padding: 20px; text-align: center; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="color: #dc3545; font-size: 24px; margin-bottom: 5px;">
+                    <i class="fa fa-dollar"></i>
+                </div>
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 14px;">Phí cao nhất</h4>
+                <p style="color: #dc3545; font-size: 20px; font-weight: 700; margin: 5px 0 0 0;">
+                    @if (((IEnumerable<ShippingModel>)ViewBag.Shippings).Any())
+                    {
+                        @(((IEnumerable<ShippingModel>)ViewBag.Shippings).Max(s => s.Price).ToString("N0"))
+                    }
+                    else
+                    {
+                        @:0
+                    }
+                    <span style="font-size: 10px;">VNĐ</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shipping Table -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-container" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div class="table-header" style="background: #F0F0E9; padding: 20px; border-bottom: 1px solid #F7F7F0;">
+                    <h3 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 18px; font-weight: 500;">
+                        <i class="fa fa-list" style="color: #FE980F; margin-right: 8px;"></i>
+                        Danh sách Địa chỉ Vận chuyển
+                    </h3>
+                </div>
+                
+                <div class="table-responsive" style="padding: 0;">
+                    <table class="table" id="myTable" style="margin: 0; border: none;">
+                        <thead style="background: #FE980F; color: white;">
+                            <tr>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; text-align: center; width: 60px;">Id</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; min-width: 150px;">Thành phố</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; width: 120px;">Quận/Huyện</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; width: 120px;">Phường/Xã</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; text-align: center; width: 140px;">Phí vận chuyển</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; text-align: center; width: 200px;">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.Shippings != null)
+                            {
+                                @foreach (var shipping in ViewBag.Shippings)
+                                {
+                                    <tr style="border-bottom: 1px solid #F7F7F0; transition: background-color 0.3s ease;" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='white'">
+                                        <td style="padding: 20px 15px; vertical-align: middle; text-align: center;">
+                                            <span style="background: #F0F0E9; color: #363432; padding: 5px 10px; border-radius: 4px; font-weight: 500; font-size: 12px;">#@shipping.Id</span>
+                                        </td>
+                                        <td style="padding: 20px 15px; vertical-align: middle;">
+                                            <div style="font-family: 'Roboto', sans-serif; color: #363432; font-weight: 500; font-size: 14px;">@shipping.City</div>
+                                        </td>
+                                        <td style="padding: 20px 15px; vertical-align: middle;">
+                                            <div style="font-family: 'Roboto', sans-serif; color: #363432; font-size: 13px;">@shipping.District</div>
+                                        </td>
+                                        <td style="padding: 20px 15px; vertical-align: middle;">
+                                            <div style="font-family: 'Roboto', sans-serif; color: #363432; font-size: 13px;">@shipping.Ward</div>
+                                        </td>
+                                        <td style="padding: 20px 15px; vertical-align: middle; text-align: center;">
+                                            <span style="color: #FE980F; font-weight: 600; font-size: 13px;">@shipping.Price.ToString("#,##0 đ")</span>
+                                        </td>
+                                        <td style="padding: 20px 15px; vertical-align: middle; text-align: center;">
+                                            <div style="display: flex; gap: 5px; justify-content: center; flex-wrap: wrap;">
+                                                <a class="btn btn-sm" asp-action="Edit" asp-controller="Shipping" asp-route-id="@shipping.Id"
+                                                   style="background: #17a2b8; border: none; color: white; padding: 6px 10px; border-radius: 4px; text-decoration: none; font-size: 11px; display: inline-flex; align-items: center; transition: all 0.3s ease; margin-bottom: 3px;"
+                                                   onmouseover="this.style.background='#138496'; this.style.transform='translateY(-1px)'"
+                                                   onmouseout="this.style.background='#17a2b8'; this.style.transform='translateY(0)'">
+                                                    <i class="fa fa-edit" style="margin-right: 3px; font-size: 9px;"></i>
+                                                    Sửa
+                                                </a>
+                                                <button type="button" class="btn btn-sm delete-shipping" data-id="@shipping.Id"
+                                                        style="background: #dc3545; border: none; color: white; padding: 6px 10px; border-radius: 4px; font-size: 11px; display: inline-flex; align-items: center; transition: all 0.3s ease; margin-bottom: 3px;"
+                                                        onmouseover="this.style.background='#c82333'; this.style.transform='translateY(-1px)'"
+                                                        onmouseout="this.style.background='#dc3545'; this.style.transform='translateY(0)'">
+                                                    <i class="fa fa-trash" style="margin-right: 3px; font-size: 9px;"></i>
+                                                    Xóa
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
                             {
                                 <tr>
-                                    <td>@shipping.Id</td>
-                                    <td>@shipping.City</td>
-                                    <td>@shipping.District</td>
-                                    <td>@shipping.Ward</td>
-                                    <td>@shipping.Price.ToString("N0") VND</td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm delete-shipping" data-id="@shipping.Id">Delete</button>
+                                    <td colspan="6" style="padding: 40px; text-align: center; color: #696763;">
+                                        <div style="display: flex; flex-direction: column; align-items: center;">
+                                            <i class="fa fa-truck" style="font-size: 48px; color: #ddd; margin-bottom: 15px;"></i>
+                                            <h5 style="color: #363432; margin-bottom: 10px;">Chưa có địa chỉ vận chuyển</h5>
+                                            <p style="margin: 0;">Thêm địa chỉ vận chuyển đầu tiên để bắt đầu</p>
+                                        </div>
                                     </td>
                                 </tr>
                             }
-                        }
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+<style>
+    .stats-mini-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+    }
+    
+    .btn:hover {
+        transform: translateY(-1px);
+    }
+    
+    .table-container {
+        transition: all 0.3s ease;
+    }
+    
+    @@media (max-width: 768px) {
+        .table-responsive {
+            font-size: 12px;
+        }
+        
+        .stats-mini-card {
+            margin-bottom: 15px;
+        }
+        
+        .page-header div {
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+    }
+</style>
+
 @section Scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <script>
-    $(document).ready(function() {
-        $('.delete-shipping').click(function() {
-            var shippingId = $(this).data('id');
-            Swal.fire({
-                title: 'Are you sure?',
-                text: 'Do you want to delete this shipping?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: '@Url.Action("Delete", "Shipping")?id=' + shippingId,
-                        type: 'POST',
-                        headers: {
-                            "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
-                        },
-                        success: function(result) {
-                            if (result.success) {
-                                Swal.fire(
-                                    'Deleted!',
-                                    'Shipping has been deleted.',
-                                    'success'
-                                ).then(() => {
-                                    location.reload();
-                                });
-                            } else {
-                                Swal.fire(
-                                    'Error!',
-                                    result.message || 'Error deleting shipping.',
-                                    'error'
-                                );
+        $(document).ready(function() {
+            // Delete shipping functionality
+            $('.delete-shipping').click(function() {
+                var shippingId = $(this).data('id');
+                Swal.fire({
+                    title: 'Bạn có chắc chắn?',
+                    text: 'Bạn có muốn xóa địa chỉ vận chuyển này không?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#FE980F',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Có, xóa nó!',
+                    cancelButtonText: 'Hủy bỏ',
+                    customClass: {
+                        popup: 'swal-custom-popup',
+                        title: 'swal-custom-title',
+                        content: 'swal-custom-content'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Show loading
+                        Swal.fire({
+                            title: 'Đang xóa...',
+                            text: 'Vui lòng đợi',
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            showConfirmButton: false,
+                            didOpen: () => {
+                                Swal.showLoading();
                             }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Delete shipping error:', error);
-                            Swal.fire(
-                                'Error!',
-                                'Error deleting shipping. Please try again.',
-                                'error'
-                            );
-                        }
-                    });
-                }
+                        });
+                        
+                        $.ajax({
+                            url: '@Url.Action("Delete", "Shipping")?id=' + shippingId,
+                            type: 'POST',
+                            headers: {
+                                "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                            },
+                            success: function(result) {
+                                if (result.success) {
+                                    Swal.fire({
+                                        title: 'Đã xóa!',
+                                        text: 'Địa chỉ vận chuyển đã được xóa thành công.',
+                                        icon: 'success',
+                                        confirmButtonColor: '#FE980F',
+                                        customClass: {
+                                            popup: 'swal-custom-popup'
+                                        }
+                                    }).then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: 'Lỗi!',
+                                        text: result.message || 'Có lỗi xảy ra khi xóa địa chỉ vận chuyển.',
+                                        icon: 'error',
+                                        confirmButtonColor: '#FE980F',
+                                        customClass: {
+                                            popup: 'swal-custom-popup'
+                                        }
+                                    });
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Delete shipping error:', error);
+                                Swal.fire({
+                                    title: 'Lỗi!',
+                                    text: 'Có lỗi xảy ra khi xóa địa chỉ vận chuyển. Vui lòng thử lại.',
+                                    icon: 'error',
+                                    confirmButtonColor: '#FE980F',
+                                    customClass: {
+                                        popup: 'swal-custom-popup'
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
             });
         });
-    });
     </script>
-}
+    
+    <style>
+        .swal-custom-popup {
+            font-family: 'Roboto', sans-serif !important;
+        }
+        
+        .swal-custom-title {
+            color: #363432 !important;
+        }
+        
+        .swal-custom-content {
+            color: #696763 !important;
+        }
+    </style>
 @Html.AntiForgeryToken()
-
+}

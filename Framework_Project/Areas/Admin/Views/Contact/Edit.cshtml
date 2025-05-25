@@ -1,72 +1,501 @@
 ﻿@model ContactModel
 @{
-    ViewData["title"] = "Chỉnh sửa Liên hệ";
+    ViewData["Title"] = "Chỉnh sửa Thông tin Liên hệ";
 }
 
-
-<h3>Chỉnh sửa Liên hệ</h3>
-
-<div class="col-md-9">
-    <form asp-action="Edit" asp-controller="Contact" method="post" enctype="multipart/form-data">
-
-
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div asp-for="Id" type="hidden"></div>
-        <div class="form-group">
-            <label>Tên</label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header" style="border-bottom: 2px solid #FE980F; margin-bottom: 30px; padding-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <h1 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; display: flex; align-items: center;">
+                            <i class="fa fa-edit" style="color: #FE980F; margin-right: 10px;"></i>
+                            Chỉnh sửa Thông tin Liên hệ
+                        </h1>
+                        <p style="color: #696763; margin: 5px 0 0 0; font-size: 14px;">Cập nhật thông tin liên hệ và cấu hình công ty</p>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a asp-action="Index" asp-controller="Contact" style="background: #6c757d; border: none; padding: 10px 20px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.3s ease;">
+                            <i class="fa fa-arrow-left" style="margin-right: 8px;"></i>
+                            Quay lại danh sách
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Email</label>
-            <input asp-for="Email" class="form-control" />
-            <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <!-- Form Container -->
+    <div class="row">
+        <div class="col-md-8 col-lg-8">
+            <div class="form-container" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div class="form-header" style="margin-bottom: 25px;">
+                    <h3 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 20px; font-weight: 500;">
+                        <i class="fa fa-pencil" style="color: #FE980F; margin-right: 8px;"></i>
+                        Thông tin Liên hệ
+                    </h3>
+                    <p style="color: #696763; margin: 5px 0 0 0; font-size: 14px;">Chỉnh sửa thông tin chi tiết cho liên hệ</p>
+                </div>
+
+                <form asp-action="Edit" asp-controller="Contact" method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Id" />
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="border-radius: 6px; border: none; background: #f8d7da; color: #721c24; padding: 15px; margin-bottom: 20px; display: none;"></div>
+                    
+                    <!-- Name Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-building" style="color: #FE980F; margin-right: 5px;"></i>
+                            Tên công ty
+                        </label>
+                        <input asp-for="Name" class="form-control" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%;" placeholder="Nhập tên công ty..." />
+                        <span asp-validation-for="Name" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                    </div>
+
+                    <!-- Email Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-envelope" style="color: #FE980F; margin-right: 5px;"></i>
+                            Email liên hệ
+                        </label>
+                        <input asp-for="Email" type="email" class="form-control" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%;" placeholder="Nhập email liên hệ..." />
+                        <span asp-validation-for="Email" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                    </div>
+
+                    <!-- Phone Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-phone" style="color: #FE980F; margin-right: 5px;"></i>
+                            Số điện thoại
+                        </label>
+                        <input asp-for="Phone" type="tel" class="form-control" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%;" placeholder="Nhập số điện thoại..." />
+                        <span asp-validation-for="Phone" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                    </div>
+
+                    <!-- Description Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-align-left" style="color: #FE980F; margin-right: 5px;"></i>
+                            Mô tả công ty
+                        </label>
+                        <textarea asp-for="Description" class="form-control" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%; min-height: 120px; resize: vertical;" placeholder="Nhập mô tả về công ty..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                    </div>
+
+                    <!-- Map Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-map-marker" style="color: #FE980F; margin-right: 5px;"></i>
+                            Bản đồ (Embed Code)
+                        </label>
+                        <textarea asp-for="Map" class="form-control" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%; min-height: 100px; resize: vertical;" placeholder="Dán mã embed bản đồ từ Google Maps..."></textarea>
+                        <div style="margin-top: 8px; padding: 8px 12px; background: #e7f3ff; border-radius: 4px; color: #004085; font-size: 12px;">
+                            <i class="fa fa-info-circle" style="margin-right: 5px;"></i>
+                            Hướng dẫn: Vào Google Maps → Chia sẻ → Nhúng bản đồ → Sao chép HTML
+                        </div>
+                        <span asp-validation-for="Map" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                    </div>
+
+                    <!-- Current Logo Display -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-image" style="color: #FE980F; margin-right: 5px;"></i>
+                            Logo hiện tại
+                        </label>
+                        <div class="current-logo-container" style="background: #fff; border: 2px solid #F0F0E9; border-radius: 8px; padding: 15px; text-align: center;">
+                            @if (!string.IsNullOrEmpty(Model.LogoImg))
+                            {
+                                <img src="~/media/logo/@Model.LogoImg" id="currentLogo" style="max-width: 200px; max-height: 150px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); object-fit: contain; background: white;" />
+                                <div style="margin-top: 10px;">
+                                    <span style="color: #696763; font-size: 12px; background: #F0F0E9; padding: 4px 8px; border-radius: 4px;">
+                                        <i class="fa fa-info-circle" style="margin-right: 3px;"></i>
+                                        Logo hiện tại
+                                    </span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div style="color: #999; font-size: 48px; margin-bottom: 10px;">
+                                    <i class="fa fa-image"></i>
+                                </div>
+                                <p style="color: #999; margin: 0; font-style: italic;">Chưa có logo</p>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Logo Upload Field -->
+                    <div class="form-group" style="margin-bottom: 30px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-upload" style="color: #FE980F; margin-right: 5px;"></i>
+                            Thay đổi logo (tùy chọn)
+                        </label>
+                        
+                        <!-- Custom File Upload -->
+                        <div class="file-upload-wrapper" id="fileUploadWrapper" style="position: relative; border: 2px dashed #F0F0E9; border-radius: 8px; padding: 30px; text-align: center; background: #fafafa; transition: all 0.3s ease; cursor: pointer;" onclick="triggerFileInput()">
+                            <div class="upload-icon" style="color: #FE980F; font-size: 48px; margin-bottom: 15px;">
+                                <i class="fa fa-cloud-upload"></i>
+                            </div>
+                            <p style="color: #696763; margin: 0 0 10px 0; font-size: 16px; font-weight: 500;">Nhấp để chọn logo mới</p>
+                            <p style="color: #999; margin: 0; font-size: 12px;">Để trống nếu không muốn thay đổi logo</p>
+                        </div>
+                        
+                        <input asp-for="ImageUpload" type="file" id="ImageUpload" style="display: none;" accept="image/*" />
+                        <span asp-validation-for="ImageUpload" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                        
+                        <!-- New Logo Preview -->
+                        <div id="newLogoPreviewContainer" style="margin-top: 20px; display: none;">
+                            <div style="background: #fff; border: 2px solid #28a745; border-radius: 8px; padding: 15px; text-align: center;">
+                                <p style="color: #28a745; margin: 0 0 10px 0; font-weight: 500;">
+                                    <i class="fa fa-check-circle" style="margin-right: 5px;"></i>
+                                    Logo mới được chọn:
+                                </p>
+                                <img id="newLogoPreview" style="max-width: 200px; max-height: 150px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" />
+                                <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center;">
+                                    <button type="button" onclick="changeLogo()" style="background: #ffc107; border: none; color: #212529; padding: 8px 15px; border-radius: 4px; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center;">
+                                        <i class="fa fa-edit" style="margin-right: 5px;"></i>
+                                        Thay đổi
+                                    </button>
+                                    <button type="button" onclick="removeNewLogo()" style="background: #dc3545; border: none; color: white; padding: 8px 15px; border-radius: 4px; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center;">
+                                        <i class="fa fa-times" style="margin-right: 5px;"></i>
+                                        Hủy thay đổi
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-group" style="margin-bottom: 0; text-align: center;">
+                        <button type="submit" class="btn btn-primary" style="background: #FE980F; border: none; padding: 15px 40px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 500; transition: all 0.3s ease; min-width: 150px;">
+                            <i class="fa fa-save" style="margin-right: 8px;"></i>
+                            Cập nhật Thông tin
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Điện thoại</label>
-            <input asp-for="Phone" class="form-control" />
-            <span asp-validation-for="Phone" class="text-danger"></span>
+
+        <!-- Info Panel -->
+        <div class="col-md-4 col-lg-4">
+            <div class="info-panel" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px;">
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0 0 15px 0; font-size: 18px; font-weight: 500;">
+                    <i class="fa fa-info-circle" style="color: #FE980F; margin-right: 8px;"></i>
+                    Thông tin Hiện tại
+                </h4>
+                <div class="info-content">
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #FE980F;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">🏢 Tên công ty</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px; font-weight: 600;">@Model.Name</p>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #28a745;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">📧 Email</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px;">
+                            @if (!string.IsNullOrEmpty(Model.Email))
+                            {
+                                <a href="mailto:@Model.Email" style="color: #28a745; text-decoration: none;">@Model.Email</a>
+                            }
+                            else
+                            {
+                                <span style="color: #999; font-style: italic;">Chưa có email</span>
+                            }
+                        </p>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #17a2b8;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">📞 Điện thoại</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px;">
+                            @if (!string.IsNullOrEmpty(Model.Phone))
+                            {
+                                <a href="tel:@Model.Phone" style="color: #17a2b8; text-decoration: none;">@Model.Phone</a>
+                            }
+                            else
+                            {
+                                <span style="color: #999; font-style: italic;">Chưa có số điện thoại</span>
+                            }
+                        </p>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #6f42c1;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">🗺️ Bản đồ</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px;">
+                            @if (!string.IsNullOrEmpty(Model.Map))
+                            {
+                                <span style="color: #28a745;">✅ Đã cấu hình</span>
+                                <button type="button" onclick="previewMap()" style="background: #6f42c1; border: none; color: white; padding: 4px 8px; border-radius: 3px; font-size: 10px; margin-left: 8px; cursor: pointer;">
+                                    <i class="fa fa-eye" style="margin-right: 3px;"></i>
+                                    Xem
+                                </button>
+                            }
+                            else
+                            {
+                                <span style="color: #999; font-style: italic;">Chưa có bản đồ</span>
+                            }
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="preview-panel" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0 0 15px 0; font-size: 18px; font-weight: 500;">
+                    <i class="fa fa-eye" style="color: #FE980F; margin-right: 8px;"></i>
+                    Xem trước thay đổi
+                </h4>
+                <div id="livePreview" style="border: 2px dashed #F0F0E9; border-radius: 8px; padding: 20px; text-align: center; background: #fafafa; min-height: 200px;">
+                    <div id="previewContent">
+                        <div style="text-align: center;">
+                            @if (!string.IsNullOrEmpty(Model.LogoImg))
+                            {
+                                <img src="~/media/logo/@Model.LogoImg" style="width: 100px; height: 75px; object-fit: contain; border-radius: 6px; margin-bottom: 10px; background: white;" />
+                            }
+                            else
+                            {
+                                <div style="color: #ddd; font-size: 48px; margin-bottom: 10px;">
+                                    <i class="fa fa-building"></i>
+                                </div>
+                            }
+                            <h6 style="color: #363432; margin: 0 0 5px 0; font-weight: 500;">@Model.Name</h6>
+                            @if (!string.IsNullOrEmpty(Model.Email))
+                            {
+                                <p style="color: #28a745; margin: 0 0 3px 0; font-size: 12px;">📧 @Model.Email</p>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.Phone))
+                            {
+                                <p style="color: #17a2b8; margin: 0; font-size: 12px;">📞 @Model.Phone</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label>Bản đồ</label>
-            <textarea asp-for="Map" class="form-control"> </textarea>
-            <span asp-validation-for="Map" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label>Mô tả</label>
-            <textarea asp-for="Description" class="form-control"> </textarea>
-            <span asp-validation-for="Description" class="text-danger"></span>
-        </div>
-
-
-
-        <div class="form-group">
-            <label>Hình ảnh</label>
-            <input asp-for="ImageUpload" class="form-control" />
-
-            <td> <img src="~/media/logo/@Model.LogoImg" width="120px" /> </td>
-        </div>
-
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Cập nhật</button>
-        </div>
-
-
-    </form>
-
-    <a asp-action="Index">Trở về danh sách Liên hệ</a>
+    </div>
 </div>
 
+<!-- Map Preview Modal -->
+<div id="mapPreviewModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8);">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 800px; height: 70%; background: white; border-radius: 8px; overflow: hidden;">
+        <div style="background: #FE980F; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
+            <h4 style="margin: 0; font-family: 'Roboto', sans-serif;">Xem trước Bản đồ</h4>
+            <button onclick="closeMapPreview()" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+        <div id="mapPreviewContent" style="width: 100%; height: calc(100% - 60px); overflow: hidden;">
+            <!-- Map content will be inserted here -->
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control:focus {
+        border-color: #FE980F !important;
+        box-shadow: 0 0 0 0.2rem rgba(254, 152, 15, 0.25) !important;
+        outline: none;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .file-upload-wrapper:hover {
+        border-color: #FE980F;
+        background: #fff5e6;
+    }
+    
+    .info-panel, .preview-panel, .form-container {
+        transition: all 0.3s ease;
+    }
+    
+    .info-panel:hover, .preview-panel:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    @@media (max-width: 768px) {
+        .page-header div {
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+        
+        .col-md-4 {
+            margin-top: 20px;
+        }
+        
+        #mapPreviewModal > div {
+            width: 95% !important;
+            height: 80% !important;
+        }
+    }
+</style>
+
 @section Scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
     <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+    
     <script>
-        CKEDITOR.replace('Description');
+        // Global function to trigger file input
+        function triggerFileInput() {
+            document.getElementById('ImageUpload').click();
+        }
+        
+        // Function to change logo (same as triggering file input)
+        function changeLogo() {
+            document.getElementById('ImageUpload').click();
+        }
+        
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    // Update new logo preview
+                    var newLogoPreview = document.getElementById('newLogoPreview');
+                    newLogoPreview.src = e.target.result;
+                    document.getElementById('newLogoPreviewContainer').style.display = 'block';
+                    
+                    // Update live preview panel
+                    updateLivePreview();
+                    
+                    // Update file upload wrapper to show success state
+                    var wrapper = document.getElementById('fileUploadWrapper');
+                    wrapper.style.borderColor = '#28a745';
+                    wrapper.style.background = '#f8fff8';
+                    wrapper.innerHTML = '<div style="color: #28a745; font-size: 24px; margin-bottom: 10px;"><i class="fa fa-check-circle"></i></div><p style="color: #28a745; margin: 0; font-weight: 500;">Logo mới đã được chọn</p><p style="color: #666; margin: 5px 0 0 0; font-size: 12px;">Nhấp để chọn logo khác</p>';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
+        function removeNewLogo() {
+            // Clear file input
+            var fileInput = document.getElementById('ImageUpload');
+            fileInput.value = '';
+            
+            // Hide new logo preview container
+            document.getElementById('newLogoPreviewContainer').style.display = 'none';
+            
+            // Reset live preview to original logo
+            updateLivePreview();
+            
+            // Reset file upload wrapper to original state
+            resetFileUploadWrapper();
+        }
+        
+        function resetFileUploadWrapper() {
+            var wrapper = document.getElementById('fileUploadWrapper');
+            wrapper.style.borderColor = '#F0F0E9';
+            wrapper.style.background = '#fafafa';
+            wrapper.innerHTML = '<div class="upload-icon" style="color: #FE980F; font-size: 48px; margin-bottom: 15px;"><i class="fa fa-cloud-upload"></i></div><p style="color: #696763; margin: 0 0 10px 0; font-size: 16px; font-weight: 500;">Nhấp để chọn logo mới</p><p style="color: #999; margin: 0; font-size: 12px;">Để trống nếu không muốn thay đổi logo</p>';
+        }
+        
+        function updateLivePreview() {
+            var name = document.querySelector('input[name="Name"]').value || '@Model.Name';
+            var email = document.querySelector('input[name="Email"]').value || '@Model.Email';
+            var phone = document.querySelector('input[name="Phone"]').value || '@Model.Phone';
+            var newLogoSrc = document.getElementById('newLogoPreview').src;
+            var currentLogoSrc = '@(!string.IsNullOrEmpty(Model.LogoImg) ? Url.Content("~/media/logo/" + Model.LogoImg) : "")';
+            
+            var previewContent = document.getElementById('previewContent');
+            var logoSrc = newLogoSrc || currentLogoSrc;
+            
+            var html = '<div style="text-align: center;">';
+            
+            if (logoSrc) {
+                html += '<img src="' + logoSrc + '" style="width: 100px; height: 75px; object-fit: contain; border-radius: 6px; margin-bottom: 10px; background: white;" />';
+            } else {
+                html += '<div style="color: #ddd; font-size: 48px; margin-bottom: 10px;"><i class="fa fa-building"></i></div>';
+            }
+            
+            html += '<h6 style="color: #363432; margin: 0 0 5px 0; font-weight: 500;">' + name + '</h6>';
+            
+            if (email) {
+                html += '<p style="color: #28a745; margin: 0 0 3px 0; font-size: 12px;">📧 ' + email + '</p>';
+            }
+            
+            if (phone) {
+                html += '<p style="color: #17a2b8; margin: 0; font-size: 12px;">📞 ' + phone + '</p>';
+            }
+            
+            html += '</div>';
+            previewContent.innerHTML = html;
+        }
+        
+        function previewMap() {
+            var mapContent = '@Html.Raw(Model.Map)';
+            if (mapContent) {
+                document.getElementById('mapPreviewContent').innerHTML = mapContent;
+                document.getElementById('mapPreviewModal').style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        
+        function closeMapPreview() {
+            document.getElementById('mapPreviewModal').style.display = 'none';
+            document.getElementById('mapPreviewContent').innerHTML = '';
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Initialize when document is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // File input change event
+            var fileInput = document.getElementById('ImageUpload');
+            if (fileInput) {
+                fileInput.addEventListener('change', function() {
+                    readURL(this);
+                });
+            }
+            
+            // Form validation styling
+            var form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    var submitBtn = form.querySelector('button[type="submit"]');
+                    submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin" style="margin-right: 8px;"></i>Đang cập nhật...';
+                    submitBtn.disabled = true;
+                });
+            }
+            
+            // Live preview updates
+            document.querySelector('input[name="Name"]').addEventListener('input', updateLivePreview);
+            document.querySelector('input[name="Email"]').addEventListener('input', updateLivePreview);
+            document.querySelector('input[name="Phone"]').addEventListener('input', updateLivePreview);
+            
+            // Add visual feedback for form changes
+            document.querySelectorAll('input, textarea').forEach(function(element) {
+                element.addEventListener('input', function() {
+                    this.classList.add('changed');
+                    setTimeout(() => {
+                        this.classList.remove('changed');
+                    }, 300);
+                });
+            });
+            
+            // Close map preview with Escape key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    closeMapPreview();
+                }
+            });
+        });
+        
+        // CKEditor initialization
+        CKEDITOR.replace('Description', {
+            height: 120,
+            toolbar: [
+                { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline'] },
+                { name: 'paragraph', items: ['NumberedList', 'BulletedList'] },
+                { name: 'links', items: ['Link', 'Unlink'] },
+                { name: 'insert', items: ['Image', 'Table'] }
+            ]
+        });
     </script>
-
+    
+    <style>
+        .form-control.changed {
+            background-color: #fff5e6 !important;
+            transition: background-color 0.3s ease;
+        }
+    </style>
 }
