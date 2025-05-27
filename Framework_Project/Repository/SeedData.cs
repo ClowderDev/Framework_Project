@@ -1,4 +1,4 @@
-﻿using Framework_Project.Models;
+using Framework_Project.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -24,6 +24,13 @@ namespace Framework_Project.Repository
             {
                 await roleManager.CreateAsync(new IdentityRole(userRole));
             }
+            
+            // Get role IDs
+            var adminRoleEntity = await roleManager.FindByNameAsync(adminRole);
+            var userRoleEntity = await roleManager.FindByNameAsync(userRole);
+            
+            string adminRoleId = adminRoleEntity?.Id;
+            string userRoleId = userRoleEntity?.Id;
 
             if (await userManager.FindByNameAsync("admin") == null)
             {
@@ -32,7 +39,8 @@ namespace Framework_Project.Repository
                     UserName = "admin",
                     Email = "admin@example.com",
                     EmailConfirmed = true,
-                    Occuapation = "System Administrator"
+                    Occuapation = "System Administrator",
+                    RoleId = adminRoleId
                 };
                 var result = await userManager.CreateAsync(adminUser, "test123");
                 if (result.Succeeded)
@@ -48,7 +56,8 @@ namespace Framework_Project.Repository
                     UserName = "user1",
                     Email = "user1@example.com",
                     EmailConfirmed = true,
-                    Occuapation = "Customer"
+                    Occuapation = "Customer",
+                    RoleId = userRoleId
                 };
                 var result = await userManager.CreateAsync(user1, "test123");
                 if (result.Succeeded)
@@ -64,7 +73,8 @@ namespace Framework_Project.Repository
                     UserName = "user2",
                     Email = "user2@example.com",
                     EmailConfirmed = true,
-                    Occuapation = "Tester"
+                    Occuapation = "Tester",
+                    RoleId = userRoleId
                 };
                 var result = await userManager.CreateAsync(user2, "test123");
                 if (result.Succeeded)

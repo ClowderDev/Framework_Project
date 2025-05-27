@@ -40,8 +40,12 @@ namespace Framework_Project.Controllers
                 Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(loginVM.Username, loginVM.Password, false, false);
                 if (result.Succeeded)
                 {
-
-                    // Chuyển hướng đến URL ban đầu hoặc trang chủ nếu không có returnUrl.
+                    if(User.IsInRole("Admin")){
+                        return Redirect("/Admin/Dashboard/");
+                    }
+                    else if(User.IsInRole("User")){
+                        return Redirect(loginVM.ReturnUrl ?? "/");
+                    }
                     return Redirect(loginVM.ReturnUrl ?? "/");
                 }
                 ModelState.AddModelError("", "Sai tài khoản hoặc mật khẩu");
@@ -65,6 +69,7 @@ namespace Framework_Project.Controllers
                 IdentityResult result = await _userManage.CreateAsync(newUser, user.Password);
                 if (result.Succeeded)
                 {
+                    await _userManage.AddToRoleAsync(newUser, "User");
                     TempData["success"] = "Tạo thành viên thành công";
                     return Redirect("/account/login");
                 }

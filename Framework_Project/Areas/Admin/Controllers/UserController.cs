@@ -30,12 +30,11 @@ namespace Framework_Project.Areas.Admin.Controllers
         {
             // Truy vấn để lấy danh sách user và role của user đó
             var usersWithRoles = await (from u in _dataContext.Users
-                                        join ur in _dataContext.UserRoles on u.Id equals ur.UserId
-                                        into UserRoles
-                                        from ur in UserRoles.DefaultIfEmpty()
-                                        join r in _dataContext.Roles on u.RoleId equals r.Id into userRolesWithRoles
-                                        from urr in userRolesWithRoles.DefaultIfEmpty()
-                                        select new { User = u, RoleName = urr.Name})
+                                        join ur in _dataContext.UserRoles on u.Id equals ur.UserId into userRolesGroup
+                                        from ur in userRolesGroup.DefaultIfEmpty()
+                                        join r in _dataContext.Roles on ur.RoleId equals r.Id into rolesGroup
+                                        from r in rolesGroup.DefaultIfEmpty()
+                                        select new { User = u, RoleName = r.Name})
                                .ToListAsync();
 
             // Lấy ID của người dùng hiện đang đăng nhập
@@ -196,7 +195,7 @@ namespace Framework_Project.Areas.Admin.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpDelete]
         [Route("Delete")]
         public async Task<IActionResult> Delete(string id)
         {

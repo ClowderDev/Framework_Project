@@ -1,4 +1,4 @@
-﻿$(function () {
+$(function () {
 
     if ($("a.confirmDeletion").length) {
         $("a.confirmDeletion").click(() => {

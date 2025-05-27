@@ -249,17 +249,6 @@
             closeImageModal();
         }
     });
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const deleteButtons = document.querySelectorAll('.confirmDeletion');
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                if (!confirm('Bạn có chắc chắn muốn xóa slider này không?')) {
-                    e.preventDefault();
-                }
-            });
-        });
-    });
 </script>
 
 @section Scripts {

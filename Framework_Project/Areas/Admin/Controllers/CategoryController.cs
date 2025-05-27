@@ -107,24 +107,22 @@ namespace Framework_Project.Areas.Admin.Controllers
             return View(category);
         }
 
-        [HttpDelete]
-        [Route("Delete/{id:long}")]
+        [HttpPost]
+        [Route("Delete/{id:int}")]
         public async Task<IActionResult> Delete(int Id)
         {
             CategoryModel category = await _dataContext.Categories.FindAsync(Id);
 
             if (category == null)
             {
-                // Return a Not Found status for AJAX if category is not found
                 return NotFound(new { success = false, message = "Danh mục không tồn tại." });
             }
 
             _dataContext.Categories.Remove(category);
             await _dataContext.SaveChangesAsync();
             
-            // Return a success JSON result for AJAX after successful deletion
             TempData["success"] = "Danh mục đã được xóa thành công"; // Keep TempData for potential non-AJAX use or logging
-            return Ok(new { success = true, message = "Danh mục đã được xóa thành công" });
+            return RedirectToAction("Index");
         }
     }
 }

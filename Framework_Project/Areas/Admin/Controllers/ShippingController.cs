@@ -66,26 +66,21 @@ namespace Framework_Project.Areas.Admin.Controllers
         }
     
         [HttpPost]
-        [Route("Delete")]
-        [ValidateAntiForgeryToken]
+        [Route("Delete/{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                var shipping = await _dataContext.Shippings.FindAsync(id);
-                if (shipping == null)
-                {
-                    return Json(new { success = false, message = "Không tìm thấy địa chỉ" });
-                }
 
-                _dataContext.Shippings.Remove(shipping);
-                await _dataContext.SaveChangesAsync();
-                return Json(new { success = true });
-            }
-            catch (Exception ex)
+            var shipping = await _dataContext.Shippings.FindAsync(id);
+            if (shipping == null)
             {
-                return Json(new { success = false, message = "Đã xảy ra lỗi khi xóa địa chỉ" });
+                TempData["error"] = "Địa chỉ không tồn tại.";
+                return RedirectToAction("Index");
             }
+
+            _dataContext.Shippings.Remove(shipping);
+            await _dataContext.SaveChangesAsync();
+            TempData["success"] = "Địa chỉ đã được xóa";
+            return RedirectToAction("Index");
         }
 
         [Route("Edit/{id}")]

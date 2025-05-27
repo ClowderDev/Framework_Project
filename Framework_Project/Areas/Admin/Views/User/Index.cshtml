@@ -139,20 +139,6 @@
     }
 </style>
 
-<script>
-    // Confirmation for delete
-    document.addEventListener('DOMContentLoaded', function() {
-        const deleteButtons = document.querySelectorAll('.confirmDeletion');
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                if (!confirm('Bạn có chắc chắn muốn xóa user này không?')) {
-                    e.preventDefault();
-                }
-            });
-        });
-    });
-</script>
-
 @section Scripts {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 }

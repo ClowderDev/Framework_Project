@@ -156,13 +156,12 @@
                                                     <i class="fa fa-edit" style="margin-right: 3px; font-size: 9px;"></i>
                                                     Sửa
                                                 </a>
-                                                <button type="button" class="btn btn-sm delete-shipping" data-id="@shipping.Id"
-                                                        style="background: #dc3545; border: none; color: white; padding: 6px 10px; border-radius: 4px; font-size: 11px; display: inline-flex; align-items: center; transition: all 0.3s ease; margin-bottom: 3px;"
-                                                        onmouseover="this.style.background='#c82333'; this.style.transform='translateY(-1px)'"
-                                                        onmouseout="this.style.background='#dc3545'; this.style.transform='translateY(0)'">
-                                                    <i class="fa fa-trash" style="margin-right: 3px; font-size: 9px;"></i>
-                                                    Xóa
-                                                </button>
+                                                <form asp-action="Delete" asp-controller="Shipping" asp-route-Id="@shipping.Id" method="post" style="display:inline;">
+                                                    <button type="submit" class="btn btn-sm" style="background: #dc3545; border: none; color: white; padding: 8px 12px; border-radius: 4px; font-size: 12px; display: inline-flex; align-items: center; transition: all 0.3s ease;" onclick="return confirm('Are you sure you want to delete this shipping?');" onmouseover="this.style.background='#c82333'; this.style.transform='translateY(-1px)'" onmouseout="this.style.background='#dc3545'; this.style.transform='translateY(0)';">
+                                                        <i class="fa fa-trash" style="margin-right: 4px;"></i>
+                                                        Xóa
+                                                    </button>
+                                                </form>
                                             </div>
                                         </td>
                                     </tr>
@@ -218,105 +217,5 @@
     }
 </style>
 
-@section Scripts {
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    <script>
-        $(document).ready(function() {
-            // Delete shipping functionality
-            $('.delete-shipping').click(function() {
-                var shippingId = $(this).data('id');
-                Swal.fire({
-                    title: 'Bạn có chắc chắn?',
-                    text: 'Bạn có muốn xóa địa chỉ vận chuyển này không?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#FE980F',
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: 'Có, xóa nó!',
-                    cancelButtonText: 'Hủy bỏ',
-                    customClass: {
-                        popup: 'swal-custom-popup',
-                        title: 'swal-custom-title',
-                        content: 'swal-custom-content'
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Show loading
-                        Swal.fire({
-                            title: 'Đang xóa...',
-                            text: 'Vui lòng đợi',
-                            allowOutsideClick: false,
-                            allowEscapeKey: false,
-                            showConfirmButton: false,
-                            didOpen: () => {
-                                Swal.showLoading();
-                            }
-                        });
-                        
-                        $.ajax({
-                            url: '@Url.Action("Delete", "Shipping")?id=' + shippingId,
-                            type: 'POST',
-                            headers: {
-                                "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
-                            },
-                            success: function(result) {
-                                if (result.success) {
-                                    Swal.fire({
-                                        title: 'Đã xóa!',
-                                        text: 'Địa chỉ vận chuyển đã được xóa thành công.',
-                                        icon: 'success',
-                                        confirmButtonColor: '#FE980F',
-                                        customClass: {
-                                            popup: 'swal-custom-popup'
-                                        }
-                                    }).then(() => {
-                                        location.reload();
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        title: 'Lỗi!',
-                                        text: result.message || 'Có lỗi xảy ra khi xóa địa chỉ vận chuyển.',
-                                        icon: 'error',
-                                        confirmButtonColor: '#FE980F',
-                                        customClass: {
-                                            popup: 'swal-custom-popup'
-                                        }
-                                    });
-                                }
-                            },
-                            error: function(xhr, status, error) {
-                                console.error('Delete shipping error:', error);
-                                Swal.fire({
-                                    title: 'Lỗi!',
-                                    text: 'Có lỗi xảy ra khi xóa địa chỉ vận chuyển. Vui lòng thử lại.',
-                                    icon: 'error',
-                                    confirmButtonColor: '#FE980F',
-                                    customClass: {
-                                        popup: 'swal-custom-popup'
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            });
-        });
-    </script>
-    
-    <style>
-        .swal-custom-popup {
-            font-family: 'Roboto', sans-serif !important;
-        }
-        
-        .swal-custom-title {
-            color: #363432 !important;
-        }
-        
-        .swal-custom-content {
-            color: #696763 !important;
-        }
-    </style>
 @Html.AntiForgeryToken()
 }

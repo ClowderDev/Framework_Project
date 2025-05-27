@@ -7,6 +7,8 @@ using Framework_Project.Services.Vnpay;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -74,6 +76,7 @@ builder.Services.ConfigureApplicationCookie(options => {
 
 builder.Services.AddRazorPages();
 
+
 builder.Services.Configure<IdentityOptions>(options =>
 {
     // Cài đặt yêu cầu về mật khẩu
@@ -85,6 +88,8 @@ builder.Services.Configure<IdentityOptions>(options =>
 
     // Yêu cầu 1 người dùng có 1 email
     options.User.RequireUniqueEmail = true;
+
+    options.ClaimsIdentity.RoleClaimType = ClaimTypes.Role;
 });
 
 //Kết nối VNPay API
