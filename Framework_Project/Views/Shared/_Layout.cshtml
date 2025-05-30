@@ -1,107 +1,149 @@
 ﻿@using System.Security.Claims
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
-<meta name="author" content="">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
 	<title>@ViewData["Title"]</title>
-<link href="~/css/bootstrap.min.css" rel="stylesheet">
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet">
+	<link href="~/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.4/dist/sweetalert2.min.css" rel="stylesheet">
 
-<link href="~/css/prettyPhoto.css" rel="stylesheet">
-<link href="~/css/price-range.css" rel="stylesheet">
-<link href="~/css/animate.css" rel="stylesheet">
-<link href="~/css/main.css" rel="stylesheet">
-<link href="~/css/responsive.css" rel="stylesheet">
+	<link href="~/css/prettyPhoto.css" rel="stylesheet">
+	<link href="~/css/price-range.css" rel="stylesheet">
+	<link href="~/css/animate.css" rel="stylesheet">
+	<link href="~/css/main.css" rel="stylesheet">
+	<link href="~/css/responsive.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
-<!--[if lt IE 9]>
+	<!--[if lt IE 9]>
 <script src="js/html5shiv.js"></script>
 <script src="js/respond.min.js"></script>
 <![endif]-->
-<link rel="shortcut icon" href="images/ico/favicon.ico">
-<link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
-<link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
-<link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
-<link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
+	<link rel="shortcut icon" href="images/ico/favicon.ico">
+	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
 
 </head><!--/head-->
 
 <body>
-	<header id="header">
+	<header id="header"
+		style="position: fixed; top: 0; width: 100%; z-index: 1000; left: 0; right: 0; background-color: #fff; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); background-color: #E30019;">
 		<!--header-->
 		<div class="header-middle">
 			<!--header-middle-->
 			<div class="container">
-				<div class="row">
-					<div class="col-sm-4">
+				<div class="row"
+					style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0;">
+					<div class="col-sm-2">
 						<div class="logo pull-left">
-							<a href="index.html"><img src="~/media/logo/eb7ec5ad-9a7c-4f0d-b744-c4edd6d7387e_logo.jpg" alt="logo" width="100px" height="100px" /></a>
+							<a asp-action="Index" asp-controller="Home"><img
+									src="~/media/logo/eb7ec5ad-9a7c-4f0d-b744-c4edd6d7387e_logo.jpg" alt="logo"
+									width="100px" height="100px" /></a>
 						</div>
 					</div>
-					<div class="col-sm-8">
-						<div class="shop-menu pull-right">
-							<ul class="nav navbar-nav">
-							@if (User.Identity?.IsAuthenticated ?? false )
-							{
-								<li><a asp-action="History" asp-controller="Account"><i class="fa fa-user"></i> Account</a></li>
-								<li><a asp-action="Wishlist" asp-controller="Home"><i class="fa fa-heart"></i> Wishlist</a></li>
-								<li><a asp-action="Compare" asp-controller="Home"><i class="fa fa-star"></i> Compare</a></li>
-								<li><a asp-action="Index" asp-controller="Cart"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-								<li><a asp-controller="Account" asp-action="Logout"><i class="fa fa-lock"></i>Hi @User.Identity.Name, Logout </a></li>
-							}
-							else
-							{
-								<li><a asp-controller="Account" asp-action="Login"><i class="fa fa-lock"></i>Login</a></li>
-							}
-
-
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div><!--/header-middle-->
-
-		<div class="header-bottom">
-			<!--header-bottom-->
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-9">
-						<div class="navbar-header">
-							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-								<span class="sr-only">Toggle navigation</span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-							</button>
-						</div>
-						<div class="mainmenu pull-left">
-							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a asp-action="index" asp-controller="Home" class="active">Home</a></li>
-								<li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
-							</ul>
-						</div>
-					</div>
-					<div class="col-sm-3">
+					<div class="col-sm-4">
 						<form asp-controller="Product" asp-action="Search" method="post">
-						<div class="search_box pull-right">
-								<input type="text" placeholder="Search" name="searchTerm" />
-								<button class="btn btn-warning" type="submit">Search</button>
-
+							<div class="search_box" style="position: relative; width: 100%;">
+								<input type="text" name="searchTerm" placeholder="Bạn muốn tìm gì?"
+									style="font-size: 16px; color: #000; border: 1px solid #f27b7b; border-radius: 4px; padding: 8px 40px 8px 40px; width: 100%; height: 42px; background-color: #FFFFFF;" />
+								<i class="fa fa-search"
+									style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #aaa;"></i>
+								<button class="btn btn-warning" type="submit"
+									style="position: absolute; right: 0; top: 0; bottom: 0; border: none; border-radius: 4px; padding: 0 15px; background-color: #fff; color: #000000; border: 1px solid #f27b7b; ">
+									Tìm
+								</button>
 							</div>
 						</form>
 					</div>
+					<div class="col-sm-6">
+						<div @* class="shop-menu pull-right"  *@
+							style="display: flex; justify-content: flex-end; align-items: center; gap: 20px;">
+							@if (User.Identity?.IsAuthenticated ?? false)
+							{
+								<div>
+									<a asp-action="History" asp-controller="Account"
+										style="display: flex; align-items: center; color: #000000; text-decoration: none; height: 42px; font-size: 14px; font-weight:300; color: #fff;">
+										<i class="fa fa-user" style="margin-right: 8px; font-size: 28px;"></i>
+										Tài khoản
+									</a>
+								</div>
+								<div>
+									<a asp-action="Wishlist" asp-controller="Account"
+										style="display: flex; align-items: center; color: #000000; text-decoration: none; height: 42px; font-size: 14px; font-weight:300; color: #fff;">
+										<i class="fa fa-heart" style="margin-right: 8px; font-size: 28px;"></i>
+										Yêu thích
+									</a>
+								</div>
+								<div>
+									<a asp-action="Compare" asp-controller="Account"
+										style="display: flex; align-items: center; color: #000000; text-decoration: none; height: 42px; font-size: 14px; font-weight:300; color: #fff;">
+										<i class="fa fa-star" style="margin-right: 8px; font-size: 28px;"></i>
+										So sánh
+									</a>
+
+								</div>
+								<div>
+									<a asp-action="Index" asp-controller="Cart"
+										style="display: flex; align-items: center; color: #000000; text-decoration: none; height: 42px; font-size: 14px; font-weight:300; color: #fff;">
+										<i class="fa fa-shopping-cart" style="margin-right: 8px; font-size: 28px;"></i>
+										Giỏ hàng
+									</a>
+								</div>
+								<div>
+									@* <a asp-controller="Home" asp-action="Contact">Contact</a> *@
+									<a asp-controller="Home" asp-action="Contact"
+										style="display: flex; align-items: center; color: #000000; text-decoration: none; height: 42px; font-size: 14px; font-weight:300; color: #fff; ">
+										<i class="fa fa-envelope" style="margin-right: 8px; font-size: 28px;"></i>
+										Liên hệ
+									</a>
+								</div>
+								<div><a asp-controller="Account" asp-action="Logout"
+										style="display: flex; align-items: center; color: #000000; text-decoration: none; height: 42px; font-size: 14px; font-weight:300; color: #fff; word-break: break-word;">
+										<i class="fa fa-lock" style="margin-right: 8px; font-size: 28px;"></i>
+										Hi @User.Identity.Name, Đăng xuất
+									</a>
+								</div>
+							}
+							else
+							{
+								<div>
+									<a asp-controller="Home" asp-action="Contact"
+										style="display: flex; align-items: center; color: #000000; text-decoration: none; height: 42px; font-size: 14px; font-weight:300; color: #fff;">
+										<i class="fa fa-envelope" style="margin-right: 8px; font-size: 28px;"></i>
+										Liên hệ
+									</a>
+								</div>
+								<div>
+									<a asp-controller="Account" asp-action="Login"
+										style="display: flex; align-items: center; color: #000000; text-decoration: none; height: 42px; font-size: 14px; font-weight:300; color: #fff;">
+										<i class="fa fa-lock" style="margin-right: 8px; font-size: 28px;"></i>
+										Đăng nhập
+									</a>
+								</div>
+							}
+						</div>
+					</div>
 				</div>
 			</div>
-		</div><!--/header-bottom-->
-	</header><!--/header-->
+
+			<!--/header-middle-->
+
+
+		</div>
+
+		<!--/header-bottom-->
+	</header>
+
+	<!--/header-->
 
 
 	<section>
-		<div class="container">
+		<div class="container" style="margin-top:160px;">
 			<div class="row">
 				<partial name="_NotificationPartial" />
 				@RenderBody()
@@ -112,7 +154,9 @@
 	<footer id="footer">
 		<!--Footer-->
 		<partial name="_FooterPartial" />
-	</footer><!--/Footer-->
+	</footer>
+
+	<!--/Footer-->
 
 
 
@@ -124,11 +168,14 @@
 
 	<script src="~/js/main.js"></script>
 	<div id="fb-root"></div>
-	<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v20.0&appId=6125793717446054" nonce="JYxicUjw"></script>
+	<script async defer crossorigin="anonymous"
+		src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v20.0&appId=6125793717446054"
+		nonce="JYxicUjw"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.4/dist/sweetalert2.all.min.js"></script>
 
 	@await RenderSectionAsync("Scripts", required: false)
 
 
 </body>
+
 </html>

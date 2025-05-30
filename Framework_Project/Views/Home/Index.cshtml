@@ -17,24 +17,28 @@
 		{
 
 			<div class="col-sm-4">
-				<div class="product-image-wrapper">
+				<div class="product-image-wrapper"
+					style="box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .1), 0 2px 6px 2px rgba(60, 64, 67, .15);">
 					<div class="single-products">
 						<div class="productinfo text-center">
 							<a asp-action="Details" asp-controller="Product" asp-route-Id="@item.Id">
 								<img src="~/media/products/@item.Image" alt="@item.Name" width="100px" height="200px" />
 								<h2>@item.Price.ToString("#,##0 VNĐ")</h2>
-								<p>@item.Name</p>
-								<p>Danh mục: @item.Category.Name</p>
-								<p>Thương hiệu: @item.Brand.Name</p>
+								<p style="font-weight: bolder;">@item.Name</p>
+								<p>Danh mục: <span style="font-weight: bold; color: #D2322D;">@item.Category.Name</span></p>
+								<p>Thương hiệu: <span style="font-weight: bold; color: #D2322D;">@item.Brand.Name</span></p>
 							</a>
 							@* <a asp-action="Add" asp-controller="Cart" asp-route-Id="@item.Id" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a> *@
 							@if (@item.Quantity == 0)
 							{
-								<button type="button" class="btn btn-default"><i class="fa fa-shopping-cart"></i>Hết hàng</button>
+								<button type="button" class="btn btn-default"><i class="fa fa-shopping-cart"></i>Hết
+									hàng</button>
 							}
 							else
 							{
-								<button class="btn btn-default add-to-cart" data-product_id="@item.Id"><i class="fa fa-shopping-cart"></i>Thêm giỏ hàng</button>
+								<button class="btn btn-default add-to-cart" data-product_id="@item.Id"
+									style="border-radius: 5px;"><i class="fa fa-shopping-cart" style="color: #D2322D;"></i>Thêm
+									giỏ hàng</button>
 							}
 						</div>
 
@@ -42,10 +46,25 @@
 					<div class="choose">
 						@if (User.Identity?.IsAuthenticated ?? false)
 						{
-							<ul class="nav nav-pills nav-justified">
-								<li><button class="btn btn-danger add-btn-wishlist" data-product_id="@item.Id">Yêu thích</button></li>
-								<li><button class="btn btn-primary add-btn-compare" data-product_id="@item.Id">So sánh</button></li>
+							<ul
+								style="display: flex; justify-content: space-around; align-items: center; padding: 0; list-style: none; margin: 0;">
+								<li>
+									@* 5 star rating *@
+									@for (int i = 1; i <= 5; i++)
+									{
+										<span class="fa fa-star" style="color: #f59e0b;"></span>
+									}
+								</li>
+								<li style="display: flex; align-items: center;">
+									<span style="margin-right: 8px ;">Yêu thích</span>
+									<i class="fa-regular fa-heart heart-icon add-btn-wishlist" data-product_id="@item.Id"></i>
+								</li>
 							</ul>
+							<div style="display: flex; justify-content: center; align-items: center; margin: 10px 0;">
+								<button class="btn btn-primary add-btn-compare mt-0" data-product_id="@item.Id"
+									style="border-radius: 5px;">So sánh
+									<i class="fa-solid fa-code-compare"></i></button>
+							</div>
 						}
 					</div>
 				</div>
@@ -131,4 +150,19 @@
 		});
 	</script>
 	<!---//Add to Wishlish Script--->
+	<script>
+		$(document).ready(function () {
+			$('.heart-icon').hover(
+				function () {
+					// Khi hover vào: đổi từ regular sang solid
+					$(this).removeClass('fa-regular').addClass('fa-solid');
+				},
+				function () {
+					// Khi rời chuột ra: đổi lại từ solid sang regular
+					$(this).removeClass('fa-solid').addClass('fa-regular');
+				}
+			);
+		});
+	</script>
+
 }
