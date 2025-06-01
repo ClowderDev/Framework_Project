@@ -2,6 +2,13 @@
 @{
 	ViewData["Title"] = "Chi tiết sản phẩm";
 	Layout = "~/Views/Shared/_Layout.cshtml";
+	var isAuthenticated = User.Identity.IsAuthenticated;
+	var userEmail = "";
+	if (isAuthenticated)
+	{
+		userEmail = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value
+			?? User.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
+	}
 }
 
 <div class="row">
@@ -60,8 +67,8 @@
 						<p><b>Tình trạng:</b> Hết hàng</p>
 					}
 					<p><b>Điều kiện:</b> Mới</p>
-					<p><b>Thương hiệu:</b> @Model.ProductDetails.Name</p>
-					<p><b>Danh mục:</b> @Model.ProductDetails.Name</p>
+					<p><b>Thương hiệu:</b> @Model.ProductDetails.Brand?.Name</p>
+					<p><b>Danh mục:</b> @Model.ProductDetails.Category?.Name</p>
 					<a href=""><img src="images/product-details/share.png" class="share img-responsive" alt="" /></a>
 				</div><!--/product-information-->
 			</div>
@@ -71,45 +78,77 @@
 			<!--category-tab-->
 			<div class="col-sm-12">
 				<ul class="nav nav-tabs">
-					<li><a href="#details" data-toggle="tab">Chi tiết</a></li>
-					<li class="active"><a href="#reviews" data-toggle="tab">Đánh giá (5)</a></li>
+					<li class="active"><a href="#details" data-toggle="tab">Chi tiết</a></li>
+					<li><a href="#reviews" data-toggle="tab">Đánh giá (@(Model.ProductDetails.Ratings != null ? Model.ProductDetails.Ratings.Count : 0))</a></li>
 				</ul>
 			</div>
 			<div class="tab-content">
 				<div class="tab-pane fade active in" id="details">
-
 					@Html.Raw(Model.ProductDetails.Description)
-
 				</div>
 
-				<div class="tab-pane fade active in" id="reviews">
+				<div class="tab-pane fade" id="reviews">
 					<div class="col-sm-12">
-						<ul>
-							<li><a href=""><i class="fa fa-user"></i>EUGEN</a></li>
-							<li><a href=""><i class="fa fa-clock-o"></i>12:41 PM</a></li>
-							<li><a href=""><i class="fa fa-calendar-o"></i>31 THÁNG 12 2014</a></li>
-						</ul>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-						<p><b>Viết đánh giá của bạn</b></p>
+						@if (Model.ProductDetails.Ratings != null && Model.ProductDetails.Ratings.Count > 0)
+						{
+							foreach (var review in Model.ProductDetails.Ratings)
+							{
+								<div class="review-item">
+									<ul>
+										<li><a href=""><i class="fa fa-user"></i>@review.Email</a></li>
+										<li><a href=""><i class="fa fa-clock-o"></i>@DateTime.Now.ToString("hh:mm tt")</a></li>
+										<li><a href=""><i class="fa fa-calendar-o"></i>@DateTime.Now.ToString("dd MMMM yyyy")</a></li>
+									</ul>
+									<div class="rating-display">
+										@for (int i = 1; i <= 5; i++)
+										{
+											if (i <= int.Parse(review.Star))
+											{
+												<span class="star filled">★</span>
+											}
+											else
+											{
+												<span class="star">☆</span>
+											}
+										}
+									</div>
+									<p>@review.Comment</p>
+								</div>
+							}
+						}
+						else
+						{
+							<p>Chưa có đánh giá nào cho sản phẩm này.</p>
+						}
+						@if (isAuthenticated)
+						{
+							<p><b>Viết đánh giá của bạn</b></p>
+							<form autocomplete="off" asp-action="CommentProduct" asp-controller="Product" method="POST">
+								<span>
+									<input asp-for="@Model.ProductDetails.Id" name="ProductId" type="hidden" />
+									<input name="Name" type="text" value="@userEmail" readonly />
+									<input name="Email" type="hidden" value="@userEmail" />
+								</span>
+								<textarea asp-for="@Model.Comment"></textarea>
+								<span asp-validation-for="@Model.Comment" class="text-danger"></span>
 
-
-						<form autocomplete="off" asp-action="CommentProduct" asp-controller="Product" method="POST">
-							<span>
-								<input asp-for="@Model.ProductDetails.Id" name="ProductId" type="hidden" />
-								<input name="Star" type="hidden" value="4" />
-								<input asp-for="@Model.Name" type="text" placeholder="Tên của bạn" />
-								<span asp-validation-for="@Model.Name" class="text-danger"></span>
-								<input asp-for="@Model.Email" name="Email" type="email" placeholder="Địa chỉ Email" />
-								<span asp-validation-for="@Model.Email" class="text-danger"></span>
-							</span>
-							<textarea asp-for="@Model.Comment"></textarea>
-							<span asp-validation-for="@Model.Comment" class="text-danger"></span>
-
-							<b>Rating: </b> <img src="images/product-details/rating.png" alt="" />
-							<button type="submit" class="btn btn-default pull-right">
-								Gửi
-							</button>
-						</form>
+								<b>Rating: </b>
+								<div class="rating">
+									<input type="radio" name="Star" value="5" id="5"><label for="5">☆</label>
+									<input type="radio" name="Star" value="4" id="4"><label for="4">☆</label>
+									<input type="radio" name="Star" value="3" id="3"><label for="3">☆</label>
+									<input type="radio" name="Star" value="2" id="2"><label for="2">☆</label>
+									<input type="radio" name="Star" value="1" id="1"><label for="1">☆</label>
+								</div>
+								<button type="submit" class="btn btn-default pull-right">
+									Gửi
+								</button>
+							</form>
+						}
+						else
+						{
+							<div class="alert alert-warning">Bạn cần <a href="/Account/Login">đăng nhập</a> để đánh giá sản phẩm.</div>
+						}
 					</div>
 				</div>
 
@@ -168,4 +207,41 @@
 	@{
 		await Html.RenderPartialAsync("_ValidationScriptsPartial");
 	}
+	<style>
+		.rating {
+			display: inline-flex;
+			flex-direction: row-reverse;
+			justify-content: flex-end;
+		}
+		.rating input {
+			display: none;
+		}
+		.rating label {
+			cursor: pointer;
+			font-size: 30px;
+			color: #ddd;
+			padding: 5px;
+		}
+		.rating input:checked ~ label,
+		.rating label:hover,
+		.rating label:hover ~ label {
+			color: #ffd700;
+		}
+		.review-item {
+			margin-bottom: 30px;
+			padding: 20px;
+			background: #f9f9f9;
+			border-radius: 5px;
+		}
+		.rating-display {
+			margin: 10px 0;
+		}
+		.rating-display .star {
+			font-size: 24px;
+			color: #ddd;
+		}
+		.rating-display .star.filled {
+			color: #ffd700;
+		}
+	</style>
 }
