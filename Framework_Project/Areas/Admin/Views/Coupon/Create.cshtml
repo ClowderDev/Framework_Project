@@ -72,7 +72,7 @@
                                         <i class="fa fa-calendar" style="color: #FE980F; margin-right: 8px;"></i>
                                         Ngày bắt đầu
                                     </label>
-                                    <input asp-for="DateStart" id="datepicker" class="form-control" 
+                                    <input asp-for="DateStart" type="date" class="form-control" 
                                            style="padding: 12px 16px; border: 2px solid #F0F0E9; border-radius: 6px; font-family: 'Roboto', sans-serif; transition: all 0.3s ease;"
                                            onfocus="this.style.borderColor='#FE980F'; this.style.boxShadow='0 0 0 3px rgba(254, 152, 15, 0.1)'"
                                            onblur="this.style.borderColor='#F0F0E9'; this.style.boxShadow='none'" />
@@ -85,7 +85,7 @@
                                         <i class="fa fa-calendar-times-o" style="color: #FE980F; margin-right: 8px;"></i>
                                         Ngày hết hạn
                                     </label>
-                                    <input asp-for="DateExpired" id="datepicker2" class="form-control" 
+                                    <input asp-for="DateExpired" type="date" class="form-control" 
                                            style="padding: 12px 16px; border: 2px solid #F0F0E9; border-radius: 6px; font-family: 'Roboto', sans-serif; transition: all 0.3s ease;"
                                            onfocus="this.style.borderColor='#FE980F'; this.style.boxShadow='0 0 0 3px rgba(254, 152, 15, 0.1)'"
                                            onblur="this.style.borderColor='#F0F0E9'; this.style.boxShadow='none'" />
@@ -108,6 +108,22 @@
                                     <span asp-validation-for="Quantity" class="text-danger"></span>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group" style="margin-bottom: 25px;">
+                                    <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center;">
+                                        <i class="fa fa-percent" style="color: #FE980F; margin-right: 8px;"></i>
+                                        Phần trăm giảm giá
+                                    </label>
+                                    <input asp-for="DiscountPercentage" type="number" min="0" max="100" class="form-control" placeholder="Nhập phần trăm giảm giá..."
+                                           style="padding: 12px 16px; border: 2px solid #F0F0E9; border-radius: 6px; font-family: 'Roboto', sans-serif; transition: all 0.3s ease;"
+                                           onfocus="this.style.borderColor='#FE980F'; this.style.boxShadow='0 0 0 3px rgba(254, 152, 15, 0.1)'"
+                                           onblur="this.style.borderColor='#F0F0E9'; this.style.boxShadow='none'" />
+                                    <span asp-validation-for="DiscountPercentage" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group" style="margin-bottom: 25px;">
                                     <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center;">
@@ -164,48 +180,38 @@
                 </div>
             </div>
 
-            <div style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                <div style="background: #fff2e6; padding: 20px; border-bottom: 1px solid #F7F7F0;">
-                    <h4 style="color: #cc5500; font-family: 'Roboto', sans-serif; margin: 0; font-size: 16px; font-weight: 500;">
-                        <i class="fa fa-star" style="margin-right: 8px;"></i>
-                        Mẹo hay
-                    </h4>
-                </div>
-                <div style="padding: 20px;">
-                    <p style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 15px; font-weight: 500;">🎯 Tạo mã hiệu quả:</p>
-                    <ul style="color: #696763; font-family: 'Roboto', sans-serif; padding-left: 20px; margin: 0;">
-                        <li style="margin-bottom: 5px;">Đặt tên mã dễ hiểu</li>
-                        <li style="margin-bottom: 5px;">Số lượng phù hợp với chiến dịch</li>
-                        <li style="margin-bottom: 5px;">Thời gian hợp lý</li>
-                        <li style="margin-bottom: 5px;">Mô tả rõ ràng điều kiện</li>
-                    </ul>
-                </div>
-            </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
-        $(function () {
-            $("#datepicker").datepicker({
-                changeYear: true,
-                minDate: 0,
-                showButtonPanel: true,
-                dateFormat: 'dd/mm/yy'
-            });
-        });
-        $(function () {
-            $("#datepicker2").datepicker({
-                changeYear: true,
-                minDate: +1,
-                showButtonPanel: true,
-                dateFormat: 'dd/mm/yy'
+        $(document).ready(function() {
+            // Set minimum dates
+            var today = new Date().toISOString().split('T')[0];
+            var tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow = tomorrow.toISOString().split('T')[0];
+
+            // Set min date for start date (today)
+            $("#DateStart").attr('min', today);
+            
+            // Set min date for end date (tomorrow)
+            $("#DateExpired").attr('min', tomorrow);
+
+            // Update end date min when start date changes
+            $("#DateStart").on('change', function() {
+                var startDate = $(this).val();
+                if (startDate) {
+                    var nextDay = new Date(startDate);
+                    nextDay.setDate(nextDay.getDate() + 1);
+                    var nextDayStr = nextDay.toISOString().split('T')[0];
+                    $("#DateExpired").attr('min', nextDayStr);
+                }
             });
         });
     </script>

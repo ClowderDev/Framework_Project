@@ -71,13 +71,37 @@ namespace Framework_Project.Controllers
 					shippingPrice = JsonConvert.DeserializeObject<decimal>(shippingPriceJson);
 				}
 				orderItem.ShippingCost = shippingPrice;
-				//Nhận coupon code
-				var CouponCode = Request.Cookies["CouponTitle"];
-				orderItem.CouponCode = CouponCode;
+
+				// Get cart items and calculate totals
+				List<CartItemModel> cartItems = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
+				decimal subtotal = cartItems.Sum(x => x.Quantity * x.Price);
+
+				// Get coupon data from cookie
+				var couponDataCookie = Request.Cookies["CouponData"];
+				decimal discountAmount = 0;
+				if (couponDataCookie != null)
+				{
+					try
+					{
+						var couponData = JsonConvert.DeserializeObject<dynamic>(couponDataCookie);
+						double discountPercentage = couponData.DiscountPercentage;
+						discountAmount = subtotal * (decimal)(discountPercentage / 100);
+						orderItem.CouponCode = couponData.Name;
+					}
+					catch (Exception ex)
+					{
+						Console.WriteLine($"Error deserializing coupon cookie: {ex.Message}");
+						Response.Cookies.Delete("CouponData");
+					}
+				}
+
+				orderItem.DiscountAmount = discountAmount;
+				orderItem.TotalAmount = subtotal - discountAmount + shippingPrice;
+
 				_dataContext.Add(orderItem);
 				_dataContext.SaveChanges();
-				//tạo order detail
-				List<CartItemModel> cartItems = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
+
+				// Create order details
 				foreach (var cart in cartItems)
 				{
 					var orderdetail = new OrderDetail();
@@ -93,9 +117,12 @@ namespace Framework_Project.Controllers
 					_dataContext.Update(product);
 					_dataContext.Add(orderdetail);
 					_dataContext.SaveChanges();
-
 				}
+
 				HttpContext.Session.Remove("Cart");
+				Response.Cookies.Delete("CouponData");
+				Response.Cookies.Delete("ShippingPrice");
+
 				//Gửi mail khi đặt hàng thành công
 				var receiver = userEmail;
 				var subject = "Đặt hàng thành công";

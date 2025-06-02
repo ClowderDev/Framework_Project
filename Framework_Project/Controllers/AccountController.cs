@@ -181,19 +181,22 @@ namespace Framework_Project.Controllers
             if ((bool)!User.Identity?.IsAuthenticated)
             {
                 // User is not logged in, redirect to login
-                return RedirectToAction("Login", "Account"); // Replace "Account" with your controller name
+                return RedirectToAction("Login", "Account");
             }
             // Lấy ID và Email của người dùng hiện tại.
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userEmail = User.FindFirstValue(ClaimTypes.Email);
 
             // Lấy danh sách đơn hàng của người dùng, sắp xếp theo ID giảm dần.
-            var Orders = await _dataContext.Orders
-                .Where(od => od.UserName == userEmail).OrderByDescending(od => od.Id).ToListAsync();
+            var orders = await _dataContext.Orders
+                .Where(od => od.UserName == userEmail)
+                .OrderByDescending(od => od.Id)
+                .ToListAsync();
+
             // Truyền email người dùng đến View.
             ViewBag.UserEmail = userEmail;
             // Trả về View với danh sách đơn hàng.
-            return View(Orders);
+            return View(orders);
         }
 
         public async Task<IActionResult> CancelOrder(string ordercode)

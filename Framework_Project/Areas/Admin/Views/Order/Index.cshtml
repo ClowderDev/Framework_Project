@@ -80,6 +80,8 @@
                                 <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; min-width: 150px;">Mã đơn hàng</th>
                                 <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; width: 120px;">Phí vận chuyển</th>
                                 <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; width: 120px;">Mã giảm giá</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; width: 120px;">Giảm giá</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; width: 120px;">Tổng tiền</th>
                                 <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; min-width: 150px;">Tên người dùng</th>
                                 <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; text-align: center; width: 140px;">Trạng thái đơn hàng</th>
                                 <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; text-align: center; width: 160px;">Phương thức thanh toán</th>
@@ -109,6 +111,19 @@
                                         {
                                             <span style="color: #6c757d; font-style: italic; font-size: 12px;">Không có</span>
                                         }
+                                    </td>
+                                    <td style="padding: 20px 15px; vertical-align: middle; text-align: right;">
+                                        @if (item.DiscountAmount > 0)
+                                        {
+                                            <span style="color: #28a745; font-weight: 600; font-size: 13px;">-@item.DiscountAmount.ToString("#,##0 đ")</span>
+                                        }
+                                        else
+                                        {
+                                            <span style="color: #6c757d; font-style: italic; font-size: 12px;">0 đ</span>
+                                        }
+                                    </td>
+                                    <td style="padding: 20px 15px; vertical-align: middle; text-align: right;">
+                                        <span style="color: #28a745; font-weight: 700; font-size: 14px;">@item.TotalAmount.ToString("#,##0 đ")</span>
                                     </td>
                                     <td style="padding: 20px 15px; vertical-align: middle;">
                                         <div style="font-family: 'Roboto', sans-serif; color: #363432; font-size: 13px;">@item.UserName</div>
