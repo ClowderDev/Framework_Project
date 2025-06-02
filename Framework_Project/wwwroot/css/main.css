@@ -1529,8 +1529,8 @@ h2.title {
   border-style: solid;
   border-color: transparent transparent transparent #fe980f;
   position: absolute;
-  top: 11px;
-  left: 48px;
+  top: 10px;
+  left: 90px;
 }
 
 .breadcrumbs .breadcrumb > li + li:before {

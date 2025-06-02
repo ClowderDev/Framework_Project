@@ -2,75 +2,81 @@
 
 @{
     ViewData["Title"] = "Lịch sử đơn hàng của: " + @ViewBag.UserEmail;
-
 }
 
 <!DOCTYPE html>
-
 <html>
+
 <head>
     <meta name="viewport" content="width=device-width" />
-
 </head>
-<body>
-    <h3>Lịch sử đơn hàng của: @ViewBag.UserEmail</h3>
 
-    <table class="table" id="myTable">
+<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px;">
+
+    <h3 style="text-align: center; color: #333; margin-bottom: 30px;">
+        Lịch sử đơn hàng của: @ViewBag.UserEmail
+    </h3>
+
+    <table
+        style="width: 90%; margin: auto; border-collapse: collapse; background-color: white; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
         <thead>
-            <tr>
-                <th>ID</th>
-                <th>Mã sản phẩm</th>
-                <th>Phí vận chuyển</th>
-                <th>Mã giảm giá</th>
-                <th>Tên người dùng</th>
-                <th>Tình trạng</th>
-                <th>Hình thức thanh toán</th>
-                <th>Ngày đặt</th>
-                <th>Thao tác</th>   
+            <tr style="background-color: #E30019; color: white;">
+                <th style="padding: 12px; border: 1px solid #ddd;">ID</th>
+                <th style="padding: 12px; border: 1px solid #ddd;">Mã sản phẩm</th>
+                <th style="padding: 12px; border: 1px solid #ddd;">Phí vận chuyển</th>
+                <th style="padding: 12px; border: 1px solid #ddd;">Mã giảm giá</th>
+                <th style="padding: 12px; border: 1px solid #ddd;">Tên người dùng</th>
+                <th style="padding: 12px; border: 1px solid #ddd;">Tình trạng</th>
+                <th style="padding: 12px; border: 1px solid #ddd;">Hình thức thanh toán</th>
+                <th style="padding: 12px; border: 1px solid #ddd;">Ngày đặt</th>
+                <th style="padding: 12px; border: 1px solid #ddd;">Thao tác</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.OrderCode</td>
-                    <td>@item.ShippingCost.ToString("#,##0 đ")</td>
-                    <td>@item.CouponCode</td>
-                    <td>@item.UserName</td>
-                    <td>
+                <tr style="border-bottom: 1px solid #ddd; transition: background-color 0.3s;"
+                    onmouseover="this.style.backgroundColor='#f1f1f1'" onmouseout="this.style.backgroundColor='white'">
+                    <td style="padding: 10px; border: 1px solid #ddd;">@item.Id</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@item.OrderCode</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@item.ShippingCost.ToString("#,##0 đ")</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@item.CouponCode</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@item.UserName</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">
                         @if (item.Status == 1)
                         {
-                            <span class="text text-success">Đơn hàng mới</span>
+                            <span style="color: green;">Đơn hàng mới</span>
                         }
                         else if (item.Status == 2)
                         {
-                            <span class="text text-success">Đã giao hàng</span>
+                            <span style="color: green;">Đã giao hàng</span>
                         }
                         else
                         {
-
-                            <span class="text text-danger">Đã hủy</span>
+                            <span style="color: red;">Đã hủy</span>
                         }
                     </td>
-                    <td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">
                         @if (item.PaymentMethod == "COD" || item.PaymentMethod == null)
                         {
-                            <span class="text text-success">Thanh toán khi nhận hàng</span>
+                            <span style="color: green;">Thanh toán khi nhận hàng</span>
                         }
-                        else if(item.PaymentMethod == "Momo")
+                        else if (item.PaymentMethod == "Momo")
                         {
-                            <span class="text text-success">Thanh toán qua MoMo</span>
+                            <span style="color: green;">Thanh toán qua MoMo</span>
                         }
-                        else if(item.PaymentMethod == "VNPay")
+                        else if (item.PaymentMethod == "VNPay")
                         {
-                            <span class="text text-success">Thanh toán qua Vnpay</span>
+                            <span style="color: green;">Thanh toán qua Vnpay</span>
                         }
                     </td>
-                    <td>@item.CreatedDate.ToString("dd-MM-yyyy")</td>
-                    <td>
-
-                        <a onclick="return confirm('Bạn xác nhận muốn hủy?')" class="btn btn-warning btn-sm" asp-action="CancelOrder" asp-controller="Account" asp-route-ordercode="@item.OrderCode">Hủy đơn hàng</a>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@item.CreatedDate.ToString("dd-MM-yyyy")</td>
+                    <td style="border: 1px solid #ddd; width: 150px; text-align: center;">
+                        <a onclick="return confirm('Bạn xác nhận muốn hủy?')"
+                            href="@Url.Action("CancelOrder", "Account", new { ordercode = item.OrderCode })"
+                            style="background-color: #ffc107; color: black; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 14px;">
+                            Hủy đơn hàng
+                        </a>
                     </td>
                 </tr>
             }
@@ -78,4 +84,5 @@
     </table>
 
 </body>
+
 </html>
