@@ -1,30 +1,79 @@
 ﻿@model ContactModel
-<div class="row">
+@if (Model != null)
+{
+	<div class="container" id="contact-page" style="margin-top: 40px; margin-bottom: 40px;">
+		<div class="row">
+			<!-- Company Info Panel -->
+			<div class="col-md-4 col-sm-12 mb-4">
+				<div class="card shadow-sm" style="border-radius: 10px; border: 1px solid #F7F7F0;">
+					<div class="card-body text-center">
+						<img src="~/media/logo/@Model.LogoImg" alt="@Model.Name Logo" style="width: 120px; height: 120px; object-fit: contain; border-radius: 8px; background: #fff; margin-bottom: 15px;" />
+						<h4 class="card-title" style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 700; margin-bottom: 10px;">
+							<i class="fa fa-building" style="color: #FE980F; margin-right: 8px;"></i>@Model.Name
+						</h4>
+						<p class="card-text" style="color: #696763; font-size: 15px;">@Html.Raw(@Model.Description)</p>
+					</div>
+				</div>
+			</div>
 
+			<!-- Contact Info Panel -->
+			<div class="col-md-4 col-sm-12 mb-4">
+				<div class="card shadow-sm" style="border-radius: 10px; border: 1px solid #F7F7F0;">
+					<div class="card-body">
+						<h5 class="card-title" style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 600; margin-bottom: 18px;">
+							<i class="fa fa-info-circle" style="color: #FE980F; margin-right: 8px;"></i>Thông tin liên hệ
+						</h5>
+						<ul class="list-unstyled" style="font-size: 15px;">
+							<li style="margin-bottom: 12px;">
+								<i class="fa fa-envelope" style="color: #28a745; margin-right: 8px;"></i>
+								<a href="mailto:@Model.Email" style="color: #363432; text-decoration: none;">@Model.Email</a>
+							</li>
+							<li style="margin-bottom: 12px;">
+								<i class="fa fa-phone" style="color: #17a2b8; margin-right: 8px;"></i>
+								<a href="tel:@Model.Phone" style="color: #363432; text-decoration: none;">@Model.Phone</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
 
-	<div class="col-sm-5 col-md-5">
-		@Html.Raw(@Model.Map)
-		@Html.Raw(Model.Description)
-	</div>
-	<div class="col-sm-4">
-		<div class="address">
-			<h5><b>Name : @Model.Name</b></h5>
-			<h5>Email : @Model.Email</h5>
-			<h5>Hotline: @Model.Phone</h5>
+			<!-- Map Panel -->
+			<div class="col-md-4 col-sm-12 mb-4">
+				<div class="card shadow-sm" style="border-radius: 10px; border: 1px solid #F7F7F0;">
+					<div class="card-body">
+						<h5 class="card-title" style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 600; margin-bottom: 18px;">
+							<i class="fa fa-map-marker" style="color: #FE980F; margin-right: 8px;"></i>Bản đồ
+						</h5>
+						<div class="contact-map" style="width: 100%; height: 250px; border-radius: 8px; overflow: hidden;">
+							@Html.Raw(@Model.Map)
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
+		<!-- Social Media Section -->
+		<div class="row mt-4">
+			<div class="col-12">
+				<div class="card shadow-sm" style="border-radius: 10px; border: 1px solid #F7F7F0;">
+					<div class="card-body text-center">
+						<h5 style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 600; margin-bottom: 18px;">
+							<i class="fa fa-facebook-square" style="color: #1877f3; margin-right: 8px;"></i>Kết nối với chúng tôi trên Facebook
+						</h5>
+						<div class="d-flex justify-content-center">
+							<div class="fb-page"
+								 data-href="https://www.facebook.com/UIT.Fanpage"
+								 data-tabs="message" data-width="340" data-height="120"
+								 data-small-header="false" data-adapt-container-width="true"
+								 data-hide-cover="false" data-show-facepile="true">
+								<blockquote cite="https://www.facebook.com/UIT.Fanpage" class="fb-xfbml-parse-ignore">
+									<a href="https://www.facebook.com/UIT.Fanpage">UIT</a>
+								</blockquote>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-
-	<div class="col-sm-4">
-		<div class="fb-page"
-			 data-href="https://www.facebook.com/UIT.Fanpage"
-			 data-tabs="message" data-width="" data-height=""
-			 data-small-header="false" data-adapt-container-width="true"
-			 data-hide-cover="false" data-show-facepile="true">
-			<blockquote cite="https://www.facebook.com/ttgshopvn" class="fb-xfbml-parse-ignore">
-				<a href="https://www.facebook.com/ttgshopvn">UIT</a>
-			</blockquote>
-		</div>
-	</div>
-
-</div>
+}
