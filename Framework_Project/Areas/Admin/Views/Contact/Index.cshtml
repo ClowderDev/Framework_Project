@@ -1,0 +1,494 @@
+﻿@model IEnumerable<ContactModel>
+@{
+    ViewData["Title"] = "Quản lý Thông tin Liên hệ";
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header" style="border-bottom: 2px solid #FE980F; margin-bottom: 30px; padding-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <h1 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; display: flex; align-items: center;">
+                            <i class="fa fa-address-book" style="color: #FE980F; margin-right: 10px;"></i>
+                            Quản lý Thông tin Liên hệ
+                        </h1>
+                        <p style="color: #696763; margin: 5px 0 0 0; font-size: 14px;">Quản lý thông tin liên hệ và cấu hình công ty</p>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a class="btn btn-primary" asp-action="Create" asp-controller="Contact" style="background: #FE980F; border: none; padding: 12px 25px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.3s ease;">
+                            <i class="fa fa-plus" style="margin-right: 8px;"></i>
+                            Thêm Thông tin Mới
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Summary -->
+    <div class="row" style="margin-bottom: 30px;">
+        <div class="col-md-3 col-sm-6">
+            <div class="stats-mini-card" style="background: #fff; border: 1px solid #F7F7F0; padding: 20px; text-align: center; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="color: #FE980F; font-size: 24px; margin-bottom: 5px;">
+                    <i class="fa fa-address-card"></i>
+                </div>
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 14px;">Tổng liên hệ</h4>
+                <p style="color: #FE980F; font-size: 20px; font-weight: 700; margin: 5px 0 0 0;">@Model.Count()</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stats-mini-card" style="background: #fff; border: 1px solid #F7F7F0; padding: 20px; text-align: center; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="color: #28a745; font-size: 24px; margin-bottom: 5px;">
+                    <i class="fa fa-envelope"></i>
+                </div>
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 14px;">Email</h4>
+                <p style="color: #28a745; font-size: 20px; font-weight: 700; margin: 5px 0 0 0;">@Model.Count(c => !string.IsNullOrEmpty(c.Email))</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stats-mini-card" style="background: #fff; border: 1px solid #F7F7F0; padding: 20px; text-align: center; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="color: #17a2b8; font-size: 24px; margin-bottom: 5px;">
+                    <i class="fa fa-phone"></i>
+                </div>
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 14px;">Điện thoại</h4>
+                <p style="color: #17a2b8; font-size: 20px; font-weight: 700; margin: 5px 0 0 0;">@Model.Count(c => !string.IsNullOrEmpty(c.Phone))</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stats-mini-card" style="background: #fff; border: 1px solid #F7F7F0; padding: 20px; text-align: center; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="color: #6f42c1; font-size: 24px; margin-bottom: 5px;">
+                    <i class="fa fa-image"></i>
+                </div>
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 14px;">Logo</h4>
+                <p style="color: #6f42c1; font-size: 20px; font-weight: 700; margin: 5px 0 0 0;">@Model.Count(c => !string.IsNullOrEmpty(c.LogoImg))</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Table -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-container" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div class="table-header" style="background: #F0F0E9; padding: 20px; border-bottom: 1px solid #F7F7F0;">
+                    <h3 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 18px; font-weight: 500;">
+                        <i class="fa fa-list" style="color: #FE980F; margin-right: 8px;"></i>
+                        Danh sách Thông tin Liên hệ
+                    </h3>
+                    <p style="color: #696763; margin: 5px 0 0 0; font-size: 14px;">Quản lý thông tin liên hệ và cấu hình hệ thống</p>
+                </div>
+                
+                <div class="table-responsive" style="padding: 0;">
+                    <table class="table" id="myTable" style="margin: 0; border: none;">
+                        <thead style="background: #FE980F; color: white;">
+                            <tr>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500;">Tên công ty</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500;">Mô tả</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; text-align: center; width: 120px;">Logo</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500;">Liên hệ</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; text-align: center; width: 150px;">Bản đồ</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; text-align: center; width: 120px;">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    <tr style="border-bottom: 1px solid #F7F7F0; transition: background-color 0.3s ease;" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='white'">
+                                        <td style="padding: 20px 15px; vertical-align: middle;">
+                                            <div style="display: flex; flex-direction: column;">
+                                                <div style="font-family: 'Roboto', sans-serif; color: #363432; font-weight: 500; font-size: 16px; margin-bottom: 5px;">@item.Name</div>
+                                                <div style="display: flex; gap: 5px;">
+                                                    <span style="background: #e7f3ff; color: #004085; padding: 2px 6px; border-radius: 3px; font-size: 10px;">
+                                                        <i class="fa fa-building" style="margin-right: 3px;"></i>
+                                                        Công ty
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td style="padding: 20px 15px; vertical-align: middle;">
+                                            <div style="font-family: 'Roboto', sans-serif; color: #696763; font-size: 13px; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                                @Html.Raw(@item.Description)
+                                            </div>
+                                        </td>
+                                        <td style="padding: 20px 15px; vertical-align: middle; text-align: center;">
+                                            @if (!string.IsNullOrEmpty(item.LogoImg))
+                                            {
+                                                <div class="logo-preview" style="position: relative; display: inline-block;">
+                                                    <img src="~/media/logo/@item.LogoImg" 
+                                                         style="width: 80px; height: 60px; object-fit: contain; border-radius: 6px; border: 2px solid #F7F7F0; cursor: pointer; transition: all 0.3s ease; background: white;"
+                                                         onclick="openImageModal('~/media/logo/@item.LogoImg', '@item.Name Logo')"
+                                                         onmouseover="this.style.transform='scale(1.05)'; this.style.borderColor='#FE980F'"
+                                                         onmouseout="this.style.transform='scale(1)'; this.style.borderColor='#F7F7F0'" />
+                                                    <div style="position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.7); color: white; padding: 1px 4px; border-radius: 3px; font-size: 8px;">
+                                                        <i class="fa fa-search-plus"></i>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div style="color: #999; font-size: 24px;">
+                                                    <i class="fa fa-image"></i>
+                                                </div>
+                                                <p style="color: #999; margin: 5px 0 0 0; font-size: 10px;">Chưa có logo</p>
+                                            }
+                                        </td>
+                                        <td style="padding: 20px 15px; vertical-align: middle;">
+                                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                                @if (!string.IsNullOrEmpty(item.Email))
+                                                {
+                                                    <div style="display: flex; align-items: center;">
+                                                        <div style="background: #d4edda; color: #155724; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 500; margin-right: 8px;">
+                                                            <i class="fa fa-envelope" style="margin-right: 3px;"></i>
+                                                        </div>
+                                                        <a href="mailto:@item.Email" style="color: #363432; text-decoration: none; font-size: 13px;">@item.Email</a>
+                                                    </div>
+                                                }
+                                                @if (!string.IsNullOrEmpty(item.Phone))
+                                                {
+                                                    <div style="display: flex; align-items: center;">
+                                                        <div style="background: #d1ecf1; color: #0c5460; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 500; margin-right: 8px;">
+                                                            <i class="fa fa-phone" style="margin-right: 3px;"></i>
+                                                        </div>
+                                                        <a href="tel:@item.Phone" style="color: #363432; text-decoration: none; font-size: 13px;">@item.Phone</a>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </td>
+                                        <td style="padding: 20px 15px; vertical-align: middle; text-align: center;">
+                                            @if (!string.IsNullOrEmpty(item.Map))
+                                            {
+                                                <button type="button" class="btn btn-sm view-map" data-map="@Html.Raw(Html.Encode(item.Map))" 
+                                                        data-name="@Html.Encode(item.Name)"
+                                                        style="background: #17a2b8; border: none; color: white; padding: 6px 12px; border-radius: 4px; font-size: 11px; display: inline-flex; align-items: center; transition: all 0.3s ease;"
+                                                        onmouseover="this.style.background='#138496'; this.style.transform='translateY(-1px)'"
+                                                        onmouseout="this.style.background='#17a2b8'; this.style.transform='translateY(0)'">
+                                                    <i class="fa fa-map-marker" style="margin-right: 4px;"></i>
+                                                    Xem bản đồ
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <span style="color: #999; font-size: 12px; font-style: italic;">Chưa có bản đồ</span>
+                                            }
+                                        </td>
+                                        <td style="padding: 20px 15px; vertical-align: middle; text-align: center;">
+                                            <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                                                <a class="btn btn-sm" asp-action="Edit" asp-controller="Contact" asp-route-id="@item.Id"
+                                                   style="background: #ffc107; border: none; color: #212529; padding: 8px 12px; border-radius: 4px; font-size: 12px; display: inline-flex; align-items: center; transition: all 0.3s ease;"
+                                                   onmouseover="this.style.background='#e0a800'; this.style.transform='translateY(-1px)'"
+                                                   onmouseout="this.style.background='#ffc107'; this.style.transform='translateY(0)'">
+                                                    <i class="fa fa-edit" style="margin-right: 4px;"></i>
+                                                    Chỉnh sửa
+                                                </a>
+                                                <button type="button" class="btn btn-sm delete-contact" data-id="@item.Id" data-name="@item.Name"
+                                                        style="background: #dc3545; border: none; color: white; padding: 8px 12px; border-radius: 4px; font-size: 12px; display: inline-flex; align-items: center; transition: all 0.3s ease;"
+                                                        onmouseover="this.style.background='#c82333'; this.style.transform='translateY(-1px)'"
+                                                        onmouseout="this.style.background='#dc3545'; this.style.transform='translateY(0)'">
+                                                    <i class="fa fa-trash" style="margin-right: 4px;"></i>
+                                                    Xóa
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="6" style="padding: 40px; text-align: center; color: #696763;">
+                                        <div style="display: flex; flex-direction: column; align-items: center;">
+                                            <i class="fa fa-address-book" style="font-size: 48px; color: #ddd; margin-bottom: 15px;"></i>
+                                            <h5 style="color: #363432; margin-bottom: 10px;">Chưa có thông tin liên hệ</h5>
+                                            <p style="margin: 0;">Thêm thông tin liên hệ đầu tiên để bắt đầu</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Image Modal -->
+<div id="imageModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); cursor: pointer;" onclick="closeImageModal()">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); max-width: 90%; max-height: 90%;">
+        <img id="modalImage" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);" />
+        <div style="text-align: center; margin-top: 15px;">
+            <h4 id="modalTitle" style="color: white; font-family: 'Roboto', sans-serif; margin: 0;"></h4>
+            <button onclick="closeImageModal()" style="background: #FE980F; border: none; color: white; padding: 10px 20px; border-radius: 4px; margin-top: 10px; cursor: pointer; font-family: 'Roboto', sans-serif;">
+                <i class="fa fa-times" style="margin-right: 5px;"></i>
+                Đóng
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Map Modal -->
+<div id="mapModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8);">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 800px; height: 70%; background: white; border-radius: 8px; overflow: hidden;">
+        <div style="background: #FE980F; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
+            <h4 id="mapModalTitle" style="margin: 0; font-family: 'Roboto', sans-serif;">Bản đồ</h4>
+            <button onclick="closeMapModal()" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+        <div id="mapContent" style="width: 100%; height: calc(100% - 60px); overflow: hidden;">
+            <!-- Map content will be inserted here -->
+        </div>
+    </div>
+</div>
+
+<style>
+    .stats-mini-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+    }
+    
+    .btn:hover {
+        transform: translateY(-1px);
+    }
+    
+    .table-container {
+        transition: all 0.3s ease;
+    }
+    
+    .logo-preview:hover .fa-search-plus {
+        animation: pulseAnimation 1s infinite;
+    }
+    
+    @@media (max-width: 768px) {
+        .table-responsive {
+            font-size: 12px;
+        }
+        
+        .stats-mini-card {
+            margin-bottom: 15px;
+        }
+        
+        .page-header div {
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+        
+        #mapModal > div {
+            width: 95% !important;
+            height: 80% !important;
+        }
+    }
+</style>
+
+<style type="text/css">
+@@keyframes pulseAnimation {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+</style>
+
+<script>
+    function openImageModal(imageSrc, title) {
+        var fullImageSrc = imageSrc.startsWith('/') ? imageSrc : '/' + imageSrc.replace('~/', '');
+        var modalImg = document.getElementById('modalImage');
+        
+        modalImg.onload = function() {
+            document.getElementById('imageModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        };
+        
+        modalImg.onerror = function() {
+            alert('Không thể tải hình ảnh: ' + title);
+        };
+        
+        modalImg.src = fullImageSrc;
+        document.getElementById('modalTitle').textContent = title;
+    }
+    
+    function closeImageModal() {
+        document.getElementById('imageModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+    
+    function openMapModal(mapContent, title) {
+        document.getElementById('mapModalTitle').textContent = 'Bản đồ - ' + title;
+        document.getElementById('mapContent').innerHTML = mapContent;
+        document.getElementById('mapModal').style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeMapModal() {
+        document.getElementById('mapModal').style.display = 'none';
+        document.getElementById('mapContent').innerHTML = '';
+        document.body.style.overflow = 'auto';
+    }
+    
+    // Close modals with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeImageModal();
+            closeMapModal();
+        }
+    });
+</script>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // View map functionality
+            $('.view-map').click(function() {
+                var mapContent = $(this).data('map');
+                var companyName = $(this).data('name');
+                
+                // Clean and validate map content
+                if (mapContent && mapContent.trim() !== '') {
+                    // Ensure the map content is properly formatted
+                    var cleanMapContent = mapContent.toString().trim();
+                    
+                    // If it's an iframe, make sure it has proper dimensions
+                    if (cleanMapContent.includes('<iframe')) {
+                        // Add responsive styling to iframe if not present
+                        if (!cleanMapContent.includes('width') || !cleanMapContent.includes('height')) {
+                            cleanMapContent = cleanMapContent.replace('<iframe', '<iframe width="100%" height="400"');
+                        }
+                        // Ensure iframe has proper styling
+                        if (!cleanMapContent.includes('style=')) {
+                            cleanMapContent = cleanMapContent.replace('<iframe', '<iframe style="border:0; width:100%; height:400px;"');
+                        }
+                    }
+                    
+                    openMapModal(cleanMapContent, companyName);
+                } else {
+                    alert('Không có dữ liệu bản đồ để hiển thị');
+                }
+            });
+            
+            // Delete contact functionality
+            $('.delete-contact').click(function() {
+                var contactId = $(this).data('id');
+                var contactName = $(this).data('name');
+                
+                Swal.fire({
+                    title: 'Bạn có chắc chắn?',
+                    text: 'Bạn có muốn xóa thông tin liên hệ "' + contactName + '" không?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#FE980F',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Có, xóa nó!',
+                    cancelButtonText: 'Hủy bỏ',
+                    customClass: {
+                        popup: 'swal-custom-popup',
+                        title: 'swal-custom-title',
+                        content: 'swal-custom-content'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Show loading
+                        Swal.fire({
+                            title: 'Đang xóa...',
+                            text: 'Vui lòng đợi',
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            showConfirmButton: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+                        
+                        $.ajax({
+                            url: '@Url.Action("Delete", "Contact")?id=' + contactId,
+                            type: 'POST',
+                            headers: {
+                                "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                            },
+                            success: function(result) {
+                                if (result.success) {
+                                    Swal.fire({
+                                        title: 'Đã xóa!',
+                                        text: 'Thông tin liên hệ đã được xóa thành công.',
+                                        icon: 'success',
+                                        confirmButtonColor: '#FE980F',
+                                        customClass: {
+                                            popup: 'swal-custom-popup'
+                                        }
+                                    }).then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: 'Lỗi!',
+                                        text: result.message || 'Có lỗi xảy ra khi xóa thông tin liên hệ.',
+                                        icon: 'error',
+                                        confirmButtonColor: '#FE980F',
+                                        customClass: {
+                                            popup: 'swal-custom-popup'
+                                        }
+                                    });
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Delete contact error:', error);
+                                Swal.fire({
+                                    title: 'Lỗi!',
+                                    text: 'Có lỗi xảy ra khi xóa thông tin liên hệ. Vui lòng thử lại.',
+                                    icon: 'error',
+                                    confirmButtonColor: '#FE980F',
+                                    customClass: {
+                                        popup: 'swal-custom-popup'
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+            
+            // // Initialize DataTable if needed
+            // if ($.fn.DataTable) {
+            //     $('#myTable').DataTable({
+            //         "language": {
+            //             "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Vietnamese.json"
+            //         },
+            //         "pageLength": 10,
+            //         "responsive": true,
+            //         "order": [[0, "asc"]]
+            //     });
+            // }
+        });
+        
+        // Add debugging function after the document ready
+        function debugMapData() {
+            $('.view-map').each(function() {
+                var mapData = $(this).data('map');
+                var name = $(this).data('name');
+                console.log('Map data for ' + name + ':', mapData);
+            });
+        }
+
+        // Call debug function
+        debugMapData();
+    </script>
+    
+    <style>
+        .swal-custom-popup {
+            font-family: 'Roboto', sans-serif !important;
+        }
+        
+        .swal-custom-title {
+            color: #363432 !important;
+        }
+        
+        .swal-custom-content {
+            color: #696763 !important;
+        }
+    </style>
+@Html.AntiForgeryToken()
+}

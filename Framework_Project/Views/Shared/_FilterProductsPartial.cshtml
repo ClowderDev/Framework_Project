@@ -1,0 +1,45 @@
+@{
+    var currentUrl = Url.ActionContext.HttpContext.Request.Path;
+    var controller = Url.ActionContext.RouteData.Values["controller"].ToString();
+    var action = "Index";
+    var slug = ViewBag.Slug ?? ViewBag.BrandSlug;
+    var startprice = ViewBag.startprice;
+    var endprice = ViewBag.endprice;
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            <h5>Sắp xếp theo</h5>
+            <select class="form-control" id="sort_by">
+                <option>---------</option>
+                <option value="@currentUrl?sort_by=price_increase&startprice=@startprice&endprice=@endprice">Giá tăng dần</option>
+                <option value="@currentUrl?sort_by=price_decrease&startprice=@startprice&endprice=@endprice">Giá giảm dần</option>
+                <option value="@currentUrl?sort_by=price_newest&startprice=@startprice&endprice=@endprice">Mới nhất</option>
+                <option value="@currentUrl?sort_by=price_oldest&startprice=@startprice&endprice=@endprice">Cũ nhất</option>
+            </select>
+        </div>
+        <div class="col-md-5">
+            <h5>Lọc theo giá</h5>
+            @if (controller == "Category")
+            {
+                <form method="get" asp-action="@action" asp-controller="@controller" asp-route-slug="@slug">
+                    <input type="hidden" id="startprice" name="startprice" value="@ViewBag.startprice" />
+                    <input type="hidden" id="endprice" name="endprice" value="@ViewBag.endprice" />
+                    <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                    <div id="slider-range"></div>
+                    <button type="submit" class="btn btn-danger btn-locgia">Lọc</button>
+                </form>
+            }
+            else
+            {
+                <form method="get" asp-action="@action" asp-controller="@controller" asp-route-brandSlug="@slug">
+                    <input type="hidden" id="startprice" name="startprice" value="@ViewBag.startprice" />
+                    <input type="hidden" id="endprice" name="endprice" value="@ViewBag.endprice" />
+                    <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                    <div id="slider-range"></div>
+                    <button type="submit" class="btn btn-danger btn-locgia">Lọc</button>
+                </form>
+            }
+        </div>
+    </div>
+</div>

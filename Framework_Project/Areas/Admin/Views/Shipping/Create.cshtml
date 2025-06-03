@@ -1,0 +1,432 @@
+@model Framework_Project.Models.ShippingModel
+@{
+    ViewData["Title"] = "Tạo địa chỉ vận chuyển";
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header" style="border-bottom: 2px solid #FE980F; margin-bottom: 30px; padding-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <h1 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; display: flex; align-items: center;">
+                            <i class="fa fa-plus-circle" style="color: #FE980F; margin-right: 10px;"></i>
+                            Tạo Địa chỉ Vận chuyển
+                        </h1>
+                        <p style="color: #696763; margin: 5px 0 0 0; font-size: 14px;">Thêm địa chỉ và phí vận chuyển mới</p>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a asp-action="Index" asp-controller="Shipping" style="background: #6c757d; border: none; padding: 10px 20px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.3s ease;">
+                            <i class="fa fa-arrow-left" style="margin-right: 8px;"></i>
+                            Quay lại danh sách
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="row">
+        <div class="col-md-8 col-lg-6">
+            <div class="form-container" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div class="form-header" style="margin-bottom: 25px;">
+                    <h3 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 20px; font-weight: 500;">
+                        <i class="fa fa-map-marker" style="color: #FE980F; margin-right: 8px;"></i>
+                        Thông tin Địa chỉ
+                    </h3>
+                    <p style="color: #696763; margin: 5px 0 0 0; font-size: 14px;">Chọn địa chỉ và thiết lập phí vận chuyển</p>
+                </div>
+
+                <form asp-action="Create" asp-controller="Shipping">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="border-radius: 6px; border: none; background: #f8d7da; color: #721c24; padding: 15px; margin-bottom: 20px; display: none;"></div>
+                    
+                    <!-- Province/City Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-building" style="color: #FE980F; margin-right: 5px;"></i>
+                            Tỉnh/Thành phố
+                        </label>
+                        <div class="select-wrapper" style="position: relative;">
+                            <select class="form-control location-select" id="tinh" name="City" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%; appearance: none; background: white;">
+                                <option value="0">-- Chọn Tỉnh/Thành phố --</option>
+                            </select>
+                            <div class="select-icon" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #696763; pointer-events: none;">
+                                <i class="fa fa-chevron-down"></i>
+                            </div>
+                        </div>
+                        <div class="loading-indicator" id="tinh-loading" style="display: none; margin-top: 8px; color: #FE980F; font-size: 12px;">
+                            <i class="fa fa-spinner fa-spin" style="margin-right: 5px;"></i>
+                            Đang tải dữ liệu...
+                        </div>
+                    </div>
+
+                    <!-- District Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-map" style="color: #FE980F; margin-right: 5px;"></i>
+                            Quận/Huyện
+                        </label>
+                        <div class="select-wrapper" style="position: relative;">
+                            <select class="form-control location-select" id="quan" name="District" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%; appearance: none; background: white;" disabled>
+                                <option value="0">-- Chọn Quận/Huyện --</option>
+                            </select>
+                            <div class="select-icon" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #696763; pointer-events: none;">
+                                <i class="fa fa-chevron-down"></i>
+                            </div>
+                        </div>
+                        <div class="loading-indicator" id="quan-loading" style="display: none; margin-top: 8px; color: #FE980F; font-size: 12px;">
+                            <i class="fa fa-spinner fa-spin" style="margin-right: 5px;"></i>
+                            Đang tải dữ liệu...
+                        </div>
+                    </div>
+
+                    <!-- Ward Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-map-marker" style="color: #FE980F; margin-right: 5px;"></i>
+                            Phường/Xã
+                        </label>
+                        <div class="select-wrapper" style="position: relative;">
+                            <select class="form-control location-select" id="phuong" name="Ward" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%; appearance: none; background: white;" disabled>
+                                <option value="0">-- Chọn Phường/Xã --</option>
+                            </select>
+                            <div class="select-icon" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #696763; pointer-events: none;">
+                                <i class="fa fa-chevron-down"></i>
+                            </div>
+                        </div>
+                        <div class="loading-indicator" id="phuong-loading" style="display: none; margin-top: 8px; color: #FE980F; font-size: 12px;">
+                            <i class="fa fa-spinner fa-spin" style="margin-right: 5px;"></i>
+                            Đang tải dữ liệu...
+                        </div>
+                    </div>
+
+                    <!-- Price Field -->
+                    <div class="form-group" style="margin-bottom: 30px;">
+                        <label asp-for="Price" style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-money" style="color: #FE980F; margin-right: 5px;"></i>
+                            Phí vận chuyển (VNĐ)
+                        </label>
+                        <input asp-for="Price" type="number" class="form-control price-input" min="0" required style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%;" placeholder="Nhập phí vận chuyển..." />
+                        <div id="price-preview" style="margin-top: 8px; padding: 8px 12px; background: #e7f3ff; border-radius: 4px; color: #004085; font-weight: 500; font-size: 14px; display: none;">
+                            <i class="fa fa-calculator" style="margin-right: 5px;"></i>
+                            <span id="price-display"></span>
+                        </div>
+                        <span asp-validation-for="Price" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div class="form-group" style="margin-bottom: 0; text-align: center;">
+                        <button type="submit" class="btn btn-primary" id="submit-btn" style="background: #FE980F; border: none; padding: 15px 40px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 500; transition: all 0.3s ease; min-width: 150px; margin-right: 10px;" disabled>
+                            <i class="fa fa-save" style="margin-right: 8px;"></i>
+                            Tạo Địa chỉ
+                        </button>
+                        <a asp-action="Index" asp-controller="Shipping" style="background: #6c757d; border: none; padding: 15px 25px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 500; transition: all 0.3s ease; text-decoration: none; display: inline-flex; align-items: center;">
+                            <i class="fa fa-times" style="margin-right: 8px;"></i>
+                            Hủy bỏ
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Help Panel -->
+        <div class="col-md-4 col-lg-6">
+            <div class="help-panel" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px;">
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0 0 15px 0; font-size: 18px; font-weight: 500;">
+                    <i class="fa fa-info-circle" style="color: #FE980F; margin-right: 8px;"></i>
+                    Hướng dẫn
+                </h4>
+                <div class="help-content">
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #FE980F;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">📍 Chọn địa chỉ</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px;">Chọn theo thứ tự: Tỉnh/Thành phố → Quận/Huyện → Phường/Xã</p>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #28a745;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">💰 Phí vận chuyển</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px;">Nhập phí vận chuyển bằng số (VNĐ)<br>Ví dụ: 30000 cho 30,000 VNĐ</p>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #17a2b8;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">⚡ Tự động tải</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px;">Dữ liệu địa chỉ được tải tự động từ API chính thức</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="preview-panel" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0 0 15px 0; font-size: 18px; font-weight: 500;">
+                    <i class="fa fa-eye" style="color: #FE980F; margin-right: 8px;"></i>
+                    Xem trước
+                </h4>
+                <div id="address-preview" style="border: 2px dashed #F0F0E9; border-radius: 8px; padding: 20px; text-align: center; background: #fafafa; min-height: 150px;">
+                    <div id="preview-content">
+                        <div style="color: #999; font-size: 48px; margin-bottom: 10px;">
+                            <i class="fa fa-map-marker"></i>
+                        </div>
+                        <p style="color: #999; margin: 0; font-style: italic;">Chọn địa chỉ để xem trước</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control:focus {
+        border-color: #FE980F !important;
+        box-shadow: 0 0 0 0.2rem rgba(254, 152, 15, 0.25) !important;
+        outline: none;
+    }
+    
+    .location-select:disabled {
+        background-color: #f8f9fa !important;
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+    
+    .help-panel, .preview-panel, .form-container {
+        transition: all 0.3s ease;
+    }
+    
+    .help-panel:hover, .preview-panel:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .select-wrapper {
+        position: relative;
+    }
+    
+    .select-icon {
+        transition: transform 0.3s ease;
+    }
+    
+    .location-select:focus + .select-icon {
+        transform: translateY(-50%) rotate(180deg);
+    }
+    
+    @@media (max-width: 768px) {
+        .page-header div {
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+        
+        .col-md-4 {
+            margin-top: 20px;
+        }
+    }
+</style>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://esgoo.net/scripts/jquery.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Show loading for provinces
+            $('#tinh-loading').show();
+            
+            // Load provinces/cities
+            $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(data_tinh) {
+                $('#tinh-loading').hide();
+                if (data_tinh.error == 0) {
+                    $.each(data_tinh.data, function(key_tinh, val_tinh) {
+                        $("#tinh").append('<option value="' + val_tinh.full_name + '" data-id="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
+                    });
+                } else {
+                    showError('Không thể tải danh sách tỉnh/thành phố');
+                }
+            }).fail(function() {
+                $('#tinh-loading').hide();
+                showError('Lỗi kết nối khi tải danh sách tỉnh/thành phố');
+            });
+
+            // Province/City change event
+            $("#tinh").change(function() {
+                var selectedOption = $(this).find('option:selected');
+                var provinceId = selectedOption.attr('data-id');
+                var provinceName = selectedOption.val();
+                
+                if (provinceId && provinceId !== '0') {
+                    // Enable and reset district dropdown
+                    $("#quan").prop('disabled', false).html('<option value="0">-- Chọn Quận/Huyện --</option>');
+                    $("#phuong").prop('disabled', true).html('<option value="0">-- Chọn Phường/Xã --</option>');
+                    
+                    // Show loading
+                    $('#quan-loading').show();
+                    
+                    // Load districts
+                    $.getJSON('https://esgoo.net/api-tinhthanh/2/' + provinceId + '.htm', function(data_quan) {
+                        $('#quan-loading').hide();
+                        if (data_quan.error == 0) {
+                            $.each(data_quan.data, function(key_quan, val_quan) {
+                                $("#quan").append('<option value="' + val_quan.full_name + '" data-id="' + val_quan.id + '">' + val_quan.full_name + '</option>');
+                            });
+                        } else {
+                            showError('Không thể tải danh sách quận/huyện');
+                        }
+                    }).fail(function() {
+                        $('#quan-loading').hide();
+                        showError('Lỗi kết nối khi tải danh sách quận/huyện');
+                    });
+                } else {
+                    // Disable dependent dropdowns
+                    $("#quan").prop('disabled', true).html('<option value="0">-- Chọn Quận/Huyện --</option>');
+                    $("#phuong").prop('disabled', true).html('<option value="0">-- Chọn Phường/Xã --</option>');
+                }
+                
+                updatePreview();
+                validateForm();
+            });
+
+            // District change event
+            $("#quan").change(function() {
+                var selectedOption = $(this).find('option:selected');
+                var districtId = selectedOption.attr('data-id');
+                var districtName = selectedOption.val();
+                
+                if (districtId && districtId !== '0') {
+                    // Enable and reset ward dropdown
+                    $("#phuong").prop('disabled', false).html('<option value="0">-- Chọn Phường/Xã --</option>');
+                    
+                    // Show loading
+                    $('#phuong-loading').show();
+                    
+                    // Load wards
+                    $.getJSON('https://esgoo.net/api-tinhthanh/3/' + districtId + '.htm', function(data_phuong) {
+                        $('#phuong-loading').hide();
+                        if (data_phuong.error == 0) {
+                            $.each(data_phuong.data, function(key_phuong, val_phuong) {
+                                $("#phuong").append('<option value="' + val_phuong.full_name + '" data-id="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
+                            });
+                        } else {
+                            showError('Không thể tải danh sách phường/xã');
+                        }
+                    }).fail(function() {
+                        $('#phuong-loading').hide();
+                        showError('Lỗi kết nối khi tải danh sách phường/xã');
+                    });
+                } else {
+                    // Disable ward dropdown
+                    $("#phuong").prop('disabled', true).html('<option value="0">-- Chọn Phường/Xã --</option>');
+                }
+                
+                updatePreview();
+                validateForm();
+            });
+
+            // Ward change event
+            $("#phuong").change(function() {
+                updatePreview();
+                validateForm();
+            });
+
+            // Price input event
+            $(".price-input").on("input", function() {
+                var price = $(this).val();
+                var priceDisplay = document.getElementById('price-display');
+                var pricePreview = document.getElementById('price-preview');
+                
+                if (price && price.trim() !== '' && price > 0) {
+                    var formattedPrice = new Intl.NumberFormat('vi-VN', { 
+                        style: 'currency', 
+                        currency: 'VND' 
+                    }).format(price);
+                    
+                    priceDisplay.textContent = formattedPrice;
+                    pricePreview.style.display = 'block';
+                } else {
+                    pricePreview.style.display = 'none';
+                }
+                
+                updatePreview();
+                validateForm();
+            });
+
+            // Update preview function
+            function updatePreview() {
+                var province = $("#tinh").val();
+                var district = $("#quan").val();
+                var ward = $("#phuong").val();
+                var price = $(".price-input").val();
+                
+                var previewContent = document.getElementById('preview-content');
+                
+                if (province && province !== '0' && district && district !== '0' && ward && ward !== '0') {
+                    var html = '<div style="text-align: left;">';
+                    html += '<div style="margin-bottom: 15px;">';
+                    html += '<h6 style="color: #363432; margin: 0 0 10px 0; font-weight: 500;">📍 Địa chỉ đầy đủ:</h6>';
+                    html += '<div style="background: #f8f9fa; padding: 10px; border-radius: 4px; border-left: 4px solid #FE980F;">';
+                    html += '<p style="margin: 0; color: #363432; font-size: 14px;"><strong>' + ward + '</strong></p>';
+                    html += '<p style="margin: 0; color: #696763; font-size: 13px;">' + district + '</p>';
+                    html += '<p style="margin: 0; color: #696763; font-size: 13px;">' + province + '</p>';
+                    html += '</div>';
+                    html += '</div>';
+                    
+                    if (price && price > 0) {
+                        var formattedPrice = new Intl.NumberFormat('vi-VN', { 
+                            style: 'currency', 
+                            currency: 'VND' 
+                        }).format(price);
+                        html += '<div>';
+                        html += '<h6 style="color: #363432; margin: 0 0 5px 0; font-weight: 500;">💰 Phí vận chuyển:</h6>';
+                        html += '<p style="color: #FE980F; margin: 0; font-weight: 700; font-size: 16px;">' + formattedPrice + '</p>';
+                        html += '</div>';
+                    }
+                    
+                    html += '</div>';
+                    previewContent.innerHTML = html;
+                } else {
+                    previewContent.innerHTML = '<div style="color: #999; font-size: 48px; margin-bottom: 10px;"><i class="fa fa-map-marker"></i></div><p style="color: #999; margin: 0; font-style: italic;">Chọn địa chỉ để xem trước</p>';
+                }
+            }
+
+            // Validate form function
+            function validateForm() {
+                var province = $("#tinh").val();
+                var district = $("#quan").val();
+                var ward = $("#phuong").val();
+                var price = $(".price-input").val();
+                
+                var isValid = province && province !== '0' && 
+                             district && district !== '0' && 
+                             ward && ward !== '0' && 
+                             price && price > 0;
+                
+                $("#submit-btn").prop('disabled', !isValid);
+            }
+
+            // Show error function
+            function showError(message) {
+                // You can implement a toast notification or alert here
+                console.error(message);
+                alert(message);
+            }
+
+            // Form submission handling
+            $('form').on('submit', function(e) {
+                var submitBtn = $('#submit-btn');
+                submitBtn.prop('disabled', true);
+                submitBtn.html('<i class="fa fa-spinner fa-spin" style="margin-right: 8px;"></i>Đang tạo...');
+            });
+
+            // Initial validation
+            validateForm();
+        });
+    </script>
+}

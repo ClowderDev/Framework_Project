@@ -1,0 +1,177 @@
+﻿@model AppUserModel
+@{
+    ViewData["title"] = "Tạo User";
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header" style="border-bottom: 2px solid #FE980F; margin-bottom: 30px; padding-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <h1 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; display: flex; align-items: center;">
+                            <i class="fa fa-plus-circle" style="color: #FE980F; margin-right: 10px;"></i>
+                            Tạo User
+                        </h1>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a asp-action="Index" asp-controller="User" style="background: #6c757d; border: none; padding: 12px 25px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.3s ease;">
+                            <i class="fa fa-arrow-left" style="margin-right: 8px;"></i>
+                            Trở về danh sách
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Content -->
+    <div class="row">
+        <div class="col-md-8">
+            <div style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="background: #F0F0E9; padding: 20px; border-bottom: 1px solid #F7F7F0;">
+                    <h3 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 18px; font-weight: 500;">
+                        <i class="fa fa-plus-circle" style="color: #FE980F; margin-right: 8px;"></i>
+                        Thông tin User
+                    </h3>
+                </div>
+                
+                <div style="padding: 30px;">
+                    <form asp-action="Create" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center;">
+                                <i class="fa fa-user" style="color: #FE980F; margin-right: 8px;"></i>
+                                Tên
+                            </label>
+                            <input asp-for="UserName" required class="form-control" placeholder="Nhập tên người dùng..." 
+                                   style="padding: 12px 16px; border: 2px solid #F0F0E9; border-radius: 6px; font-family: 'Roboto', sans-serif; transition: all 0.3s ease;"
+                                   onfocus="this.style.borderColor='#FE980F'; this.style.boxShadow='0 0 0 3px rgba(254, 152, 15, 0.1)'"
+                                   onblur="this.style.borderColor='#F0F0E9'; this.style.boxShadow='none'" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center;">
+                                <i class="fa fa-envelope" style="color: #FE980F; margin-right: 8px;"></i>
+                                Email
+                            </label>
+                            <input asp-for="Email" required class="form-control" placeholder="Nhập địa chỉ email..."
+                                   style="padding: 12px 16px; border: 2px solid #F0F0E9; border-radius: 6px; font-family: 'Roboto', sans-serif; transition: all 0.3s ease;"
+                                   onfocus="this.style.borderColor='#FE980F'; this.style.boxShadow='0 0 0 3px rgba(254, 152, 15, 0.1)'"
+                                   onblur="this.style.borderColor='#F0F0E9'; this.style.boxShadow='none'" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center;">
+                                <i class="fa fa-phone" style="color: #FE980F; margin-right: 8px;"></i>
+                                SDT
+                            </label>
+                            <input asp-for="PhoneNumber" class="form-control" placeholder="Nhập số điện thoại..."
+                                   style="padding: 12px 16px; border: 2px solid #F0F0E9; border-radius: 6px; font-family: 'Roboto', sans-serif; transition: all 0.3s ease;"
+                                   onfocus="this.style.borderColor='#FE980F'; this.style.boxShadow='0 0 0 3px rgba(254, 152, 15, 0.1)'"
+                                   onblur="this.style.borderColor='#F0F0E9'; this.style.boxShadow='none'" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center;">
+                                <i class="fa fa-lock" style="color: #FE980F; margin-right: 8px;"></i>
+                                Mật khẩu
+                            </label>
+                            <input asp-for="PasswordHash" class="form-control" placeholder="Nhập mật khẩu..."
+                                   style="padding: 12px 16px; border: 2px solid #F0F0E9; border-radius: 6px; font-family: 'Roboto', sans-serif; transition: all 0.3s ease;"
+                                   onfocus="this.style.borderColor='#FE980F'; this.style.boxShadow='0 0 0 3px rgba(254, 152, 15, 0.1)'"
+                                   onblur="this.style.borderColor='#F0F0E9'; this.style.boxShadow='none'" />
+                            <span asp-validation-for="PasswordHash" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center;">
+                                <i class="fa fa-users" style="color: #FE980F; margin-right: 8px;"></i>
+                                Roles
+                            </label>
+                            <select asp-for="RoleId" class="form-control" asp-items="ViewBag.Roles"
+                                    style="padding: 12px 16px; border: 2px solid #F0F0E9; border-radius: 6px; font-family: 'Roboto', sans-serif; transition: all 0.3s ease;"
+                                    onfocus="this.style.borderColor='#FE980F'; this.style.boxShadow='0 0 0 3px rgba(254, 152, 15, 0.1)'"
+                                    onblur="this.style.borderColor='#F0F0E9'; this.style.boxShadow='none'">
+                            </select>
+                            <span asp-validation-for="RoleId" class="text-danger"></span>
+                        </div>
+
+                        <div style="border-top: 1px solid #F0F0E9; padding-top: 25px; margin-top: 30px;">
+                            <button type="submit" class="btn btn-primary" 
+                                    style="background: #FE980F; border: none; padding: 12px 30px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; font-weight: 500; display: inline-flex; align-items: center; transition: all 0.3s ease;"
+                                    onmouseover="this.style.background='#e8890e'; this.style.transform='translateY(-1px)'"
+                                    onmouseout="this.style.background='#FE980F'; this.style.transform='translateY(0)'">
+                                <i class="fa fa-plus" style="margin-right: 8px;"></i>
+                                Tạo
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px;">
+                <div style="background: #e7f3ff; padding: 20px; border-bottom: 1px solid #F7F7F0;">
+                    <h4 style="color: #004085; font-family: 'Roboto', sans-serif; margin: 0; font-size: 16px; font-weight: 500;">
+                        <i class="fa fa-lightbulb-o" style="margin-right: 8px;"></i>
+                        Hướng dẫn
+                    </h4>
+                </div>
+                <div style="padding: 20px;">
+                    <p style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 15px; font-weight: 500;">👤 Tên người dùng:</p>
+                    <ul style="color: #696763; font-family: 'Roboto', sans-serif; padding-left: 20px; margin-bottom: 20px;">
+                        <li style="margin-bottom: 5px;">Tên duy nhất trong hệ thống</li>
+                        <li style="margin-bottom: 5px;">Không chứa ký tự đặc biệt</li>
+                        <li style="margin-bottom: 5px;">Tối thiểu 3 ký tự</li>
+                    </ul>
+
+                    <p style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 15px; font-weight: 500;">📧 Email:</p>
+                    <ul style="color: #696763; font-family: 'Roboto', sans-serif; padding-left: 20px; margin-bottom: 20px;">
+                        <li style="margin-bottom: 5px;">Địa chỉ email hợp lệ</li>
+                        <li style="margin-bottom: 5px;">Duy nhất trong hệ thống</li>
+                        <li style="margin-bottom: 5px;">Dùng để đăng nhập</li>
+                    </ul>
+
+                    <p style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 15px; font-weight: 500;">🔒 Mật khẩu:</p>
+                    <ul style="color: #696763; font-family: 'Roboto', sans-serif; padding-left: 20px; margin: 0;">
+                        <li style="margin-bottom: 5px;">Tối thiểu 6 ký tự</li>
+                        <li style="margin-bottom: 5px;">Nên có chữ hoa, số</li>
+                        <li style="margin-bottom: 5px;">Bảo mật thông tin</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="background: #fff2e6; padding: 20px; border-bottom: 1px solid #F7F7F0;">
+                    <h4 style="color: #cc5500; font-family: 'Roboto', sans-serif; margin: 0; font-size: 16px; font-weight: 500;">
+                        <i class="fa fa-star" style="margin-right: 8px;"></i>
+                        Mẹo hay
+                    </h4>
+                </div>
+                <div style="padding: 20px;">
+                    <p style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 15px; font-weight: 500;">🎯 Tạo user hiệu quả:</p>
+                    <ul style="color: #696763; font-family: 'Roboto', sans-serif; padding-left: 20px; margin: 0;">
+                        <li style="margin-bottom: 5px;">Kiểm tra email trước khi tạo</li>
+                        <li style="margin-bottom: 5px;">Chọn role phù hợp</li>
+                        <li style="margin-bottom: 5px;">Mật khẩu mạnh, bảo mật</li>
+                        <li style="margin-bottom: 5px;">Thông tin chính xác</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,397 @@
+﻿@model ProductModel
+@{
+    ViewData["Title"] = "Tạo Sản phẩm";
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header" style="border-bottom: 2px solid #FE980F; margin-bottom: 30px; padding-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <h1 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; display: flex; align-items: center;">
+                            <i class="fa fa-plus-circle" style="color: #FE980F; margin-right: 10px;"></i>
+                            Tạo Sản phẩm Mới
+                        </h1>
+                        <p style="color: #696763; margin: 5px 0 0 0; font-size: 14px;">Thêm sản phẩm mới vào hệ thống</p>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a asp-action="Index" asp-controller="Product" style="background: #6c757d; border: none; padding: 10px 20px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.3s ease;">
+                            <i class="fa fa-arrow-left" style="margin-right: 8px;"></i>
+                            Quay lại danh sách
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="row">
+        <div class="col-md-8 col-lg-8">
+            <div class="form-container" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div class="form-header" style="margin-bottom: 25px;">
+                    <h3 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 20px; font-weight: 500;">
+                        <i class="fa fa-edit" style="color: #FE980F; margin-right: 8px;"></i>
+                        Thông tin Sản phẩm
+                    </h3>
+                    <p style="color: #696763; margin: 5px 0 0 0; font-size: 14px;">Điền thông tin chi tiết cho sản phẩm mới</p>
+                </div>
+
+                <form autocomplete="off" asp-action="Create" asp-controller="Product" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="border-radius: 6px; border: none; background: #f8d7da; color: #721c24; padding: 15px; margin-bottom: 20px; display: none;"></div>
+                    
+                    <!-- Name Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-tag" style="color: #FE980F; margin-right: 5px;"></i>
+                            Tên Sản phẩm
+                        </label>
+                        <input asp-for="Name" class="form-control" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%;" placeholder="Nhập tên sản phẩm..." />
+                        <span asp-validation-for="Name" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                    </div>
+
+                    <!-- Price Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-money" style="color: #FE980F; margin-right: 5px;"></i>
+                            Giá Sản phẩm
+                        </label>
+                        <input asp-for="Price" pattern="[0-9.,]+" class="form-control typing-price" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%;" placeholder="Nhập giá sản phẩm..." />
+                        <div id="price-convert" style="margin-top: 8px; padding: 8px 12px; background: #e7f3ff; border-radius: 4px; color: #004085; font-weight: 500; font-size: 14px; display: none;">
+                            <i class="fa fa-calculator" style="margin-right: 5px;"></i>
+                            <span id="price-display"></span>
+                        </div>
+                        <span asp-validation-for="Price" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                    </div>
+
+                    <!-- Description Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-align-left" style="color: #FE980F; margin-right: 5px;"></i>
+                            Mô tả Sản phẩm
+                        </label>
+                        <textarea asp-for="Description" class="form-control" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%; min-height: 120px; resize: vertical;" placeholder="Nhập mô tả chi tiết cho sản phẩm..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                    </div>
+
+                    <!-- Category Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-folder" style="color: #FE980F; margin-right: 5px;"></i>
+                            Danh mục
+                        </label>
+                        <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Categories" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%;">
+                            <option value="">-- Chọn danh mục --</option>
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                    </div>
+
+                    <!-- Brand Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-star" style="color: #FE980F; margin-right: 5px;"></i>
+                            Thương hiệu
+                        </label>
+                        <select asp-for="BrandId" class="form-control" asp-items="ViewBag.Brands" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 14px; transition: all 0.3s ease; width: 100%;">
+                            <option value="">-- Chọn thương hiệu --</option>
+                        </select>
+                        <span asp-validation-for="BrandId" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                    </div>
+
+                    <!-- Image Upload Field -->
+                    <div class="form-group" style="margin-bottom: 30px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-image" style="color: #FE980F; margin-right: 5px;"></i>
+                            Hình ảnh Sản phẩm
+                        </label>
+                        
+                        <!-- Custom File Upload -->
+                        <div class="file-upload-wrapper" id="fileUploadWrapper" style="position: relative; border: 2px dashed #F0F0E9; border-radius: 8px; padding: 30px; text-align: center; background: #fafafa; transition: all 0.3s ease; cursor: pointer;" onclick="triggerFileInput()">
+                            <div class="upload-icon" style="color: #FE980F; font-size: 48px; margin-bottom: 15px;">
+                                <i class="fa fa-cloud-upload"></i>
+                            </div>
+                            <p style="color: #696763; margin: 0 0 10px 0; font-size: 16px; font-weight: 500;">Nhấp để chọn hình ảnh</p>
+                            <p style="color: #999; margin: 0; font-size: 12px;">Hỗ trợ: JPG, PNG, GIF (Tối đa 5MB)</p>
+                        </div>
+                        
+                        <input asp-for="ImageUpload" type="file" id="ImageUpload" style="display: none;" accept="image/*" />
+                        <span asp-validation-for="ImageUpload" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                        
+                        <!-- Image Preview -->
+                        <div id="imagePreviewContainer" style="margin-top: 20px; display: none;">
+                            <div style="background: #fff; border: 2px solid #F0F0E9; border-radius: 8px; padding: 15px; text-align: center;">
+                                <p style="color: #363432; margin: 0 0 10px 0; font-weight: 500;">Xem trước hình ảnh:</p>
+                                <img id="imgpreview" style="max-width: 100%; max-height: 200px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" />
+                                <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center;">
+                                    <button type="button" onclick="changeImage()" style="background: #ffc107; border: none; color: #212529; padding: 8px 15px; border-radius: 4px; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center;">
+                                        <i class="fa fa-edit" style="margin-right: 5px;"></i>
+                                        Thay đổi
+                                    </button>
+                                    <button type="button" onclick="removeImage()" style="background: #dc3545; border: none; color: white; padding: 8px 15px; border-radius: 4px; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center;">
+                                        <i class="fa fa-times" style="margin-right: 5px;"></i>
+                                        Xóa hình ảnh
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-group" style="margin-bottom: 0; text-align: center;">
+                        <button type="submit" class="btn btn-primary" style="background: #FE980F; border: none; padding: 15px 40px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 500; transition: all 0.3s ease; min-width: 150px;">
+                            <i class="fa fa-save" style="margin-right: 8px;"></i>
+                            Tạo Sản phẩm
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Help Panel -->
+        <div class="col-md-4 col-lg-4">
+            <div class="help-panel" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px;">
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0 0 15px 0; font-size: 18px; font-weight: 500;">
+                    <i class="fa fa-info-circle" style="color: #FE980F; margin-right: 8px;"></i>
+                    Hướng dẫn
+                </h4>
+                <div class="help-content">
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #FE980F;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">📝 Tên Sản phẩm</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px;">Nhập tên rõ ràng, dễ hiểu cho sản phẩm</p>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #28a745;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">💰 Giá cả</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px;">Nhập giá bằng số, hệ thống sẽ tự động định dạng</p>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #17a2b8;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">🖼️ Hình ảnh</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px;">Kích thước khuyến nghị: 800x800px<br>Định dạng: JPG, PNG, GIF</p>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #6f42c1;">
+                        <h6 style="color: #363432; margin: 0 0 8px 0; font-weight: 500;">📂 Phân loại</h6>
+                        <p style="color: #696763; margin: 0; font-size: 13px;">Chọn danh mục và thương hiệu phù hợp</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="preview-panel" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0 0 15px 0; font-size: 18px; font-weight: 500;">
+                    <i class="fa fa-eye" style="color: #FE980F; margin-right: 8px;"></i>
+                    Xem trước
+                </h4>
+                <div id="livePreview" style="border: 2px dashed #F0F0E9; border-radius: 8px; padding: 20px; text-align: center; background: #fafafa; min-height: 200px;">
+                    <div id="previewContent" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+                        <div style="color: #999; font-size: 48px; margin-bottom: 10px;">
+                            <i class="fa fa-cube"></i>
+                        </div>
+                        <p style="color: #999; margin: 0; font-style: italic;">Điền thông tin để xem trước</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control:focus {
+        border-color: #FE980F !important;
+        box-shadow: 0 0 0 0.2rem rgba(254, 152, 15, 0.25) !important;
+        outline: none;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .file-upload-wrapper:hover {
+        border-color: #FE980F;
+        background: #fff5e6;
+    }
+    
+    .help-panel, .preview-panel, .form-container {
+        transition: all 0.3s ease;
+    }
+    
+    .help-panel:hover, .preview-panel:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    @@media (max-width: 768px) {
+        .page-header div {
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+        
+        .col-md-4 {
+            margin-top: 20px;
+        }
+    }
+</style>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+    
+    <script>
+        // Global function to trigger file input
+        function triggerFileInput() {
+            document.getElementById('ImageUpload').click();
+        }
+        
+        // Function to change image (same as triggering file input)
+        function changeImage() {
+            document.getElementById('ImageUpload').click();
+        }
+        
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    // Update main preview
+                    var imgPreview = document.getElementById('imgpreview');
+                    imgPreview.src = e.target.result;
+                    document.getElementById('imagePreviewContainer').style.display = 'block';
+                    
+                    // Update live preview panel
+                    updateLivePreview();
+                    
+                    // Update file upload wrapper to show success state
+                    var wrapper = document.getElementById('fileUploadWrapper');
+                    wrapper.style.borderColor = '#28a745';
+                    wrapper.style.background = '#f8fff8';
+                    wrapper.innerHTML = '<div style="color: #28a745; font-size: 24px; margin-bottom: 10px;"><i class="fa fa-check-circle"></i></div><p style="color: #28a745; margin: 0; font-weight: 500;">Hình ảnh đã được chọn</p><p style="color: #666; margin: 5px 0 0 0; font-size: 12px;">Nhấp để chọn hình ảnh khác</p>';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
+        function removeImage() {
+            // Clear file input
+            var fileInput = document.getElementById('ImageUpload');
+            fileInput.value = '';
+            
+            // Hide preview container
+            document.getElementById('imagePreviewContainer').style.display = 'none';
+            
+            // Update live preview
+            updateLivePreview();
+            
+            // Reset file upload wrapper to original state
+            resetFileUploadWrapper();
+        }
+        
+        function resetFileUploadWrapper() {
+            var wrapper = document.getElementById('fileUploadWrapper');
+            wrapper.style.borderColor = '#F0F0E9';
+            wrapper.style.background = '#fafafa';
+            wrapper.innerHTML = '<div class="upload-icon" style="color: #FE980F; font-size: 48px; margin-bottom: 15px;"><i class="fa fa-cloud-upload"></i></div><p style="color: #696763; margin: 0 0 10px 0; font-size: 16px; font-weight: 500;">Nhấp để chọn hình ảnh</p><p style="color: #999; margin: 0; font-size: 12px;">Hỗ trợ: JPG, PNG, GIF (Tối đa 5MB)</p>';
+        }
+        
+        function updateLivePreview() {
+            var name = document.querySelector('input[name="Name"]').value;
+            var price = document.querySelector('input[name="Price"]').value;
+            var imgSrc = document.getElementById('imgpreview').src;
+            var category = document.querySelector('select[name="CategoryId"] option:checked').text;
+            var brand = document.querySelector('select[name="BrandId"] option:checked').text;
+            
+            var previewContent = document.getElementById('previewContent');
+            
+            if (name || price || imgSrc || (category && category !== '-- Chọn danh mục --') || (brand && brand !== '-- Chọn thương hiệu --')) {
+                var html = '<div style="text-align: center;">';
+                
+                if (imgSrc) {
+                    html += '<img src="' + imgSrc + '" style="width: 100px; height: 100px; object-fit: cover; border-radius: 6px; margin-bottom: 10px;" />';
+                } else {
+                    html += '<div style="color: #ddd; font-size: 48px; margin-bottom: 10px;"><i class="fa fa-image"></i></div>';
+                }
+                
+                if (name) {
+                    html += '<h6 style="color: #363432; margin: 0 0 5px 0; font-weight: 500;">' + name + '</h6>';
+                }
+                
+                if (price) {
+                    html += '<p style="color: #FE980F; margin: 0 0 5px 0; font-weight: 700;">' + new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price) + '</p>';
+                }
+                
+                if (category && category !== '-- Chọn danh mục --') {
+                    html += '<span style="background: #e7f3ff; color: #004085; padding: 2px 6px; border-radius: 3px; font-size: 10px; margin-right: 5px;">' + category + '</span>';
+                }
+                
+                if (brand && brand !== '-- Chọn thương hiệu --') {
+                    html += '<span style="background: #fff2e6; color: #cc5500; padding: 2px 6px; border-radius: 3px; font-size: 10px;">' + brand + '</span>';
+                }
+                
+                html += '</div>';
+                previewContent.innerHTML = html;
+            } else {
+                previewContent.innerHTML = '<div style="color: #999; font-size: 48px; margin-bottom: 10px;"><i class="fa fa-cube"></i></div><p style="color: #999; margin: 0; font-style: italic;">Điền thông tin để xem trước</p>';
+            }
+        }
+        
+        // Initialize when document is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // File input change event
+            var fileInput = document.getElementById('ImageUpload');
+            if (fileInput) {
+                fileInput.addEventListener('change', function() {
+                    readURL(this);
+                });
+            }
+            
+            // Form validation styling
+            var form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    var submitBtn = form.querySelector('button[type="submit"]');
+                    submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin" style="margin-right: 8px;"></i>Đang tạo...';
+                    submitBtn.disabled = true;
+                });
+            }
+            
+            // Live preview updates
+            document.querySelector('input[name="Name"]').addEventListener('input', updateLivePreview);
+            document.querySelector('input[name="Price"]').addEventListener('input', updateLivePreview);
+            document.querySelector('select[name="CategoryId"]').addEventListener('change', updateLivePreview);
+            document.querySelector('select[name="BrandId"]').addEventListener('change', updateLivePreview);
+        });
+        
+        // Price formatting
+        $(".typing-price").on("keyup", function () {
+            var currency_input = $(this).val();
+            var priceDisplay = document.getElementById('price-display');
+            var priceConvert = document.getElementById('price-convert');
+            
+            if (currency_input && currency_input.trim() !== '') {
+                var formattedPrice = new Intl.NumberFormat('vi-VN', { 
+                    style: 'currency', 
+                    currency: 'VND' 
+                }).format(currency_input);
+                
+                priceDisplay.textContent = formattedPrice;
+                priceConvert.style.display = 'block';
+            } else {
+                priceConvert.style.display = 'none';
+            }
+            
+            updateLivePreview();
+        });
+        
+        // CKEditor initialization
+        CKEDITOR.replace('Description', {
+            height: 120,
+            toolbar: [
+                { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline'] },
+                { name: 'paragraph', items: ['NumberedList', 'BulletedList'] },
+                { name: 'links', items: ['Link', 'Unlink'] }
+            ]
+        });
+    </script>
+}

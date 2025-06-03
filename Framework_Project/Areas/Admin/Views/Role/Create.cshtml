@@ -1,0 +1,142 @@
+@using Microsoft.AspNetCore.Identity
+@model IdentityRole
+
+@{
+    ViewData["title"] = "Tạo vai trò";
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header" style="border-bottom: 2px solid #FE980F; margin-bottom: 30px; padding-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <h1 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; display: flex; align-items: center;">
+                            <i class="fa fa-plus-circle" style="color: #FE980F; margin-right: 10px;"></i>
+                            Tạo vai trò
+                        </h1>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a asp-action="Index" asp-controller="Role" style="background: #6c757d; border: none; padding: 12px 25px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.3s ease;">
+                            <i class="fa fa-arrow-left" style="margin-right: 8px;"></i>
+                            Trở về danh sách
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Content -->
+    <div class="row">
+        <div class="col-md-8">
+            <div style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="background: #F0F0E9; padding: 20px; border-bottom: 1px solid #F7F7F0;">
+                    <h3 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 18px; font-weight: 500;">
+                        <i class="fa fa-plus-circle" style="color: #FE980F; margin-right: 8px;"></i>
+                        Thông tin Vai trò
+                    </h3>
+                </div>
+                
+                <div style="padding: 30px;">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center;">
+                                <i class="fa fa-shield" style="color: #FE980F; margin-right: 8px;"></i>
+                                Name
+                            </label>
+                            <input asp-for="Name" class="form-control" placeholder="Nhập tên vai trò..." 
+                                   style="padding: 12px 16px; border: 2px solid #F0F0E9; border-radius: 6px; font-family: 'Roboto', sans-serif; transition: all 0.3s ease;"
+                                   onfocus="this.style.borderColor='#FE980F'; this.style.boxShadow='0 0 0 3px rgba(254, 152, 15, 0.1)'"
+                                   onblur="this.style.borderColor='#F0F0E9'; this.style.boxShadow='none'" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div style="border-top: 1px solid #F0F0E9; padding-top: 25px; margin-top: 30px;">
+                            <button type="submit" class="btn btn-primary" 
+                                    style="background: #FE980F; border: none; padding: 12px 30px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; font-weight: 500; display: inline-flex; align-items: center; transition: all 0.3s ease;"
+                                    onmouseover="this.style.background='#e8890e'; this.style.transform='translateY(-1px)'"
+                                    onmouseout="this.style.background='#FE980F'; this.style.transform='translateY(0)'">
+                                <i class="fa fa-plus" style="margin-right: 8px;"></i>
+                                Tạo
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px;">
+                <div style="background: #e7f3ff; padding: 20px; border-bottom: 1px solid #F7F7F0;">
+                    <h4 style="color: #004085; font-family: 'Roboto', sans-serif; margin: 0; font-size: 16px; font-weight: 500;">
+                        <i class="fa fa-lightbulb-o" style="margin-right: 8px;"></i>
+                        Hướng dẫn
+                    </h4>
+                </div>
+                <div style="padding: 20px;">
+                    <p style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 15px; font-weight: 500;">🛡️ Tên vai trò:</p>
+                    <ul style="color: #696763; font-family: 'Roboto', sans-serif; padding-left: 20px; margin-bottom: 20px;">
+                        <li style="margin-bottom: 5px;">Tên ngắn gọn, dễ hiểu</li>
+                        <li style="margin-bottom: 5px;">Không chứa ký tự đặc biệt</li>
+                        <li style="margin-bottom: 5px;">Phải duy nhất trong hệ thống</li>
+                        <li style="margin-bottom: 5px;">Ví dụ: Admin, User, Manager</li>
+                    </ul>
+
+                    <p style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 15px; font-weight: 500;">📋 Quy tắc đặt tên:</p>
+                    <ul style="color: #696763; font-family: 'Roboto', sans-serif; padding-left: 20px; margin: 0;">
+                        <li style="margin-bottom: 5px;">Sử dụng tiếng Anh hoặc tiếng Việt</li>
+                        <li style="margin-bottom: 5px;">Không có khoảng trắng thừa</li>
+                        <li style="margin-bottom: 5px;">Tối đa 256 ký tự</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px;">
+                <div style="background: #fff2e6; padding: 20px; border-bottom: 1px solid #F7F7F0;">
+                    <h4 style="color: #cc5500; font-family: 'Roboto', sans-serif; margin: 0; font-size: 16px; font-weight: 500;">
+                        <i class="fa fa-star" style="margin-right: 8px;"></i>
+                        Mẹo hay
+                    </h4>
+                </div>
+                <div style="padding: 20px;">
+                    <p style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 15px; font-weight: 500;">🎯 Tạo vai trò hiệu quả:</p>
+                    <ul style="color: #696763; font-family: 'Roboto', sans-serif; padding-left: 20px; margin: 0;">
+                        <li style="margin-bottom: 5px;">Đặt tên rõ ràng, mô tả đúng chức năng</li>
+                        <li style="margin-bottom: 5px;">Tránh trùng lặp với vai trò có sẵn</li>
+                        <li style="margin-bottom: 5px;">Cân nhắc quyền hạn trước khi tạo</li>
+                        <li style="margin-bottom: 5px;">Kiểm tra kỹ trước khi lưu</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="background: #d4edda; padding: 20px; border-bottom: 1px solid #F7F7F0;">
+                    <h4 style="color: #155724; font-family: 'Roboto', sans-serif; margin: 0; font-size: 16px; font-weight: 500;">
+                        <i class="fa fa-check-circle" style="margin-right: 8px;"></i>
+                        Vai trò phổ biến
+                    </h4>
+                </div>
+                <div style="padding: 20px;">
+                    <p style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 15px; font-weight: 500;">📝 Gợi ý tên vai trò:</p>
+                    <ul style="color: #696763; font-family: 'Roboto', sans-serif; padding-left: 20px; margin: 0;">
+                        <li style="margin-bottom: 5px;"><strong>Admin:</strong> Quản trị viên</li>
+                        <li style="margin-bottom: 5px;"><strong>User:</strong> Người dùng thường</li>
+                        <li style="margin-bottom: 5px;"><strong>Manager:</strong> Quản lý</li>
+                        <li style="margin-bottom: 5px;"><strong>Editor:</strong> Biên tập viên</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,263 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header" style="border-bottom: 2px solid #FE980F; margin-bottom: 30px; padding-bottom: 15px;">
+                <h1 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0;">
+                    <i class="fa fa-dashboard" style="color: #FE980F; margin-right: 10px;"></i>
+                    Dashboard
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row" style="margin-bottom: 40px;">
+        <div class="col-md-12">
+            <h3 style="color: #FE980F; font-family: 'Roboto', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 20px; text-transform: uppercase;">
+                <i class="fa fa-bar-chart" style="margin-right: 8px;"></i>
+                Thống kê số lượng
+            </h3>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="stats-card" style="background: #fff; border: 1px solid #F7F7F0; padding: 25px; text-align: center; margin-bottom: 20px; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div class="stats-icon" style="background: #FE980F; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 24px;">
+                    <i class="fa fa-shopping-cart"></i>
+                </div>
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 5px; font-size: 16px;">Tổng đơn hàng</h4>
+                <p style="color: #FE980F; font-size: 28px; font-weight: 700; margin: 0;">@ViewBag.CountOrder</p>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="stats-card" style="background: #fff; border: 1px solid #F7F7F0; padding: 25px; text-align: center; margin-bottom: 20px; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div class="stats-icon" style="background: #FE980F; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 24px;">
+                    <i class="fa fa-cube"></i>
+                </div>
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 5px; font-size: 16px;">Tổng sản phẩm</h4>
+                <p style="color: #FE980F; font-size: 28px; font-weight: 700; margin: 0;">@ViewBag.CountProduct</p>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="stats-card" style="background: #fff; border: 1px solid #F7F7F0; padding: 25px; text-align: center; margin-bottom: 20px; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div class="stats-icon" style="background: #FE980F; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 24px;">
+                    <i class="fa fa-tags"></i>
+                </div>
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 5px; font-size: 16px;">Tổng danh mục</h4>
+                <p style="color: #FE980F; font-size: 28px; font-weight: 700; margin: 0;">@ViewBag.CountCategory</p>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="stats-card" style="background: #fff; border: 1px solid #F7F7F0; padding: 25px; text-align: center; margin-bottom: 20px; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div class="stats-icon" style="background: #FE980F; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 24px;">
+                    <i class="fa fa-users"></i>
+                </div>
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 5px; font-size: 16px;">Tổng khách hàng</h4>
+                <p style="color: #FE980F; font-size: 28px; font-weight: 700; margin: 0;">@(ViewBag.CountUser-1)</p> 
+                @* 1 Admin *@
+            </div>
+        </div>
+    </div>
+
+    <!-- Sales Statistics -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-container" style="background: #fff; border: 1px solid #F7F7F0; padding: 30px; margin-bottom: 40px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h3 style="color: #FE980F; font-family: 'Roboto', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 25px; text-transform: uppercase;">
+                    <i class="fa fa-line-chart" style="margin-right: 8px;"></i>
+                    Thống kê bán hàng
+                </h3>
+
+                <!-- Filter Controls -->
+                <div class="row" style="margin-bottom: 30px;">
+                    <div class="col-md-6">
+                        <div class="filter-section" style="background: #F0F0E9; padding: 20px; border-radius: 4px;">
+                            <h5 style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 15px; font-weight: 500;">
+                                <i class="fa fa-calendar" style="color: #FE980F; margin-right: 5px;"></i>
+                                Lọc theo ngày tháng
+                            </h5>
+                            <form style="margin: 0;">
+                                <div class="form-group" style="margin-bottom: 15px;">
+                                    <label style="color: #696763; font-size: 14px; margin-bottom: 5px; display: block;">Chọn ngày:</label>
+                                    <input type="date" class="form-control" id="datepicker" 
+                                           style="padding: 12px 16px; border: 2px solid #F0F0E9; border-radius: 6px; font-family: 'Roboto', sans-serif; transition: all 0.3s ease;"
+                                           onfocus="this.style.borderColor='#FE980F'; this.style.boxShadow='0 0 0 3px rgba(254, 152, 15, 0.1)'"
+                                           onblur="this.style.borderColor='#F0F0E9'; this.style.boxShadow='none'" />
+                                </div>
+                                <button type="button" class="btn btn-primary btn-filter-date" 
+                                        style="background: #FE980F; border: none; padding: 12px 25px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; display: inline-flex; align-items: center; transition: all 0.3s ease;"
+                                        onmouseover="this.style.background='#e8890e'; this.style.transform='translateY(-1px)'"
+                                        onmouseout="this.style.background='#FE980F'; this.style.transform='translateY(0)'">
+                                    <i class="fa fa-filter" style="margin-right: 8px;"></i>
+                                    Lọc theo ngày
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="filter-section" style="background: #F0F0E9; padding: 20px; border-radius: 4px;">
+                            <h5 style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 15px; font-weight: 500;">
+                                <i class="fa fa-clock-o" style="color: #FE980F; margin-right: 5px;"></i>
+                                Lọc theo khoảng thời gian
+                            </h5>
+                            <div class="form-group" style="margin: 0;">
+                                <label style="color: #696763; font-size: 14px; margin-bottom: 8px; display: block;">Chọn khoảng thời gian:</label>
+                                <select class="form-control filter-date" style="background: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 4px; width: 100%;">
+                                    <option value="last_month">Tháng trước</option>
+                                    <option value="this_month">Tháng này</option>
+                                    <option value="all_year">Cả năm</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart Area -->
+                <div class="chart-wrapper" style="background: #fafafa; padding: 20px; border-radius: 4px; border: 1px solid #eee;">
+                    <div class="chart-legend" style="margin-bottom: 15px; text-align: center;">
+                        <span style="color: #696763; font-size: 14px; margin-right: 20px;">
+                            <span style="display: inline-block; width: 12px; height: 12px; background: #FE980F; margin-right: 5px; border-radius: 2px;"></span>
+                            Doanh thu
+                        </span>
+                        <span style="color: #696763; font-size: 14px;">
+                            <span style="display: inline-block; width: 12px; height: 12px; background: #363432; margin-right: 5px; border-radius: 2px;"></span>
+                            Đơn hàng
+                        </span>
+                    </div>
+                    <div id="myfirstchart" style="height: 300px; background: white; border-radius: 4px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .stats-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+    }
+
+    .chart-container {
+        border-radius: 8px;
+    }
+
+    .filter-section {
+        border-radius: 6px;
+    }
+
+    .btn-primary:hover {
+        background: #e8890e !important;
+        transform: translateY(-1px);
+    }
+
+    .form-control:focus {
+        border-color: #FE980F;
+        box-shadow: 0 0 0 0.2rem rgba(254, 152, 15, 0.25);
+    }
+
+    #datepicker {
+        cursor: pointer;
+    }
+
+    .page-header h1 {
+        display: flex;
+        align-items: center;
+    }
+</style>
+
+@section Scripts {
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var chartData = [];
+            var chart = new Morris.Line({
+                element: 'myfirstchart',
+                parseTime: false,
+                data: chartData,
+                xkey: 'date',
+                ykeys: ['revenue', 'orders'],
+                labels: ['Doanh thu', 'Đơn hàng'],
+                lineColors: ['#FE980F', '#363432'],
+                pointFillColors: ['#FE980F', '#363432'],
+                pointStrokeColors: ['#FE980F', '#363432'],
+                gridLineColor: '#eee',
+                gridTextColor: '#696763',
+                gridTextSize: 12,
+                hideHover: 'auto',
+                resize: true
+            });
+
+            // Load thông tin chart ban đầu
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetChartData", "Dashboard")",
+                success: function (data) {
+                    chart.setData(data);
+                }
+            });
+
+            // Lọc theo khoảng thời gian
+            $(".filter-date").change(function () {
+                var filterdate = $(this).val();
+
+                $(this).prop('disabled', true);
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("SelectFilterDate", "Dashboard")",
+                    data: { filterdate: filterdate },
+                    success: function (data) {
+                        chart.setData(data);
+                        $(".filter-date").prop('disabled', false);
+                    },
+                    error: function() {
+                        $(".filter-date").prop('disabled', false);
+                        alert('Có lỗi xảy ra khi tải dữ liệu');
+                    }
+                });
+            });
+
+            $(".btn-filter-date").click(function () {
+                var filterdate = $("#datepicker").val();
+
+                if (!filterdate) {
+                    alert('Vui lòng chọn ngày');
+                    return;
+                }
+
+                $(this).prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Đang tải...');
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("SubmitFilterDate", "Dashboard")",
+                    data: { filterdate: filterdate },
+                    success: function (data) {
+                        chart.setData(data);
+                        $(".btn-filter-date").prop('disabled', false).html('<i class="fa fa-filter"></i> Lọc theo ngày');
+                    },
+                    error: function() {
+                        $(".btn-filter-date").prop('disabled', false).html('<i class="fa fa-filter"></i> Lọc theo ngày');
+                        alert('Có lỗi xảy ra khi tải dữ liệu');
+                    }
+                });
+            });
+
+            // Set minimum date for date picker (today)
+            var today = new Date().toISOString().split('T')[0];
+            $("#datepicker").attr('min', today);
+        });
+    </script>
+}

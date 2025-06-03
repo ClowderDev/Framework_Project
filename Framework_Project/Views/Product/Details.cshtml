@@ -1,0 +1,174 @@
+﻿@model ProductDetailsViewModel
+@{
+	ViewData["Title"] = "Chi tiết sản phẩm";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var isAuthenticated = User.Identity.IsAuthenticated;
+	var userEmail = "";
+	if (isAuthenticated)
+	{
+		userEmail = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value
+			?? User.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
+	}
+}
+
+<section style="padding: 40px 0; background-color: #f9f9f9;">
+	<div class="container" style="max-width: 1100px; background-color: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 0 16px rgba(0,0,0,0.08);">
+		@if (Model.ProductDetails == null)
+		{
+			<div class="alert alert-danger">Không tìm thấy thông tin sản phẩm.</div>
+		}
+		else
+		{
+			<div class="row">
+				<div class="col-md-5 col-sm-12" style="display: flex; flex-direction: column; align-items: center;">
+					<div style="border: 1px solid #eee; padding: 16px; border-radius: 10px; background: #fafbfc; width: 100%; text-align: center;">
+						<img src="~/media/products/@Model.ProductDetails.Image" alt="@Model.ProductDetails.Name" style="width: 100%; max-width: 320px; height: 320px; object-fit: contain; border-radius: 8px; background: #fff;" />
+					</div>
+				</div>
+				<div class="col-md-7 col-sm-12" style="padding-left: 32px; display: flex; flex-direction: column; justify-content: center;">
+					<h2 style="font-weight: bold; color: #222; margin-bottom: 12px;">@Model.ProductDetails.Name</h2>
+					<div style="font-size: 24px; color: #E30019; font-weight: bold; margin-bottom: 16px;">@Model.ProductDetails.Price.ToString("#,##0 VNĐ")</div>
+					<form id="add-to-cart-form" method="post" asp-action="AddQuantity" asp-controller="Cart" style="display: flex; align-items: center; gap: 12px; margin-bottom: 18px;">
+						<label for="quantity" style="margin-right: 5px; font-weight: 500;">Số lượng:</label>
+						<input type="number" name="quantity" id="quantity" value="1" min="1" max="@Model.ProductDetails.Quantity" style="width:70px; padding: 6px 10px; border-radius: 5px; border: 1px solid #ddd;" />
+						<input type="hidden" name="productId" value="@Model.ProductDetails.Id" />
+						<button type="submit" class="btn-add-to-cart" style="background-color: #E30019; color: #fff; font-weight: bold; border-radius: 5px; padding: 8px 20px;"> <i class="fa fa-shopping-cart" style="color: #fff;"></i> Thêm giỏ hàng </button>
+					</form>
+					@if (@Model.ProductDetails.Quantity > 0)
+					{
+						<span class="badge" style="background: #e6f4ea; color: #1a7f37; font-weight: 600; padding: 6px 16px; border-radius: 20px; margin-bottom: 10px;">Còn hàng</span>
+					}
+					else
+					{
+						<span class="badge" style="background: #fde8e8; color: #d32f2f; font-weight: 600; padding: 6px 16px; border-radius: 20px; margin-bottom: 10px;">Hết hàng</span>
+					}
+					<p style="margin-bottom: 8px;"><b>Điều kiện:</b> Mới</p>
+					<p style="margin-bottom: 8px;"><b>Thương hiệu:</b> 
+						@if (Model.ProductDetails.Brand != null)
+						{
+							<a asp-action="Index" asp-controller="Brand" asp-route-slug="@Model.ProductDetails.Brand.Slug" style="color: #3472D9; font-weight: 500;">@Model.ProductDetails.Brand.Name</a>
+						}
+						else
+						{
+							<span class="text-muted">Không rõ</span>
+						}
+					</p>
+					<p style="margin-bottom: 8px;"><b>Danh mục:</b> 
+						@if (Model.ProductDetails.Category != null)
+						{
+							<a asp-action="Index" asp-controller="Category" asp-route-slug="@Model.ProductDetails.Category.Slug" style="color: #3472D9; font-weight: 500;">@Model.ProductDetails.Category.Name</a>
+						}
+						else
+						{
+							<span class="text-muted">Không rõ</span>
+						}
+					</p>
+				</div>
+			</div>
+
+			<div class="row" style="margin-top: 40px;">
+				<div class="col-12">
+					<ul class="nav nav-tabs" style="border-bottom: 2px solid #E30019;">
+						<li class="active" style="margin-right: 8px;"><a href="#details" data-toggle="tab" style="color: #E30019; font-weight: 600; border-radius: 8px 8px 0 0;">Chi tiết</a></li>
+						<li><a href="#reviews" data-toggle="tab" style="color: #222; font-weight: 600; border-radius: 8px 8px 0 0;">Đánh giá (@(Model.ProductDetails.Ratings != null ? Model.ProductDetails.Ratings.Count : 0))</a></li>
+					</ul>
+					<div class="tab-content" style="padding: 24px 16px; background: #fafbfc; border-radius: 0 0 8px 8px; border: 1px solid #eee; border-top: none;">
+						<div class="tab-pane fade active in" id="details">
+							@Html.Raw(Model.ProductDetails.Description)
+						</div>
+						<div class="tab-pane fade" id="reviews">
+							<div class="col-sm-12" style="padding: 0;">
+								@if (Model.ProductDetails.Ratings != null && Model.ProductDetails.Ratings.Count > 0)
+								{
+									@foreach (var review in Model.ProductDetails.Ratings)
+									{
+										<div class="review-item" style="margin-bottom: 24px; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+											<ul style="list-style: none; padding: 0; margin-bottom: 8px; display: flex; gap: 24px; color: #888; font-size: 15px;">
+												<li><i class="fa fa-user"></i> @review.Email</li>
+												<li><i class="fa fa-clock-o"></i> @DateTime.Now.ToString("hh:mm tt")</li>
+												<li><i class="fa fa-calendar-o"></i> @DateTime.Now.ToString("dd MMMM yyyy")</li>
+											</ul>
+											<div class="rating-display" style="margin-bottom: 8px;">
+												@for (int i = 1; i <= 5; i++)
+												{
+													if (i <= int.Parse(review.Star))
+													{
+														<span class="star filled" style="font-size: 22px; color: #ffd700;">★</span>
+													}
+													else
+													{
+														<span class="star" style="font-size: 22px; color: #ddd;">☆</span>
+													}
+												}
+											</div>
+											<p style="margin-bottom: 0;">@review.Comment</p>
+										</div>
+									}
+								}
+								else
+								{
+									<p>Chưa có đánh giá nào cho sản phẩm này.</p>
+								}
+								@if (isAuthenticated)
+								{
+									<p style="font-weight: 600; margin-top: 24px;">Viết đánh giá của bạn</p>
+									<form autocomplete="off" asp-action="CommentProduct" asp-controller="Product" method="POST" style="background: #f9f9f9; padding: 18px; border-radius: 8px; margin-bottom: 16px;">
+										<input asp-for="@Model.ProductDetails.Id" name="ProductId" type="hidden" />
+										<input name="Name" type="text" value="@userEmail" readonly style="margin-bottom: 10px; width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ddd; background: #f5f5f5;" />
+										<input name="Email" type="hidden" value="@userEmail" />
+										<textarea asp-for="@Model.Comment" style="width: 100%; min-height: 80px; padding: 8px; border-radius: 5px; border: 1px solid #ddd; margin-bottom: 8px;"></textarea>
+										<span asp-validation-for="@Model.Comment" class="text-danger"></span>
+										<div style="margin-bottom: 10px;">
+											<b>Rating: </b>
+											<div class="rating" style="display: inline-flex; flex-direction: row-reverse; justify-content: flex-end;">
+												@for (int i = 5; i >= 1; i--)
+												{
+													<input type="radio" name="Star" value="@i" id="@i"><label for="@i" style="cursor: pointer; font-size: 28px; color: #ddd; padding: 5px;">☆</label>
+												}
+											</div>
+										</div>
+										<button type="submit" class="btn btn-default pull-right" style="background: #E30019; color: #fff; font-weight: bold; border-radius: 5px; padding: 8px 20px;">Gửi</button>
+									</form>
+								}
+								else
+								{
+									<div class="alert alert-warning" style="margin-top: 16px;">Bạn cần <a href="/Account/Login" style="color: #E30019; font-weight: bold;">đăng nhập</a> để đánh giá sản phẩm.</div>
+								}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="recommended_items" style="margin-top: 48px;">
+				<h2 class="title text-center" style="font-size: 22px; font-weight: bold; color: #222; margin-bottom: 24px;">Sản phẩm liên quan</h2>
+				<div class="row" style="overflow-x: auto; white-space: nowrap;">
+					@foreach (var relatedProduct in @ViewBag.RelatedProducts as IEnumerable<ProductModel>)
+					{
+						<div class="col-sm-4" style="display: inline-block; float: none; width: 260px; margin-right: 16px; vertical-align: top;">
+							<div class="product-image-wrapper" style="border: 1px solid #ddd; padding: 14px; margin-bottom: 20px; border-radius: 8px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+								<div class="single-products">
+									<div class="productinfo text-center">
+										<a asp-action="Details" asp-controller="Product" asp-route-Id="@relatedProduct.Id" style="text-decoration: none;">
+											<img src="~/media/products/@relatedProduct.Image" alt="@relatedProduct.Name" style="width: 100%; max-width: 120px; height: 120px; object-fit: contain; margin-bottom: 10px;" />
+											<h2 style="font-size: 16px; color: #E30019; font-weight: bold; margin-bottom: 6px;">@relatedProduct.Price.ToString("#,##0 VNĐ")</h2>
+											<p style="margin: 5px 0; color: #222; font-weight: 500;">@relatedProduct.Name</p>
+											<p style="font-size: 13px; color: #888;">Danh mục: @(relatedProduct.Category != null ? relatedProduct.Category.Name : "Không rõ")</p>
+											<p style="font-size: 13px; color: #888;">Thương hiệu: @(relatedProduct.Brand != null ? relatedProduct.Brand.Name : "Không rõ")</p>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					}
+				</div>
+			</div>
+		}
+	</div>
+</section>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

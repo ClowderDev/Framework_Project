@@ -1,0 +1,234 @@
+@model IEnumerable<CategoryModel>
+@{
+    ViewData["Title"] = "Quản lý Danh mục";
+    
+    Paginate pager = new Paginate();
+    int pageNo = 0;
+    
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header" style="border-bottom: 2px solid #FE980F; margin-bottom: 30px; padding-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <h1 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; display: flex; align-items: center;">
+                            <i class="fa fa-tags" style="color: #FE980F; margin-right: 10px;"></i>
+                            Quản lý Danh mục
+                        </h1>
+                        <p style="color: #696763; margin: 5px 0 0 0; font-size: 14px;">Quản lý danh mục sản phẩm và phân loại</p>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a class="btn btn-primary" asp-action="Create" asp-controller="Category" style="background: #FE980F; border: none; padding: 12px 25px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.3s ease;">
+                            <i class="fa fa-plus" style="margin-right: 8px;"></i>
+                            Thêm Danh mục Mới
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Summary -->
+    <div class="row" style="margin-bottom: 30px;">
+        <div class="col-md-3 col-sm-6">
+            <div class="stats-mini-card" style="background: #fff; border: 1px solid #F7F7F0; padding: 20px; text-align: center; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="color: #FE980F; font-size: 24px; margin-bottom: 5px;">
+                    <i class="fa fa-tags"></i>
+                </div>
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 14px;">Tổng danh mục</h4>
+                <p style="color: #FE980F; font-size: 20px; font-weight: 700; margin: 5px 0 0 0;">@Model.Count()</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stats-mini-card" style="background: #fff; border: 1px solid #F7F7F0; padding: 20px; text-align: center; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="color: #28a745; font-size: 24px; margin-bottom: 5px;">
+                    <i class="fa fa-eye"></i>
+                </div>
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 14px;">Đang hiển thị</h4>
+                <p style="color: #28a745; font-size: 20px; font-weight: 700; margin: 5px 0 0 0;">@Model.Count(c => c.Status == 1)</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stats-mini-card" style="background: #fff; border: 1px solid #F7F7F0; padding: 20px; text-align: center; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="color: #dc3545; font-size: 24px; margin-bottom: 5px;">
+                    <i class="fa fa-eye-slash"></i>
+                </div>
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 14px;">Đang ẩn</h4>
+                <p style="color: #dc3545; font-size: 20px; font-weight: 700; margin: 5px 0 0 0;">@Model.Count(c => c.Status != 1)</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stats-mini-card" style="background: #fff; border: 1px solid #F7F7F0; padding: 20px; text-align: center; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="color: #17a2b8; font-size: 24px; margin-bottom: 5px;">
+                    <i class="fa fa-file-text"></i>
+                </div>
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 14px;">Có mô tả</h4>
+                <p style="color: #17a2b8; font-size: 20px; font-weight: 700; margin: 5px 0 0 0;">@Model.Count(c => !string.IsNullOrEmpty(c.Description))</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Table -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-container" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div class="table-header" style="background: #F0F0E9; padding: 20px; border-bottom: 1px solid #F7F7F0;">
+                    <h3 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 18px; font-weight: 500;">
+                        <i class="fa fa-list" style="color: #FE980F; margin-right: 8px;"></i>
+                        Danh sách Danh mục
+                    </h3>
+                    <p style="color: #696763; margin: 5px 0 0 0; font-size: 14px;">Quản lý và phân loại danh mục sản phẩm</p>
+                </div>
+                
+                <div class="table-responsive" style="padding: 0;">
+                    <table class="table" id="myTable" style="margin: 0; border: none;">
+                        <thead style="background: #FE980F; color: white;">
+                            <tr>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; width: 80px;">ID</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500;">Tên danh mục</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500;">Mô tả</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500;">Slug</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; text-align: center; width: 120px;">Trạng thái</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; text-align: center; width: 150px;">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    <tr style="border-bottom: 1px solid #F7F7F0; transition: background-color 0.3s ease;" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='white'">
+                                        <td style="padding: 20px 15px; vertical-align: middle;">
+                                            <div style="background: #e7f3ff; color: #004085; padding: 6px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; text-align: center; display: inline-block;">
+                                                #@item.Id
+                                            </div>
+                                        </td>
+                                        <td style="padding: 20px 15px; vertical-align: middle;">
+                                            <div style="display: flex; flex-direction: column;">
+                                                <div style="font-family: 'Roboto', sans-serif; color: #363432; font-weight: 500; font-size: 16px; margin-bottom: 5px;">@item.Name</div>
+                                                <div style="display: flex; gap: 5px;">
+                                                    <span style="background: #f8f9fa; color: #6c757d; padding: 2px 6px; border-radius: 3px; font-size: 10px;">
+                                                        <i class="fa fa-tag" style="margin-right: 3px;"></i>
+                                                        Danh mục
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td style="padding: 20px 15px; vertical-align: middle;">
+                                            <div style="font-family: 'Roboto', sans-serif; color: #696763; font-size: 13px; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                                @if (!string.IsNullOrEmpty(item.Description))
+                                                {
+                                                    @Html.Raw(@item.Description)
+                                                }
+                                                else
+                                                {
+                                                    <span style="color: #999; font-style: italic;">Chưa có mô tả</span>
+                                                }
+                                            </div>
+                                        </td>
+                                        <td style="padding: 20px 15px; vertical-align: middle;">
+                                            <div style="background: #f8f9fa; color: #495057; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-family: 'Courier New', monospace; display: inline-block;">
+                                                @item.Slug
+                                            </div>
+                                        </td>
+                                        <td style="padding: 20px 15px; vertical-align: middle; text-align: center;">
+                                            @if (item.Status == 1)
+                                            {
+                                                <span style="background: #d4edda; color: #155724; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center;">
+                                                    <i class="fa fa-eye" style="margin-right: 4px;"></i>
+                                                    Hiển thị
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span style="background: #f8d7da; color: #721c24; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center;">
+                                                    <i class="fa fa-eye-slash" style="margin-right: 4px;"></i>
+                                                    Ẩn
+                                                </span>
+                                            }
+                                        </td>
+                                        <td style="padding: 20px 15px; vertical-align: middle; text-align: center;">
+                                            <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                                                <a class="btn btn-sm" asp-action="Edit" asp-controller="Category" asp-route-Id="@item.Id"
+                                                   style="background: #ffc107; border: none; color: #212529; padding: 8px 12px; border-radius: 4px; font-size: 12px; display: inline-flex; align-items: center; transition: all 0.3s ease;"
+                                                   onmouseover="this.style.background='#e0a800'; this.style.transform='translateY(-1px)'"
+                                                   onmouseout="this.style.background='#ffc107'; this.style.transform='translateY(0)'">
+                                                    <i class="fa fa-edit" style="margin-right: 4px;"></i>
+                                                    Chỉnh sửa
+                                                </a>
+                                                <form asp-action="Delete" asp-controller="Category" asp-route-Id="@item.Id" method="post" style="display:inline;">
+                                                    <button type="submit" class="btn btn-sm" style="background: #dc3545; border: none; color: white; padding: 8px 12px; border-radius: 4px; font-size: 12px; display: inline-flex; align-items: center; transition: all 0.3s ease;" onclick="return confirm('Are you sure you want to delete this category?');" onmouseover="this.style.background='#c82333'; this.style.transform='translateY(-1px)'" onmouseout="this.style.background='#dc3545'; this.style.transform='translateY(0)';">
+                                                        <i class="fa fa-trash" style="margin-right: 4px;"></i>
+                                                        Xóa
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="6" style="padding: 40px; text-align: center; color: #696763;">
+                                        <div style="display: flex; flex-direction: column; align-items: center;">
+                                            <i class="fa fa-tags" style="font-size: 48px; color: #ddd; margin-bottom: 15px;"></i>
+                                            <h5 style="color: #363432; margin-bottom: 10px;">Chưa có danh mục nào</h5>
+                                            <p style="margin: 0;">Thêm danh mục đầu tiên để bắt đầu phân loại sản phẩm</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                @if (pager != null && pager.TotalPages > 1)
+                {
+                    <div style="padding: 20px; border-top: 1px solid #F7F7F0; background: #F0F0E9;">
+                        <partial name="_paging" model="@pager" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .stats-mini-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+    }
+    
+    .btn:hover {
+        transform: translateY(-1px);
+    }
+    
+    .table-container {
+        transition: all 0.3s ease;
+    }
+    
+    @@media (max-width: 768px) {
+        .table-responsive {
+            font-size: 12px;
+        }
+        
+        .stats-mini-card {
+            margin-bottom: 15px;
+        }
+        
+        .page-header div {
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+    }
+</style>

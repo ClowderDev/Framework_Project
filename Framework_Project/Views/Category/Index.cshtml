@@ -1,0 +1,186 @@
+@model IEnumerable<ProductModel>
+@{
+    ViewData["Title"] = @ViewBag.Slug.ToUpper();
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-sm-3">
+    <partial name="_SidebarPartial" />
+</div>
+
+<div class="col-sm-9 padding-right">
+    <div class="features_items">
+        @if (ViewBag.count > 0)
+        {
+            <partial name="_FilterProductsPartial" />
+        }
+
+        <h2 class="title text-center">@ViewBag.Slug</h2>
+
+        @if (!Model.Any())
+        {
+            <div class="alert alert-info text-center">
+                <h4>Không tìm thấy sản phẩm nào phù hợp với tiêu chí của bạn.</h4>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-sm-4">
+                        <div class="product-image-wrapper"
+                             style="box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .1), 0 2px 6px 2px rgba(60, 64, 67, .15); min-height: 450px;">
+                            <div class="single-products">
+                                <div class="productinfo text-center">
+                                    <a asp-action="Details" asp-controller="Product" asp-route-Id="@item.Id">
+                                        <img src="~/media/products/@item.Image" alt="@item.Name" width="100px" height="200px" />
+                                        <h2>@item.Price.ToString("#,##0 VNĐ")</h2>
+                                        <p style="font-weight: bolder;">@item.Name</p>
+                                        <p>Danh mục: <span style="font-weight: bold; color: #D2322D;">@item.Category.Name</span></p>
+                                        <p>Thương hiệu: <span style="font-weight: bold; color: #D2322D;">@item.Brand.Name</span></p>
+                                    </a>
+                                    @if (item.Quantity == 0)
+                                    {
+                                        <button type="button" class="btn btn-default">
+                                            <i class="fa fa-shopping-cart"></i> Hết hàng
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-default add-to-cart" data-product_id="@item.Id" style="border-radius: 5px;">
+                                            <i class="fa fa-shopping-cart" style="color: #D2322D;"></i> Thêm giỏ hàng
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                            <div class="choose">
+                                @if (User.Identity?.IsAuthenticated ?? false)
+                                {
+                                    <ul style="display: flex; justify-content: space-around; align-items: center; padding: 0; list-style: none; margin: 0;">
+                                        <li>
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                <span class="fa fa-star" style="color: #f59e0b;"></span>
+                                            }
+                                        </li>
+                                        <li style="display: flex; align-items: center;">
+                                            <span style="margin-right: 8px;">Yêu thích</span>
+                                            <i class="fa-regular fa-heart heart-icon add-btn-wishlist" data-product_id="@item.Id"></i>
+                                        </li>
+                                    </ul>
+                                    <div style="display: flex; justify-content: center; align-items: center; margin: 10px 0;">
+                                        <button class="btn btn-primary add-btn-compare mt-0" data-product_id="@item.Id" style="border-radius: 5px;">
+                                            So sánh <i class="fa-solid fa-code-compare"></i>
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div><!--features_items-->
+</div>
+
+@if (ViewBag.count > 0)
+{
+    @section Scripts {
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            $(document).ready(function () {
+                // --- FILTER/SORT/SLIDER ---
+                $("#slider-range").slider({
+                    range: true,
+                    min: 50000,
+                    max: 1000000000,
+                    step: 50000,
+                    values: [@ViewBag.startprice, @ViewBag.endprice],
+                    slide: function (event, ui) {
+                        $("#amount").val("đ" + ui.values[0] + " - đ" + ui.values[1]);
+                        $("#startprice").val(ui.values[0]);
+                        $("#endprice").val(ui.values[1]);
+                    }
+                });
+
+                $("#amount").val("đ" + $("#slider-range").slider("values", 0) +
+                    " - đ" + $("#slider-range").slider("values", 1));
+
+                $('.btn-locgia').on('click', function () {
+                    var startPrice = $("#startprice").val();
+                    var endPrice = $("#endprice").val();
+                    var baseUrl = window.location.pathname;
+
+                    $('#sort_by option').each(function () {
+                        if ($(this).val() !== '') {
+                            var url = new URL($(this).val(), window.location.origin);
+                            url.searchParams.set('startprice', startPrice);
+                            url.searchParams.set('endprice', endPrice);
+                            $(this).val(url.pathname + url.search);
+                        }
+                    });
+                });
+
+                $('#sort_by').on('change', function () {
+                    var url = $(this).val();
+                    if (url) {
+                        window.location = url;
+                    }
+                    return false;
+                });
+
+                // --- BUTTONS (add-to-cart, wishlist, compare, heart hover) ---
+                $('.add-to-cart').click(function () {
+                    var Id = $(this).data("product_id");
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Add", "Cart")',
+                        data: { Id: Id },
+                        success: function (result) {
+                            if (result) {
+                                Swal.fire("Thêm giỏ hàng thành công.");
+                            }
+                        }
+                    });
+                });
+                $('.add-btn-wishlist').click(function () {
+                    var Id = $(this).data("product_id");
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("AddWishlist", "Home")',
+                        data: { Id: Id },
+                        success: function (result) {
+                            if (result) {
+                                Swal.fire("Thêm yêu thích sản phẩm thành công.");
+                            }
+                        }
+                    });
+                });
+                $('.add-btn-compare').click(function () {
+                    var Id = $(this).data("product_id");
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("AddCompare", "Home")',
+                        data: { Id: Id },
+                        success: function (result) {
+                            if (result) {
+                                Swal.fire("Thêm so sánh thành công.");
+                            }
+                        }
+                    });
+                });
+                $('.heart-icon').hover(
+                    function () {
+                        $(this).removeClass('fa-regular').addClass('fa-solid');
+                    },
+                    function () {
+                        $(this).removeClass('fa-solid').addClass('fa-regular');
+                    }
+                );
+            });
+        </script>
+    }
+}

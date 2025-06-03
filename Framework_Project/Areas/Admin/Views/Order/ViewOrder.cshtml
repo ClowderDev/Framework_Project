@@ -1,0 +1,220 @@
+﻿@model IEnumerable<OrderDetail>
+
+@{
+    ViewData["title"] = "Order Details";
+    decimal total = 0; 
+    decimal subtotal = 0;
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header" style="border-bottom: 2px solid #FE980F; margin-bottom: 30px; padding-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <h1 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; display: flex; align-items: center;">
+                            <i class="fa fa-file-text-o" style="color: #FE980F; margin-right: 10px;"></i>
+                            Chi tiết Đơn hàng
+                        </h1>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a asp-action="Index" asp-controller="Order" style="background: #6c757d; border: none; padding: 12px 25px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.3s ease;">
+                            <i class="fa fa-arrow-left" style="margin-right: 8px;"></i>
+                            Trở về danh sách
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="row" style="margin-bottom: 30px;">
+        <div class="col-md-4">
+            <div style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="background: #e7f3ff; padding: 20px; border-bottom: 1px solid #F7F7F0;">
+                    <h4 style="color: #004085; font-family: 'Roboto', sans-serif; margin: 0; font-size: 16px; font-weight: 500;">
+                        <i class="fa fa-info-circle" style="margin-right: 8px;"></i>
+                        Thông tin đơn hàng
+                    </h4>
+                </div>
+                <div style="padding: 20px;">
+                    @if (Model.Any())
+                    {
+                        <p style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 10px;"><strong>📦 Mã đơn:</strong> @Model.First().OrderCode</p>
+                        <p style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 10px;"><strong>👤 Khách hàng:</strong> @Model.First().UserName</p>
+                        <p style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0;"><strong>📊 Số sản phẩm:</strong> @Model.Count() mặt hàng</p>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="background: #d4edda; padding: 20px; border-bottom: 1px solid #F7F7F0;">
+                    <h4 style="color: #155724; font-family: 'Roboto', sans-serif; margin: 0; font-size: 16px; font-weight: 500;">
+                        <i class="fa fa-calculator" style="margin-right: 8px;"></i>
+                        Tổng tiền
+                    </h4>
+                </div>
+                <div style="padding: 20px;">
+                    @{
+                        foreach (var item in Model)
+                        {
+                            subtotal = item.Quantity * item.Price;
+                            total += subtotal;
+                        }
+                    }
+                    <p style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 10px;"><strong>💰 Tạm tính:</strong> <span style="color: #FE980F; font-weight: 600;">@total.ToString("#,##0 đ")</span></p>
+                    <p style="color: #363432; font-family: 'Roboto', sans-serif; margin-bottom: 10px;"><strong>🚚 Phí ship:</strong> <span style="color: #17a2b8; font-weight: 600;">@ViewBag.ShippingCost.ToString("#,##0 đ")</span></p>
+                    <p style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 16px;"><strong>🎯 Tổng cộng:</strong> <span style="color: #28a745; font-weight: 700; font-size: 18px;">@((total + (decimal)ViewBag.ShippingCost).ToString("#,##0 đ"))</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="background: #fff3cd; padding: 20px; border-bottom: 1px solid #F7F7F0;">
+                    <h4 style="color: #856404; font-family: 'Roboto', sans-serif; margin: 0; font-size: 16px; font-weight: 500;">
+                        <i class="fa fa-cogs" style="margin-right: 8px;"></i>
+                        Cập nhật trạng thái
+                    </h4>
+                </div>
+                <div style="padding: 20px;">
+                    @if (@ViewBag.Status != 3)
+                    {
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">Trạng thái đơn hàng:</label>
+                        <select class="form-control select-update-order" style="padding: 12px 16px; border: 2px solid #F0F0E9; border-radius: 6px; font-family: 'Roboto', sans-serif;">
+                            <option value="1">Đơn hàng mới</option>
+                            <option value="0">Đã xử lý</option>
+                        </select>
+                    }
+                    else
+                    {
+                        <p style="color: #dc3545; font-family: 'Roboto', sans-serif; margin: 0; font-style: italic;">Đơn hàng đã bị hủy, không thể cập nhật.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Details Table -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-container" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div class="table-header" style="background: #F0F0E9; padding: 20px; border-bottom: 1px solid #F7F7F0;">
+                    <h3 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 18px; font-weight: 500;">
+                        <i class="fa fa-list" style="color: #FE980F; margin-right: 8px;"></i>
+                        Chi tiết sản phẩm
+                    </h3>
+                </div>
+                
+                <div class="table-responsive" style="padding: 0;">
+                    <table class="table" id="detail_order" style="margin: 0; border: none;">
+                        <thead style="background: #FE980F; color: white;">
+                            <tr>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; text-align: center; width: 60px;">Id</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; min-width: 150px;">Order Code</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; min-width: 150px;">UserName</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; min-width: 200px;">Product Name</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; text-align: right; width: 120px;">Product Price</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; text-align: center; width: 100px;">Quantity</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; text-align: right; width: 120px;">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                total = 0; // Reset total for table calculation
+                            }
+                            @foreach (var item in Model)
+                            {
+                                //Tính tiền cho từng sản phẩm rồi cộng dồn vào biến total
+                                subtotal = item.Quantity * item.Price; 
+                                total += subtotal;
+                                <tr style="border-bottom: 1px solid #F7F7F0; transition: background-color 0.3s ease;" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='white'">
+                                    <input type="hidden" asp-for="@item.OrderCode" class="getId" />
+                                    <td style="padding: 20px 15px; vertical-align: middle; text-align: center;">
+                                        <span style="background: #F0F0E9; color: #363432; padding: 5px 10px; border-radius: 4px; font-weight: 500; font-size: 12px;">#@item.Id</span>
+                                    </td>
+                                    <td style="padding: 20px 15px; vertical-align: middle;">
+                                        <div style="font-family: 'Roboto', sans-serif; color: #363432; font-weight: 500; font-size: 14px;">@item.OrderCode</div>
+                                    </td>
+                                    <td style="padding: 20px 15px; vertical-align: middle;">
+                                        <div style="font-family: 'Roboto', sans-serif; color: #363432; font-size: 13px;">@item.UserName</div>
+                                    </td>
+                                    <td style="padding: 20px 15px; vertical-align: middle;">
+                                        <div style="font-family: 'Roboto', sans-serif; color: #363432; font-weight: 500; font-size: 14px;">@item.Product.Name</div>
+                                    </td>
+                                    <td style="padding: 20px 15px; vertical-align: middle; text-align: right;">
+                                        <span style="color: #FE980F; font-weight: 600; font-size: 13px;">@item.Price.ToString("#,##0 VNĐ")</span>
+                                    </td>
+                                    <td style="padding: 20px 15px; vertical-align: middle; text-align: center;">
+                                        <span style="background: #e7f3ff; color: #004085; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500;">@item.Quantity</span>
+                                    </td>
+                                    <td style="padding: 20px 15px; vertical-align: middle; text-align: right;">
+                                        <span style="color: #28a745; font-weight: 700; font-size: 14px;">@subtotal.ToString("#,##0 VNĐ")</span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .table-container {
+        transition: all 0.3s ease;
+    }
+    
+    @@media (max-width: 768px) {
+        .table-responsive {
+            font-size: 12px;
+        }
+        
+        .page-header div {
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+        
+        .col-md-4 {
+            margin-bottom: 20px;
+        }
+    }
+</style>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script>
+        new DataTable('#detail_order', {
+            layout: {
+                topStart: {
+                    buttons: ['pdf','print']
+                }
+            }
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.select-update-order').change(function () {
+                var status = $(this).val(); //Lấy giá trị status từ thẻ select
+                var ordercode = $('.getId').val(); //Lấy giá trị ordercode từ thẻ input hidden
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("UpdateOrder")",
+                    data: { status: status, ordercode: ordercode }, 
+
+                    success: function (result) {
+                        if (result.success) {
+                            Swal.fire("Cập nhật đơn hàng thành công.");
+                        } else {
+                            Swal.fire("Cập nhật đơn hàng thất bại." + result.message);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

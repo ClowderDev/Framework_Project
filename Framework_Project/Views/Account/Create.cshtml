@@ -1,0 +1,53 @@
+﻿@model UserModel
+@{
+	ViewData["title"] = "Đăng ký";
+}
+
+<section style="padding: 40px 0; background-color: #f9f9f9;">
+	<div class="container"
+		style="max-width: 600px; background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+		<h2 class="text-center" style="margin-bottom: 30px;">Đăng ký người dùng mới!</h2>
+
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+		<form asp-action="Create" asp-controller="Account">
+			<div class="form-group" style="margin-bottom: 20px;">
+				<label style="font-weight: 600;">Tên người dùng</label>
+				<input asp-for="Username" class="form-control" style="background-color: #fff; padding: 10px;"
+					placeholder="Nhập tên người dùng" />
+				<span asp-validation-for="Username" class="text-danger"></span>
+			</div>
+
+			<div class="form-group" style="margin-bottom: 20px;">
+				<label style="font-weight: 600;">Email</label>
+				<input asp-for="Email" class="form-control" style="background-color: #fff; padding: 10px;"
+					placeholder="Nhập email" />
+				<span asp-validation-for="Email" class="text-danger"></span>
+			</div>
+
+			<div class="form-group" style="margin-bottom: 20px;">
+				<label style="font-weight: 600;">Mật khẩu</label>
+				<input asp-for="Password" class="form-control" style="background-color: #fff; padding: 10px;"
+					placeholder="Nhập mật khẩu" />
+				<span asp-validation-for="Password" class="text-danger"></span>
+			</div>
+
+			<button type="submit" class="btn"
+				style="background-color: #E30019; width: 100%; color: white; font-weight: bold; padding: 10px 20px; margin-top: 10px;">
+				Tạo tài khoản
+			</button>
+
+			<div style="display: flex; justify-content: center; gap: 8px; font-size: 16px; margin-top: 20px;">
+				<span>Đã có tài khoản?</span>
+				<a asp-action="Login" asp-controller="Account" style="color: #3472D9; font-weight: bold;">Đăng nhập</a>
+			</div>
+
+		</form>
+	</div>
+</section>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

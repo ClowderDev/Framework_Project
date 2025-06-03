@@ -1,0 +1,276 @@
+﻿@model ProductQuantityModel
+@{
+    ViewData["Title"] = "Thêm số lượng sản phẩm";
+    decimal total_quantities = 0;
+    decimal key = 1;
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header" style="border-bottom: 2px solid #FE980F; margin-bottom: 30px; padding-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <h1 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; display: flex; align-items: center;">
+                            <i class="fa fa-plus-square" style="color: #FE980F; margin-right: 10px;"></i>
+                            Quản lý Số lượng Sản phẩm
+                        </h1>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a asp-action="Index" asp-controller="Product" style="background: #6c757d; border: none; padding: 10px 20px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.3s ease;">
+                            <i class="fa fa-arrow-left" style="margin-right: 8px;"></i>
+                            Quay lại danh sách
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="row">
+        <!-- Add Quantity Form -->
+        <div class="col-md-4">
+            <div class="form-container" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px;">
+                <div class="form-header" style="margin-bottom: 25px;">
+                    <h3 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 20px; font-weight: 500;">
+                        <i class="fa fa-plus-circle" style="color: #FE980F; margin-right: 8px;"></i>
+                        Thêm Số lượng
+                    </h3>
+                    <p style="color: #696763; margin: 5px 0 0 0; font-size: 14px;">Nhập số lượng cần thêm vào kho</p>
+                </div>
+
+                <form asp-action="UpdateMoreQuantity" asp-controller="Product" enctype="multipart/form-data">
+                    <input type="hidden" name="ProductId" value="@ViewBag.ProductId" />
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="border-radius: 6px; border: none; background: #f8d7da; color: #721c24; padding: 15px; margin-bottom: 20px; display: none;"></div>
+                    
+                    <!-- Quantity Field -->
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 500; margin-bottom: 8px; display: block;">
+                            <i class="fa fa-cubes" style="color: #FE980F; margin-right: 5px;"></i>
+                            Số lượng thêm vào
+                        </label>
+                        <input min="1" value="1" asp-for="Quantity" class="form-control quantity-input" style="border: 2px solid #F0F0E9; border-radius: 6px; padding: 12px 15px; font-size: 16px; transition: all 0.3s ease; width: 100%; text-align: center; font-weight: 600;" />
+                        <span asp-validation-for="Quantity" class="text-danger" style="font-size: 12px; margin-top: 5px; display: block;"></span>
+                        
+                        <!-- Quick Add Buttons -->
+                        <div style="margin-top: 15px; display: flex; gap: 8px; flex-wrap: wrap;">
+                            <button type="button" onclick="addQuantity(10)" style="background: #e9ecef; border: 1px solid #ced4da; color: #495057; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer; transition: all 0.3s ease;">+10</button>
+                            <button type="button" onclick="addQuantity(50)" style="background: #e9ecef; border: 1px solid #ced4da; color: #495057; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer; transition: all 0.3s ease;">+50</button>
+                            <button type="button" onclick="addQuantity(100)" style="background: #e9ecef; border: 1px solid #ced4da; color: #495057; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer; transition: all 0.3s ease;">+100</button>
+                            <button type="button" onclick="setQuantity(1)" style="background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer; transition: all 0.3s ease;">Reset</button>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <button type="submit" class="btn btn-primary" style="background: #FE980F; border: none; padding: 12px 25px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 500; transition: all 0.3s ease; width: 100%;">
+                            <i class="fa fa-plus" style="margin-right: 8px;"></i>
+                            Thêm vào kho
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Current Stock Info -->
+            <div class="stock-info" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h4 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0 0 15px 0; font-size: 18px; font-weight: 500;">
+                    <i class="fa fa-info-circle" style="color: #FE980F; margin-right: 8px;"></i>
+                    Thông tin Kho
+                </h4>
+                <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 6px;">
+                    @foreach (var productQuantity in ViewBag.ProductByQuantity)
+                    {
+                        total_quantities += productQuantity.Quantity;
+                    }
+                    <div style="color: #FE980F; font-size: 48px; margin-bottom: 10px;">
+                        <i class="fa fa-cubes"></i>
+                    </div>
+                    <h3 style="color: #363432; margin: 0 0 5px 0; font-weight: 700; font-size: 32px;">@total_quantities</h3>
+                    <p style="color: #696763; margin: 0; font-size: 14px;">Tổng số lượng trong kho</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quantity History Table -->
+        <div class="col-md-8">
+            <div class="table-container" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div class="table-header" style="background: #F0F0E9; padding: 20px; border-bottom: 1px solid #F7F7F0;">
+                    <h3 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; font-size: 18px; font-weight: 500;">
+                        <i class="fa fa-history" style="color: #FE980F; margin-right: 8px;"></i>
+                        Lịch sử Nhập kho
+                    </h3>
+                    <p style="color: #696763; margin: 5px 0 0 0; font-size: 14px;">Theo dõi các lần nhập hàng vào kho</p>
+                </div>
+                
+                <div class="table-responsive" style="padding: 0;">
+                    <table class="table" style="margin: 0; border: none;">
+                        <thead style="background: #FE980F; color: white;">
+                            <tr>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; text-align: center; width: 80px;">#</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; text-align: center;">Số lượng nhập</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; text-align: center;">Ngày nhập</th>
+                                <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500; text-align: center;">Thời gian</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                total_quantities = 0; // Reset for calculation
+                                key = 1;
+                            }
+                            @foreach (var productQuantity in ViewBag.ProductByQuantity)
+                            {
+                                total_quantities += productQuantity.Quantity;
+                                <tr style="border-bottom: 1px solid #F7F7F0; transition: background-color 0.3s ease;" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='white'">
+                                    <td style="padding: 20px 15px; vertical-align: middle; text-align: center;">
+                                        <span style="background: #F0F0E9; color: #363432; padding: 5px 10px; border-radius: 4px; font-weight: 500; font-size: 12px;">@key</span>
+                                    </td>
+                                    <td style="padding: 20px 15px; vertical-align: middle; text-align: center;">
+                                        <span style="background: #d4edda; color: #155724; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center;">
+                                            <i class="fa fa-plus" style="margin-right: 5px; font-size: 12px;"></i>
+                                            @productQuantity.Quantity
+                                        </span>
+                                    </td>
+                                    <td style="padding: 20px 15px; vertical-align: middle; text-align: center;">
+                                        <div style="font-family: 'Roboto', sans-serif; color: #363432; font-weight: 500; font-size: 14px;">
+                                            @productQuantity.DateTime.ToString("dd/MM/yyyy")
+                                        </div>
+                                    </td>
+                                    <td style="padding: 20px 15px; vertical-align: middle; text-align: center;">
+                                        <div style="font-family: 'Roboto', sans-serif; color: #696763; font-size: 13px;">
+                                            @productQuantity.DateTime.ToString("HH:mm:ss")
+                                        </div>
+                                    </td>
+                                </tr>
+                                key++;
+                            }
+                        </tbody>
+                        <tfoot style="background: #f8f9fa;">
+                            <tr>
+                                <td colspan="4" style="padding: 20px 15px; text-align: center; border-top: 2px solid #FE980F;">
+                                    <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                                        <i class="fa fa-calculator" style="color: #FE980F; font-size: 18px;"></i>
+                                        <span style="color: #363432; font-family: 'Roboto', sans-serif; font-weight: 600; font-size: 16px;">
+                                            Tổng số lượng trong kho: 
+                                        </span>
+                                        <span style="color: #FE980F; font-weight: 700; font-size: 18px;">@total_quantities</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control:focus {
+        border-color: #FE980F !important;
+        box-shadow: 0 0 0 0.2rem rgba(254, 152, 15, 0.25) !important;
+        outline: none;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .form-container, .stock-info, .table-container {
+        transition: all 0.3s ease;
+    }
+    
+    .form-container:hover, .stock-info:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .quantity-input {
+        font-size: 18px !important;
+        font-weight: 700 !important;
+        color: #FE980F !important;
+    }
+    
+    .quantity-input:focus {
+        color: #FE980F !important;
+    }
+    
+    button[onclick*="addQuantity"]:hover,
+    button[onclick*="setQuantity"]:hover {
+        background: #FE980F !important;
+        color: white !important;
+        border-color: #FE980F !important;
+        transform: translateY(-1px);
+    }
+    
+    @@media (max-width: 768px) {
+        .page-header div {
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+        
+        .col-md-4 {
+            margin-bottom: 20px;
+        }
+        
+        .table-responsive {
+            font-size: 12px;
+        }
+    }
+</style>
+
+<script>
+    function addQuantity(amount) {
+        var quantityInput = document.querySelector('.quantity-input');
+        var currentValue = parseInt(quantityInput.value) || 0;
+        quantityInput.value = currentValue + amount;
+        
+        // Add visual feedback
+        quantityInput.style.background = '#fff5e6';
+        setTimeout(function() {
+            quantityInput.style.background = 'white';
+        }, 300);
+    }
+    
+    function setQuantity(amount) {
+        var quantityInput = document.querySelector('.quantity-input');
+        quantityInput.value = amount;
+        
+        // Add visual feedback
+        quantityInput.style.background = '#fff3cd';
+        setTimeout(function() {
+            quantityInput.style.background = 'white';
+        }, 300);
+    }
+    
+    // Form submission handling
+    document.addEventListener('DOMContentLoaded', function() {
+        var form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                var submitBtn = form.querySelector('button[type="submit"]');
+                submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin" style="margin-right: 8px;"></i>Đang thêm...';
+                submitBtn.disabled = true;
+            });
+        }
+        
+        // Add number input validation
+        var quantityInput = document.querySelector('.quantity-input');
+        if (quantityInput) {
+            quantityInput.addEventListener('input', function() {
+                if (this.value < 1) {
+                    this.value = 1;
+                }
+            });
+        }
+    });
+</script>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
