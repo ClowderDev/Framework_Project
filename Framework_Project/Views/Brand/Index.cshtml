@@ -1,7 +1,13 @@
 @model IEnumerable<ProductModel>
+@{
+	ViewData["Title"] = @ViewBag.BrandSlug;
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
 <div class="col-sm-3">
-	@Html.Partial("_SidebarPartial")
+	<partial name="_SidebarPartial" />
 </div>
+
 <style>	
 	.product-image-wrapper {
 		height: 450px;
@@ -10,67 +16,128 @@
 
 <div class="col-sm-9 padding-right">
 	<div class="features_items">
-		<!--features_items-->
-		<h2 class="title text-center">Sản phẩm nổi bật</h2>
-		@foreach (var item in Model)
+		@if (ViewBag.count > 0)
 		{
-			<div class="col-sm-4">
-				<a asp-action="Details" asp-controller="Product" asp-route-Id="@item.Id" style="text-decoration:none; color:inherit;">
-					<div class="product-image-wrapper">
-						<div class="single-products">
-							<div class="productinfo text-center">
-								<img src="~/media/products/@item.Image" alt="@item.Name" width="100px" height="200px" />
-								<h2>@item.Price.ToString("#,##0 VNĐ")</h2>
-								<p>@item.Name</p>
-								<p>Danh mục: @item.Category.Name</p>
-								<p>Thương hiệu: @item.Brand.Name</p>
-								<button class="btn btn-default add-to-cart" data-product_id="@item.Id"><i class="fa fa-shopping-cart"></i>Thêm giỏ hàng</button>
-							</div>
-						</div>
-					</div>
-				</a>
-				<div class="choose">
-					@if (User.Identity?.IsAuthenticated ?? false)
-					{
-						<ul class="nav nav-pills nav-justified">
-							<li><a href="#"><i class="fa fa-plus-square"></i>Thêm vào danh sách yêu thích</a></li>
-							<li><a href="#" class="add-to-compare" data-product_id="@item.Id"><i class="fa fa-plus-square"></i>Thêm vào so sánh</a></li>
-						</ul>
-					}
-				</div>
+			<partial name="_FilterProductsPartial" />
+		}
+		
+		<!--features_items-->
+		<h2 class="title text-center">@ViewBag.BrandSlug</h2>
+		@if (!Model.Any())
+		{
+			<div class="alert alert-info text-center">
+				<h4>Không tìm thấy sản phẩm nào phù hợp với tiêu chí của bạn.</h4>
 			</div>
 		}
-
-
+		else
+		{
+			@foreach (var item in Model)
+			{
+				<div class="col-sm-4">
+					<a asp-action="Details" asp-controller="Product" asp-route-Id="@item.Id" style="text-decoration:none; color:inherit;">
+						<div class="product-image-wrapper">
+							<div class="single-products">
+								<div class="productinfo text-center">
+									<img src="~/media/products/@item.Image" alt="@item.Name" width="100px" height="200px" />
+									<h2>@item.Price.ToString("#,##0 VNĐ")</h2>
+									<p>@item.Name</p>
+									<p>Danh mục: @item.Category.Name</p>
+									<p>Thương hiệu: @item.Brand.Name</p>
+									<a asp-action="Add" asp-controller="Cart" asp-route-Id="@item.Id" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm giỏ hàng</a>
+								</div>
+							</div>
+						</div>
+					</a>
+					<div class="choose">
+						@if (User.Identity?.IsAuthenticated ?? false)
+						{
+							<ul class="nav nav-pills nav-justified">
+								<li><a href="#"><i class="fa fa-plus-square"></i>Thêm vào danh sách yêu thích</a></li>
+								<li><a href="#" class="add-to-compare" data-product_id="@item.Id"><i class="fa fa-plus-square"></i>Thêm vào so sánh</a></li>
+							</ul>
+						}
+					</div>
+				</div>
+			}
+		}
 	</div><!--features_items-->
-
 </div>
 
+@if (ViewBag.count > 0)
+{
 @section Scripts {
-    <script>
-        $(document).ready(function () {
-            $('.add-to-compare').click(function (e) {
-                e.preventDefault();
-                var productId = $(this).data('product_id');
+	<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+	<script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+	<script>
+		$(document).ready(function () {
+			$("#slider-range").slider({
+				range: true,
+				min: 50000,
+				max: 1000000000,
+				step: 50000,
+				values: [@ViewBag.startprice, @ViewBag.endprice],
+				slide: function (event, ui) {
+					$("#amount").val("đ" + ui.values[0] + " - đ" + ui.values[1]);
+					$("#startprice").val(ui.values[0]);
+					$("#endprice").val(ui.values[1]);
+				}
+			});
+			
+			$("#amount").val("đ" + $("#slider-range").slider("values", 0) +
+				" - đ" + $("#slider-range").slider("values", 1));
 
-                $.ajax({
-                    url: '/Home/AddCompare',
-                    type: 'POST',
-                    data: { Id: productId },
-                    success: function (response) {
-                        if (response.success) {
-                            alert(response.message);
-                            // Optionally update the compare count display
-                        } else {
-                            alert(response.message);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        var errorMessage = xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred.';
-                        alert(errorMessage);
-                    }
-                });
-            });
-        });
-    </script>
+			// Update sort options when price range changes
+			$('.btn-locgia').on('click', function() {
+				var startPrice = $("#startprice").val();
+				var endPrice = $("#endprice").val();
+				var baseUrl = window.location.pathname;
+				
+				$('#sort_by option').each(function() {
+					if ($(this).val() !== '') {
+						var url = new URL($(this).val(), window.location.origin);
+						url.searchParams.set('startprice', startPrice);
+						url.searchParams.set('endprice', endPrice);
+						$(this).val(url.pathname + url.search);
+					}
+				});
+			});
+		});
+	</script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('#sort_by').on('change', function () {
+				var url = $(this).val();
+				if (url) {
+					window.location = url;
+				}
+				return false;
+			});
+		});
+	</script>
+	<script>
+		$(document).ready(function () {
+			$('.add-to-compare').click(function (e) {
+				e.preventDefault();
+				var productId = $(this).data('product_id');
+
+				$.ajax({
+					url: '/Home/AddCompare',
+					type: 'POST',
+					data: { Id: productId },
+					success: function (response) {
+						if (response.success) {
+							alert(response.message);
+						} else {
+							alert(response.message);
+						}
+					},
+					error: function (xhr, status, error) {
+						var errorMessage = xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred.';
+						alert(errorMessage);
+					}
+				});
+			});
+		});
+	</script>
+}
 }

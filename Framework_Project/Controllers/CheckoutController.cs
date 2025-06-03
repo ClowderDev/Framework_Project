@@ -59,47 +59,64 @@ namespace Framework_Project.Controllers
 				}
 				else{
 					orderItem.PaymentMethod = "COD";
-				}	
-
-				// Retrieve shipping price from cookie
-				var shippingPriceCookie = Request.Cookies["ShippingPrice"];
-				decimal shippingPrice = 0;
-
-				if (shippingPriceCookie != null)
-				{
-					var shippingPriceJson = shippingPriceCookie;
-					shippingPrice = JsonConvert.DeserializeObject<decimal>(shippingPriceJson);
 				}
-				orderItem.ShippingCost = shippingPrice;
 
-				// Get cart items and calculate totals
-				List<CartItemModel> cartItems = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
-				decimal subtotal = cartItems.Sum(x => x.Quantity * x.Price);
+				// Get cart items
+				var cartItems = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
+				if (cartItems.Count == 0)
+				{
+					return RedirectToAction("Index", "Cart");
+				}
 
-				// Get coupon data from cookie
+				// Get coupon information from cookie
+				string couponCode = null;
+				double discountPercentage = 0;
 				var couponDataCookie = Request.Cookies["CouponData"];
-				decimal discountAmount = 0;
 				if (couponDataCookie != null)
 				{
 					try
 					{
 						var couponData = JsonConvert.DeserializeObject<dynamic>(couponDataCookie);
-						double discountPercentage = couponData.DiscountPercentage;
-						discountAmount = subtotal * (decimal)(discountPercentage / 100);
-						orderItem.CouponCode = couponData.Name;
+						couponCode = couponData.Name;
+						discountPercentage = couponData.DiscountPercentage;
 					}
 					catch (Exception ex)
 					{
 						Console.WriteLine($"Error deserializing coupon cookie: {ex.Message}");
-						Response.Cookies.Delete("CouponData");
 					}
 				}
 
+				// Calculate total amount and discount
+				decimal totalAmount = cartItems.Sum(x => x.Quantity * x.Price);
+				decimal discountAmount = 0;
+				if (discountPercentage > 0)
+				{
+					discountAmount = totalAmount * (decimal)discountPercentage / 100;
+				}
+
+				// Get shipping price from cookie
+				decimal shippingPrice = 0;
+				var shippingPriceCookie = Request.Cookies["ShippingPrice"];
+				if (shippingPriceCookie != null)
+				{
+					try
+					{
+						shippingPrice = JsonConvert.DeserializeObject<decimal>(shippingPriceCookie);
+					}
+					catch (Exception ex)
+					{
+						Console.WriteLine($"Error deserializing shipping price cookie: {ex.Message}");
+					}
+				}
+
+				// Set order details
+				orderItem.TotalAmount = totalAmount - discountAmount + shippingPrice;
+				orderItem.ShippingCost = shippingPrice;
+				orderItem.CouponCode = couponCode;
 				orderItem.DiscountAmount = discountAmount;
-				orderItem.TotalAmount = subtotal - discountAmount + shippingPrice;
 
 				_dataContext.Add(orderItem);
-				_dataContext.SaveChanges();
+				await _dataContext.SaveChangesAsync();
 
 				// Create order details
 				foreach (var cart in cartItems)
@@ -142,8 +159,17 @@ namespace Framework_Project.Controllers
 			var response = _momoService.PaymentExecuteAsync(HttpContext.Request.Query);
 			var requestQuery = HttpContext.Request.Query;
 			if(requestQuery["resultCode"] != "0"){
+				var orderId = requestQuery["orderId"].ToString();
+				var order = await _dataContext.Set<OrderModel>().FirstOrDefaultAsync(o => o.OrderCode == orderId);
+				if (order != null)
+				{
+					order.Status = 1; // Paid/Confirmed
+					order.PaymentMethod = "Momo";
+					_dataContext.Update(order);
+					await _dataContext.SaveChangesAsync();
+				}
 				var newMomoInfo = new MomoInfo(){
-					OrderId = requestQuery["orderId"],
+					OrderId = orderId,
 					FullName = User.FindFirstValue(ClaimTypes.Email),
 					Amount = decimal.Parse(requestQuery["Amount"]),
 					OrderInfo = requestQuery["orderInfo"],
@@ -151,15 +177,22 @@ namespace Framework_Project.Controllers
 				};
 				_dataContext.Add(newMomoInfo);
 				await _dataContext.SaveChangesAsync();
-				await Checkout(requestQuery["orderId"], "Momo");
+				// Clean up session/cookies
+				HttpContext.Session.Remove("Cart");
+				Response.Cookies.Delete("CouponData");
+				Response.Cookies.Delete("ShippingPrice");
+				// Send email
+				var receiver = User.FindFirstValue(ClaimTypes.Email);
+				var subject = "Đặt hàng thành công";
+				var message = "Đặt hàng thành công, cảm ơn bạn đã ủng hộ";
+				await _emailSender.SendEmailAsync(receiver, subject, message);
+				TempData["success"] = "Đơn hàng đã được tạo,vui lòng chờ duyệt đơn hàng nhé.";
+				return RedirectToAction("History", "Account");
 			}
 			else{
 				TempData["error"] = "Thanh toán thất bại, vui lòng thử lại.";	
 				return RedirectToAction("Index", "Cart");
 			}
-
-			
-			return View(response);
 		}
 
 		[HttpGet]
@@ -167,6 +200,15 @@ namespace Framework_Project.Controllers
 		{
 			var response = _vnPayService.PaymentExecute(Request.Query);
 			if(response.VnPayResponseCode == "00"){
+				var orderId = response.OrderId;
+				var order = await _dataContext.Set<OrderModel>().FirstOrDefaultAsync(o => o.OrderCode == orderId);
+				if (order != null)
+				{
+					order.Status = 1; // Paid/Confirmed
+					order.PaymentMethod = "VNPay";
+					_dataContext.Update(order);
+					await _dataContext.SaveChangesAsync();
+				}
 				var newVnpayInsert = new VnpayModel{
 					OrderId = response.OrderId,
 					PaymentMethod = "VNPay",
@@ -177,14 +219,22 @@ namespace Framework_Project.Controllers
 				};
 				_dataContext.Add(newVnpayInsert);
 				await _dataContext.SaveChangesAsync();
-				await Checkout(response.OrderId, "VNPay");
+				// Clean up session/cookies
+				HttpContext.Session.Remove("Cart");
+				Response.Cookies.Delete("CouponData");
+				Response.Cookies.Delete("ShippingPrice");
+				// Send email
+				var receiver = User.FindFirstValue(ClaimTypes.Email);
+				var subject = "Đặt hàng thành công";
+				var message = "Đặt hàng thành công, cảm ơn bạn đã ủng hộ";
+				await _emailSender.SendEmailAsync(receiver, subject, message);
+				TempData["success"] = "Đơn hàng đã được tạo,vui lòng chờ duyệt đơn hàng nhé.";
+				return RedirectToAction("History", "Account");
 			}
 			else{
 				TempData["error"] = "Thanh toán thất bại, vui lòng thử lại.";
 				return RedirectToAction("Index", "Cart");	
 			}
-
-			return View(response);
 		}
 	}
 

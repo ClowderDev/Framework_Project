@@ -16,7 +16,6 @@ namespace Framework_Project.Controllers
         {
             CategoryModel category = _dataContext.Categories.Where(c => c.Slug == slug).FirstOrDefault();
 
-
             if (category == null)
             {
                 return RedirectToAction("Index");
@@ -26,7 +25,6 @@ namespace Framework_Project.Controllers
             IQueryable<ProductModel> productsByCategory = _dataContext.Products.Where(p => p.CategoryId == category.Id);
             var count = await productsByCategory.CountAsync();
             
- 
             if (sort_by == "price_increase")
             {
                 productsByCategory = productsByCategory.OrderBy(p => p.Price);
@@ -45,7 +43,7 @@ namespace Framework_Project.Controllers
             }
 
             decimal startPriceValue = 50000;
-            decimal endPriceValue = 5000000;
+            decimal endPriceValue = 1000000000;
 
             if (!string.IsNullOrEmpty(startprice) && !string.IsNullOrEmpty(endprice))
             {
@@ -61,12 +59,11 @@ namespace Framework_Project.Controllers
 
             ViewBag.startprice = startPriceValue;
             ViewBag.endprice = endPriceValue;
-
             ViewBag.sort_key = sort_by;
             ViewBag.count = count; 
 
             decimal minPrice = 50000;
-            decimal maxPrice = 5000000;
+            decimal maxPrice = 1000000000;
 
             if (count > 0)
             {
