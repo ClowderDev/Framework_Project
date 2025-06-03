@@ -16,6 +16,7 @@
     <h3>Danh sách so sánh</h3>
 
     <div class="compare-container">
+<<<<<<< HEAD
         @{
             var key = 0;
             bool isEmpty = true;
@@ -24,6 +25,10 @@
         @foreach (var compare_product in Model)
         {
             isEmpty = false;
+=======
+        @foreach (var compare_product in Model)
+        {
+>>>>>>> 2ef18365088934809e564403ae838724d292a07b
             <div class="compare-item">
                 <div class="product-image text-center">
                     <a asp-controller="Product" asp-action="Details" asp-route-Id="@compare_product.Product.Id">
@@ -46,6 +51,7 @@
                 </div>
             </div>
         }
+<<<<<<< HEAD
         @if (isEmpty)
         {
             <tr>
@@ -54,6 +60,8 @@
                 </td>
             </tr>
         }
+=======
+>>>>>>> 2ef18365088934809e564403ae838724d292a07b
     </div>
 
     <style>

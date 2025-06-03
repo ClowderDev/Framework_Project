@@ -32,7 +32,11 @@
 						<label for="quantity" style="margin-right: 5px; font-weight: 500;">Số lượng:</label>
 						<input type="number" name="quantity" id="quantity" value="1" min="1" max="@Model.ProductDetails.Quantity" style="width:70px; padding: 6px 10px; border-radius: 5px; border: 1px solid #ddd;" />
 						<input type="hidden" name="productId" value="@Model.ProductDetails.Id" />
+<<<<<<< HEAD
 						<button type="submit" class="btn-add-to-cart" style="background-color: #E30019; color: #fff; font-weight: bold; border-radius: 5px; padding: 8px 20px;"> <i class="fa fa-shopping-cart" style="color: #fff;"></i> Thêm giỏ hàng </button>
+=======
+						<button type="submit" class="btn" style="background-color: #E30019; color: #fff; font-weight: bold; border-radius: 5px; padding: 8px 20px;"> <i class="fa fa-shopping-cart" style="color: #fff;"></i> Thêm giỏ hàng </button>
+>>>>>>> 2ef18365088934809e564403ae838724d292a07b
 					</form>
 					@if (@Model.ProductDetails.Quantity > 0)
 					{
