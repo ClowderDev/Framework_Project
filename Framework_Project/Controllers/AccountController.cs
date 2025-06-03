@@ -40,10 +40,12 @@ namespace Framework_Project.Controllers
                 Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(loginVM.Username, loginVM.Password, false, false);
                 if (result.Succeeded)
                 {
-                    if(User.IsInRole("Admin")){
+                    if (User.IsInRole("Admin"))
+                    {
                         return Redirect("/Admin/Dashboard/");
                     }
-                    else if(User.IsInRole("User")){
+                    else if (User.IsInRole("User"))
+                    {
                         return Redirect(loginVM.ReturnUrl ?? "/");
                     }
                     return Redirect(loginVM.ReturnUrl ?? "/");
@@ -237,7 +239,7 @@ namespace Framework_Project.Controllers
 
         // Xử lý phản hồi từ Google sau khi đăng nhập.
         // Xác thực người dùng và tạo tài khoản mới nếu chưa tồn tại.
-        public async Task<IActionResult>GoogleResponse()
+        public async Task<IActionResult> GoogleResponse()
         {
             // Xác thực bằng Google scheme.
             var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
@@ -273,7 +275,7 @@ namespace Framework_Project.Controllers
                 // Tạo đối tượng AppUserModel mới.
                 var newUser = new AppUserModel { UserName = emailName, Email = email };
                 // Gán mật khẩu đã hash cho người dùng mới.
-                newUser.PasswordHash = hashedPassword; 
+                newUser.PasswordHash = hashedPassword;
 
                 // Tạo người dùng trong Identity system.
                 var createUserResult = await _userManage.CreateAsync(newUser);
@@ -296,6 +298,7 @@ namespace Framework_Project.Controllers
             {
                 // Nếu người dùng đã tồn tại, đăng nhập cho người dùng đó.
                 await _signInManager.SignInAsync(existingUser, isPersistent: false);
+                return RedirectToAction("Index", "Home");
             }
 
             return RedirectToAction("Login");

@@ -11,22 +11,20 @@
 	}
 }
 
-<div class="row">
+<div class="row" style="margin-top: 20px;">
 	<div class="col-sm-3">
 		<partial name="_SidebarPartial" />
 	</div>
 
 	<div class="col-sm-9 padding-right">
-		<div class="product-details">
+		<div class="product-details" style="background-color: #fdfdfd; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
 			<!--product-details-->
 			<div class="col-sm-5">
-				<div class="view-product">
-					<img src="~/media/products/@Model.ProductDetails.Image" alt="" width="100px" height="200px" />
-					<h3>ZOOM</h3>
+				<div class="view-product" style="text-align: center; border: 1px solid #eee; padding: 10px; border-radius: 6px;">
+					<img src="~/media/products/@Model.ProductDetails.Image" alt="" width="100px" height="200px" style="object-fit: contain;" />
+					<h3 style="margin-top: 10px;">ZOOM</h3>
 				</div>
-				<div id="similar-product" class="carousel slide" data-ride="carousel">
-
-					<!-- Wrapper for slides -->
+				<div id="similar-product" class="carousel slide" data-ride="carousel" style="margin-top: 15px;">
 					<div class="carousel-inner">
 						<div class="item">
 							<a href=""><img src="images/product-details/similar1.jpg" alt=""></a>
@@ -34,8 +32,6 @@
 							<a href=""><img src="images/product-details/similar3.jpg" alt=""></a>
 						</div>
 					</div>
-
-					<!-- Controls -->
 					<a class="left item-control" href="#similar-product" data-slide="prev">
 						<i class="fa fa-angle-left"></i>
 					</a>
@@ -43,52 +39,98 @@
 						<i class="fa fa-angle-right"></i>
 					</a>
 				</div>
-
 			</div>
+
 			<div class="col-sm-7">
-				<div class="product-information">
-					<!--/product-information-->
-					<h2>@Model.ProductDetails.Name</h2>
-					<span>
-						<span>@Model.ProductDetails.Price.ToString("#,##0 VNĐ")</span>
-						<form id="add-to-cart-form" method="post" asp-action="AddQuantity" asp-controller="Cart" style="display:inline;">
-							<label for="quantity">Số lượng:</label>
-							<input type="number" name="quantity" id="quantity" value="1" min="1" max="@Model.ProductDetails.Quantity" style="width:60px;" />
+				<div class="product-information" style="padding-left: 20px;">
+					<h2 style="font-weight: bold;">@Model.ProductDetails.Name</h2>
+					<span style="display: block; margin: 10px 0;">
+						<span style="font-size: 20px; color: #D2322D;">@Model.ProductDetails.Price.ToString("#,##0 VNĐ")</span>
+						<form id="add-to-cart-form" method="post" asp-action="AddQuantity" asp-controller="Cart"
+							style="display:flex; margin: 0; align-items: center; width: 100%;">
+							<label for="quantity" style="margin-right: 5px;">Số lượng:</label>
+							<input type="number" name="quantity" id="quantity" value="1" min="1"
+								max="@Model.ProductDetails.Quantity" style="width:60px; padding: 3px;" />
 							<input type="hidden" name="productId" value="@Model.ProductDetails.Id" />
-							<button type="submit" class="btn btn-default add-to-cart">
-								<i class="fa fa-shopping-cart"></i>Thêm giỏ hàng
+							<button type="submit" class="btn btn-default add-to-cart"
+								style=" margin-left: 10px; border-radius: 5px; margin-bottom: 0;">
+								<i class="fa fa-shopping-cart" style="color: #D2322D;"></i> Thêm giỏ hàng
 							</button>
 						</form>
 					</span>
-					@if(@Model.ProductDetails.Quantity > 0 ){
-						<p><b>Tình trạng:</b> Còn hàng</p>
+					@if (@Model.ProductDetails.Quantity > 0)
+					{
+						<p><b>Tình trạng:</b> <span style="color: green;">Còn hàng</span></p>
 					}
-					else{
-						<p><b>Tình trạng:</b> Hết hàng</p>
+					else
+					{
+						<p><b>Tình trạng:</b> <span style="color: red;">Hết hàng</span></p>
 					}
 					<p><b>Điều kiện:</b> Mới</p>
+<<<<<<< HEAD
+					@* <a asp-action="Index" asp-controller="Brand"
+					asp-route-slug="@item.Slug">@item.Name</a> *@
+					<p>
+						<b>Thương hiệu:</b>
+						<a asp-action="Index" asp-controller="Brand" asp-route-slug="@Model.ProductDetails.Brand.Slug">
+							@Model.ProductDetails.Brand.Name
+						</a>
+    				</p>
+					<p><b>Danh mục:</b> <a asp-action="Index" asp-controller="Category" asp-route-slug="@Model.ProductDetails.Category.Slug">@Model.ProductDetails.Category.Name</a></p>
+=======
 					<p><b>Thương hiệu:</b> @Model.ProductDetails.Brand?.Name</p>
 					<p><b>Danh mục:</b> @Model.ProductDetails.Category?.Name</p>
+>>>>>>> 8ebcae1257dd60363703e9711749a78987537c74
 					<a href=""><img src="images/product-details/share.png" class="share img-responsive" alt="" /></a>
-				</div><!--/product-information-->
+				</div>
 			</div>
-		</div><!--/product-details-->
+		</div>
 
-		<div class="category-tab shop-details-tab">
-			<!--category-tab-->
+		<div class="category-tab shop-details-tab" style="margin-top: 30px;">
 			<div class="col-sm-12">
+<<<<<<< HEAD
+				<ul class="nav nav-tabs" style="border-bottom: 2px solid #ccc;">
+					<li><a href="#details" data-toggle="tab">Chi tiết</a></li>
+					<li class="active"><a href="#reviews" data-toggle="tab">Đánh giá (5)</a></li>
+=======
 				<ul class="nav nav-tabs">
 					<li class="active"><a href="#details" data-toggle="tab">Chi tiết</a></li>
 					<li><a href="#reviews" data-toggle="tab">Đánh giá (@(Model.ProductDetails.Ratings != null ? Model.ProductDetails.Ratings.Count : 0))</a></li>
+>>>>>>> 8ebcae1257dd60363703e9711749a78987537c74
 				</ul>
 			</div>
-			<div class="tab-content">
+			<div class="tab-content" style="padding: 15px; background: #f9f9f9; border: 1px solid #ddd; border-top: none;">
 				<div class="tab-pane fade active in" id="details">
 					@Html.Raw(Model.ProductDetails.Description)
 				</div>
 
 				<div class="tab-pane fade" id="reviews">
 					<div class="col-sm-12">
+<<<<<<< HEAD
+						<ul style="padding-left: 0;">
+							<li><a href=""><i class="fa fa-user"></i> EUGEN</a></li>
+							<li><a href=""><i class="fa fa-clock-o"></i> 12:41 PM</a></li>
+							<li><a href=""><i class="fa fa-calendar-o"></i> 31 THÁNG 12 2014</a></li>
+						</ul>
+						<p style="margin-top: 10px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+						<p><b>Viết đánh giá của bạn</b></p>
+
+						<form autocomplete="off" asp-action="CommentProduct" asp-controller="Product" method="POST">
+							<span style="display: flex; gap: 10px; flex-wrap: wrap;">
+								<input asp-for="@Model.ProductDetails.Id" name="ProductId" type="hidden" />
+								<input name="Star" type="hidden" value="4" />
+								<input asp-for="@Model.Name" type="text" placeholder="Tên của bạn" style="flex:1; min-width: 200px;" />
+								<span asp-validation-for="@Model.Name" class="text-danger"></span>
+								<input asp-for="@Model.Email" name="Email" type="email" placeholder="Địa chỉ Email" style="flex:1; min-width: 200px;" />
+								<span asp-validation-for="@Model.Email" class="text-danger"></span>
+							</span>
+							<textarea asp-for="@Model.Comment" style="width: 100%; margin-top: 10px;"></textarea>
+							<span asp-validation-for="@Model.Comment" class="text-danger"></span>
+
+							<b>Rating:</b> <img src="images/product-details/rating.png" alt="" />
+							<button type="submit" class="btn btn-default pull-right" style="margin-top: 10px;">Gửi</button>
+						</form>
+=======
 						@if (Model.ProductDetails.Ratings != null && Model.ProductDetails.Ratings.Count > 0)
 						{
 							foreach (var review in Model.ProductDetails.Ratings)
@@ -149,47 +191,38 @@
 						{
 							<div class="alert alert-warning">Bạn cần <a href="/Account/Login">đăng nhập</a> để đánh giá sản phẩm.</div>
 						}
+>>>>>>> 8ebcae1257dd60363703e9711749a78987537c74
 					</div>
 				</div>
-
 			</div>
-		</div><!--/category-tab-->
+		</div>
 
-		<div class="recommended_items">
-			<!--recommended_items-->
+		<div class="recommended_items" style="margin-top: 40px;">
 			<h2 class="title text-center">Sản phẩm liên quan</h2>
 
 			<div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
 				<div class="carousel-inner">
-
 					<div class="item active">
 						@foreach (var relatedProduct in @ViewBag.RelatedProducts as IEnumerable<ProductModel>)
 						{
 							<div class="col-sm-4">
-								<div class="product-image-wrapper">
+								<div class="product-image-wrapper" style="border: 1px solid #ddd; padding: 10px; margin-bottom: 20px; border-radius: 5px;">
 									<div class="single-products">
-
-
 										<div class="productinfo text-center">
 											<a asp-action="Details" asp-controller="Product" asp-route-Id="@relatedProduct.Id">
-												<img src="~/media/products/@relatedProduct.Image" alt="@relatedProduct.Name" width="100px" height="200px" />
-												<h2>@relatedProduct.Price.ToString("#,##0 VNĐ")</h2>
-												<p>@relatedProduct.Name</p>
-												<p>Danh mục: @relatedProduct.Category.Name</p>
-												<p>Thương hiệu: @relatedProduct.Brand.Name</p>
+												<img src="~/media/products/@relatedProduct.Image" alt="@relatedProduct.Name"
+													width="100px" height="200px" style="object-fit: contain;" />
+												<h2 style="font-size: 16px; color: #D2322D;">@relatedProduct.Price.ToString("#,##0 VNĐ")</h2>
+												<p style="margin: 5px 0;">@relatedProduct.Name</p>
+												<p style="font-size: 13px;">Danh mục: @relatedProduct.Category.Name</p>
+												<p style="font-size: 13px;">Thương hiệu: @relatedProduct.Brand.Name</p>
 											</a>
-
 										</div>
-
-
 									</div>
-
 								</div>
 							</div>
 						}
-
 					</div>
-
 				</div>
 				<a class="left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
 					<i class="fa fa-angle-left"></i>
@@ -198,15 +231,17 @@
 					<i class="fa fa-angle-right"></i>
 				</a>
 			</div>
-
-		</div><!--/recommended_items-->
-
+		</div>
 	</div>
 </div>
+
 @section Scripts {
 	@{
 		await Html.RenderPartialAsync("_ValidationScriptsPartial");
 	}
+<<<<<<< HEAD
+}
+=======
 	<style>
 		.rating {
 			display: inline-flex;
@@ -245,3 +280,4 @@
 		}
 	</style>
 }
+>>>>>>> 8ebcae1257dd60363703e9711749a78987537c74
