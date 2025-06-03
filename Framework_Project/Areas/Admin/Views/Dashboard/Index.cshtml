@@ -86,10 +86,16 @@
                             <form style="margin: 0;">
                                 <div class="form-group" style="margin-bottom: 15px;">
                                     <label style="color: #696763; font-size: 14px; margin-bottom: 5px; display: block;">Chọn ngày:</label>
-                                    <input type="text" class="form-control" id="datepicker" style="background: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 4px; width: 100%;" placeholder="Chọn ngày...">
+                                    <input type="date" class="form-control" id="datepicker" 
+                                           style="padding: 12px 16px; border: 2px solid #F0F0E9; border-radius: 6px; font-family: 'Roboto', sans-serif; transition: all 0.3s ease;"
+                                           onfocus="this.style.borderColor='#FE980F'; this.style.boxShadow='0 0 0 3px rgba(254, 152, 15, 0.1)'"
+                                           onblur="this.style.borderColor='#F0F0E9'; this.style.boxShadow='none'" />
                                 </div>
-                                <button type="button" class="btn btn-primary btn-filter-date" style="background: #FE980F; border: none; padding: 10px 20px; border-radius: 4px; color: white; font-family: 'Roboto', sans-serif;">
-                                    <i class="fa fa-filter" style="margin-right: 5px;"></i>
+                                <button type="button" class="btn btn-primary btn-filter-date" 
+                                        style="background: #FE980F; border: none; padding: 12px 25px; border-radius: 6px; color: white; font-family: 'Roboto', sans-serif; display: inline-flex; align-items: center; transition: all 0.3s ease;"
+                                        onmouseover="this.style.background='#e8890e'; this.style.transform='translateY(-1px)'"
+                                        onmouseout="this.style.background='#FE980F'; this.style.transform='translateY(0)'">
+                                    <i class="fa fa-filter" style="margin-right: 8px;"></i>
                                     Lọc theo ngày
                                 </button>
                             </form>
@@ -169,12 +175,10 @@
 
 @section Scripts {
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/ui-lightness/jquery-ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
 
     <script>
         $(document).ready(function () {
@@ -250,28 +254,10 @@
                     }
                 });
             });
-        });
-    </script>
 
-    <script>
-        $(function () {
-            $("#datepicker").datepicker({
-                dateFormat: 'yy-mm-dd',
-                changeMonth: true,
-                changeYear: true,
-                showButtonPanel: true,
-                onSelect: function (datetext) {
-                    var d = new Date();
-                    var h = d.getHours();
-                    h = (h < 10) ? ("0" + h) : h;
-                    var m = d.getMinutes();
-                    m = (m < 10) ? ("0" + m) : m;
-                    var s = d.getSeconds();
-                    s = (s < 10) ? ("0" + s) : s;
-                    datetext = datetext + " " + h + ":" + m + ":" + s;
-                    $('#datepicker').val(datetext);
-                }
-            });
+            // Set minimum date for date picker (today)
+            var today = new Date().toISOString().split('T')[0];
+            $("#datepicker").attr('min', today);
         });
     </script>
 }

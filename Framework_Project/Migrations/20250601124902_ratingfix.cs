@@ -5,7 +5,7 @@
 namespace Framework_Project.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateModelChanges : Migration
+    public partial class ratingfix : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,17 +15,16 @@ namespace Framework_Project.Migrations
                 table: "Ratings");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ratings_ProductId_Email",
+                name: "IX_Ratings_ProductId",
                 table: "Ratings",
-                columns: new[] { "ProductId", "Email" },
-                unique: true);
+                column: "ProductId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropIndex(
-                name: "IX_Ratings_ProductId_Email",
+                name: "IX_Ratings_ProductId",
                 table: "Ratings");
 
             migrationBuilder.CreateIndex(

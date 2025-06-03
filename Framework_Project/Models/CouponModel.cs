@@ -11,14 +11,13 @@ namespace Framework_Project.Models
         [Required(ErrorMessage = "Yêu cầu nhập mô tả coupon")]
         public string Description { get; set; }
 
+        [Required(ErrorMessage = "Yêu cầu nhập mã coupon")]
+        public string Code { get; set; }
 
         [Required(ErrorMessage = "Yêu cầu nhập ngày bắt đầu")]
-
         public DateTime DateStart { get; set; }
 
         [Required(ErrorMessage = "Yêu cầu nhập ngày kết thúc")]
-
-
         public DateTime DateExpired { get; set; }
 
         [Required(ErrorMessage = "Yêu cầu số lượng coupon")]

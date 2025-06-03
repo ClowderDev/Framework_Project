@@ -25,14 +25,19 @@ namespace Framework_Project.Controllers
         {
             if(Id == null) return RedirectToAction("Index");
 
-            var productsById = _dataContext.Products.
-                Include(p => p.Ratings).
-                Where(p => p.Id == Id).FirstOrDefault();
+            var productsById = await _dataContext.Products
+                .Include(p => p.Ratings)
+                .Include(p => p.Category)
+                .Include(p => p.Brand)
+                .Where(p => p.Id == Id)
+                .FirstOrDefaultAsync();
+
+            if (productsById == null) return RedirectToAction("Index");
 
             var relatedProducts = await _dataContext.Products
-            .Where(p => p.CategoryId == productsById.CategoryId && p.Id != productsById.Id)
-            .Take(4)
-            .ToListAsync();
+                .Where(p => p.CategoryId == productsById.CategoryId && p.Id != productsById.Id)
+                .Take(4)
+                .ToListAsync();
 
             ViewBag.RelatedProducts = relatedProducts;
 
@@ -59,8 +64,29 @@ namespace Framework_Project.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> CommentProduct(RatingModel rating)
 		{
+			if (!User.Identity.IsAuthenticated)
+			{
+				TempData["error"] = "Bạn cần đăng nhập để đánh giá sản phẩm.";
+				return Redirect(Request.Headers["Referer"]);
+			}
+
+			// Always use the logged-in user's email
+			var userEmail = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value
+				?? User.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
+			rating.Email = userEmail;
+
 			if (ModelState.IsValid)
 			{
+				// Check if this user already reviewed this product
+				var existingReview = await _dataContext.Ratings
+					.FirstOrDefaultAsync(r => r.ProductId == rating.ProductId && r.Email == rating.Email);
+
+				if (existingReview != null)
+				{
+					TempData["error"] = "Bạn đã đánh giá sản phẩm này rồi!";
+					return Redirect(Request.Headers["Referer"]);
+				}
+
 				var ratingEntity = new RatingModel
 				{
 					ProductId = rating.ProductId,
@@ -74,7 +100,6 @@ namespace Framework_Project.Controllers
 				await _dataContext.SaveChangesAsync();
 
 				TempData["success"] = "Thêm đánh giá thành công";
-
 				return Redirect(Request.Headers["Referer"]);
 			}
 			else
@@ -92,8 +117,6 @@ namespace Framework_Project.Controllers
 
 				return RedirectToAction("Detail", new { id = rating.ProductId });
 			}
-
-			return Redirect(Request.Headers["Referer"]);
 		}
 
     }

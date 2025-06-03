@@ -14,5 +14,6 @@ namespace Framework_Project.Models
         
         public string PaymentMethod { get; set; }
         public decimal DiscountAmount { get; set; }
+        public decimal TotalAmount { get; set; }
     }
 }

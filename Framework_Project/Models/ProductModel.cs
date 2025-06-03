@@ -27,7 +27,7 @@ namespace Framework_Project.Models
         public CategoryModel Category { get; set; }
         public BrandModel Brand { get; set; }
 
-        public RatingModel Ratings { get; set; }
+        public ICollection<RatingModel> Ratings { get; set; }
 
         [NotMapped]
         [FileExtension]

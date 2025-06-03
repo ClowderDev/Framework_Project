@@ -28,6 +28,7 @@
         {
             @foreach (var item in Model)
             {
+<<<<<<< HEAD
 
                 <div class="col-sm-4">
                     <div class="product-image-wrapper"
@@ -52,6 +53,20 @@
                                         style="border-radius: 5px;"><i class="fa fa-shopping-cart" style="color: #D2322D;"></i>Thêm
                                         giỏ hàng</button>
                                 }
+=======
+                <div class="col-sm-4">
+                    <a asp-action="Details" asp-controller="Product" asp-route-Id="@item.Id" style="text-decoration:none; color:inherit;">
+                        <div class="product-image-wrapper">
+                            <div class="single-products">
+                                <div class="productinfo text-center">
+                                    <img src="~/media/products/@item.Image" alt="@item.Name" width="100px" height="200px" />
+                                    <h2>@item.Price.ToString("#,##0 VNĐ")</h2>
+                                    <p>@item.Name</p>
+                                    <p>Danh mục: @item.Category.Name</p>
+                                    <p>Thương hiệu: @item.Brand.Name</p>
+                                    <a asp-action="Add" asp-controller="Cart" asp-route-Id="@item.Id" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm giỏ hàng</a>
+                                </div>
+>>>>>>> 8ebcae1257dd60363703e9711749a78987537c74
                             </div>
                         </div>
                         <div class="choose">
@@ -80,7 +95,10 @@
                         </div>
                     </div>
                 </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8ebcae1257dd60363703e9711749a78987537c74
             }
         }
 

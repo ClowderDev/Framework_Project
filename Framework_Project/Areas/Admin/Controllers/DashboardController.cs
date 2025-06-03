@@ -48,7 +48,7 @@ namespace Framework_Project.Areas.Admin.Controllers
               (o, od) => new StatisticalModel
               {
                   Date = o.CreatedDate,
-                  Revenue = od.Quantity * od.Price,
+                  Revenue = (od.Quantity * od.Price) - o.DiscountAmount,
                   Orders = 1
               })
           // Nhóm dữ liệu theo ngày
@@ -134,7 +134,7 @@ namespace Framework_Project.Areas.Admin.Controllers
                             // Tạo đối tượng ẩn với doanh thu và số lượng đơn hàng
                             (o, od) => new
                             {
-                                revenue = od.Quantity * od.Price,
+                                revenue = (od.Quantity * od.Price) - o.DiscountAmount,
                                 orders = 1
                             })
                         .GroupBy(x => true)
@@ -171,7 +171,7 @@ namespace Framework_Project.Areas.Admin.Controllers
                         (o, od) => new StatisticalModel
                         {
                             Date = o.CreatedDate,
-                            Revenue = od.Quantity * od.Price,
+                            Revenue = (od.Quantity * od.Price) - o.DiscountAmount,
                             Orders = 1
                         })
                     // Nhóm dữ liệu theo ngày
@@ -205,7 +205,6 @@ namespace Framework_Project.Areas.Admin.Controllers
         [Route("GetChartData")]
         public IActionResult GetChartData()
         {
-
             var chartData = _dataContext.Orders
           .Join(_dataContext.OrderDetails,
               o => o.OrderCode,
@@ -214,7 +213,7 @@ namespace Framework_Project.Areas.Admin.Controllers
               (o, od) => new StatisticalModel
               {
                   Date = o.CreatedDate,
-                  Revenue = od.Quantity * od.Price,
+                  Revenue = (od.Quantity * od.Price) - o.DiscountAmount,
                   Orders = 1
               })
           .GroupBy(s => s.Date)

@@ -4,6 +4,7 @@
     ViewData["Title"] = "Lịch sử đơn hàng của: " + @ViewBag.UserEmail;
 }
 
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 
@@ -86,3 +87,138 @@
 </body>
 
 </html>
+=======
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header" style="border-bottom: 2px solid #FE980F; margin-bottom: 30px; padding-bottom: 15px;">
+                <h3 style="color: #363432; font-family: 'Roboto', sans-serif; margin: 0; display: flex; align-items: center;">
+                    <i class="fa fa-history" style="color: #FE980F; margin-right: 10px;"></i>
+                    Lịch sử đơn hàng của: @ViewBag.UserEmail
+                </h3>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table" id="myTable" style="background: #fff; border: 1px solid #F7F7F0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <thead style="background: #FE980F; color: white;">
+                        <tr>
+                            <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500;">Mã đơn hàng</th>
+                            <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500;">Phí vận chuyển</th>
+                            <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500;">Mã giảm giá</th>
+                            <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500;">Giảm giá</th>
+                            <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500;">Tổng tiền</th>
+                            <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500;">Tình trạng</th>
+                            <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500;">Hình thức thanh toán</th>
+                            <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500;">Ngày đặt</th>
+                            <th style="padding: 15px; border: none; font-family: 'Roboto', sans-serif; font-weight: 500;">Thao tác</th>   
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr style="border-bottom: 1px solid #F7F7F0; transition: background-color 0.3s ease;" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='white'">
+                                <td style="padding: 20px 15px; vertical-align: middle;">
+                                    <span style="font-family: 'Roboto', sans-serif; color: #363432; font-weight: 500;">@item.OrderCode</span>
+                                </td>
+                                <td style="padding: 20px 15px; vertical-align: middle; text-align: right;">
+                                    <span style="color: #FE980F; font-weight: 600; font-size: 13px;">@item.ShippingCost.ToString("#,##0 đ")</span>
+                                </td>
+                                <td style="padding: 20px 15px; vertical-align: middle;">
+                                    @if (!string.IsNullOrEmpty(item.CouponCode))
+                                    {
+                                        <span style="background: #e7f3ff; color: #004085; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 500;">@item.CouponCode</span>
+                                    }
+                                    else
+                                    {
+                                        <span style="color: #6c757d; font-style: italic; font-size: 12px;">Không có</span>
+                                    }
+                                </td>
+                                <td style="padding: 20px 15px; vertical-align: middle; text-align: right;">
+                                    @if (item.DiscountAmount > 0)
+                                    {
+                                        <span style="color: #28a745; font-weight: 600; font-size: 13px;">-@item.DiscountAmount.ToString("#,##0 đ")</span>
+                                    }
+                                    else
+                                    {
+                                        <span style="color: #6c757d; font-style: italic; font-size: 12px;">0 đ</span>
+                                    }
+                                </td>
+                                <td style="padding: 20px 15px; vertical-align: middle; text-align: right;">
+                                    <span style="color: #28a745; font-weight: 700; font-size: 14px;">@item.TotalAmount.ToString("#,##0 đ")</span>
+                                </td>
+                                <td style="padding: 20px 15px; vertical-align: middle;">
+                                    @if (item.Status == 1)
+                                    {
+                                        <span style="background: #d1ecf1; color: #0c5460; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center;">
+                                            <i class="fa fa-clock-o" style="margin-right: 5px; font-size: 10px;"></i>
+                                            Đơn hàng mới
+                                        </span>
+                                    }
+                                    else if (item.Status == 2)
+                                    {
+                                        <span style="background: #d4edda; color: #155724; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center;">
+                                            <i class="fa fa-check-circle" style="margin-right: 5px; font-size: 10px;"></i>
+                                            Đã giao hàng
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span style="background: #f8d7da; color: #721c24; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center;">
+                                            <i class="fa fa-times-circle" style="margin-right: 5px; font-size: 10px;"></i>
+                                            Đã hủy
+                                        </span>
+                                    }
+                                </td>
+                                <td style="padding: 20px 15px; vertical-align: middle;">
+                                    @if (item.PaymentMethod == "COD" || item.PaymentMethod == null)
+                                    {
+                                        <span style="background: #fff3cd; color: #856404; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center;">
+                                            <i class="fa fa-money" style="margin-right: 5px; font-size: 10px;"></i>
+                                            COD
+                                        </span>
+                                    }
+                                    else if(item.PaymentMethod == "Momo")
+                                    {
+                                        <span style="background: #e7f3ff; color: #004085; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center;">
+                                            <i class="fa fa-mobile" style="margin-right: 5px; font-size: 10px;"></i>
+                                            MoMo
+                                        </span>
+                                    }
+                                    else if(item.PaymentMethod == "VNPay")
+                                    {
+                                        <span style="background: #d4edda; color: #155724; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center;">
+                                            <i class="fa fa-credit-card" style="margin-right: 5px; font-size: 10px;"></i>
+                                            VNPay
+                                        </span>
+                                    }
+                                </td>
+                                <td style="padding: 20px 15px; vertical-align: middle;">
+                                    <span style="color: #6c757d; font-size: 14px;">@item.CreatedDate.ToString("dd-MM-yyyy")</span>
+                                </td>
+                                <td style="padding: 20px 15px; vertical-align: middle;">
+                                    @if (item.Status == 1)
+                                    {
+                                        <a onclick="return confirm('Bạn xác nhận muốn hủy?')" 
+                                           class="btn btn-warning btn-sm" 
+                                           asp-action="CancelOrder" 
+                                           asp-controller="Account" 
+                                           asp-route-ordercode="@item.OrderCode"
+                                           style="padding: 8px 15px; border-radius: 6px; font-size: 13px; display: inline-flex; align-items: center;">
+                                            <i class="fa fa-times" style="margin-right: 5px;"></i>
+                                            Hủy đơn hàng
+                                        </a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+}
+>>>>>>> 8ebcae1257dd60363703e9711749a78987537c74
